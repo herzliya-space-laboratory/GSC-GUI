@@ -1,0 +1,167 @@
+﻿<html class="bg">
+      <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/materialize.css') }}">
+      <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='GUI.css') }}">
+
+
+
+
+<div bgcolor="#07224f" id="listBody">
+  <nav class="purple">
+    <div class="nav-wrapper">
+      <img src="logo/favicon.png" class="brand-logo" alt="Logo1" height="42" width="42">
+
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="sass.html">Sass</a></li>
+        <li><a href="badges.html">Components</a></li>
+        <li><a href="collapsible.html">JavaScript</a></li>
+      </ul>
+    </div>
+  </nav>
+<input type="text" id="commandInput" style="float:left" class="commandInput floatLeft" onkeyup="searchNames()" placeholder="Search for names.." title="Type in a name">
+<input type="text" id="numberInput" style="float:right" class="commandInput floatRight" onkeyup="searchNumbers()" placeholder="Search for ordered pair.." title="Type in an ordered pair">
+
+<table id="commandTable1" class="commandTable" bgcolor="#102952">
+  <font face="Trebuchet MS" color="white">
+  <tr class="header">
+    <th style="width:60%;color: white">Command</th>
+    <th style="width:40%;color: white">Command number</th>
+  </tr>
+
+          {% for commandName in commandNames1 %}
+          <tr onclick="location.href = '?{{commandNumbers1[commandNames1.index(commandName)]}}'">
+    <td style="color:White;font-family:Trebuchet MS">{{commandName}}</td>
+    <td style="color:White;font-family:Trebuchet MS">{{commandNumbers1[commandNames1.index(commandName)]}}</td>
+  </tr>
+        {% endfor %}
+</table>
+
+<table id="commandTable2" class="commandTable" bgcolor="#102952">
+
+  <tr class="header">
+    <th style="width:60%;color: white;">Command</th>
+    <th style="width:40%;color: white;">Command number</th>
+  </tr>
+          {% for commandName in commandNames2 %}
+  <tr class="commandTr" onclick="location.href = '?{{commandNumbers2[commandNames2.index(commandName)]}}'">
+    <td>{{commandName}}</td>
+    <td>{{commandNumbers2[commandNames2.index(commandName)]}}</td>
+  </tr>
+        {% endfor %}
+    </font>
+</table>
+
+</div>
+
+<div id="commandBody" style="display:none">
+aa
+</div>
+
+<style>
+.bg 
+{
+    background-color:#07224f
+}
+</style>
+
+
+<script>
+
+    var regex = new RegExp();
+    var results = regex.exec(location.search);
+    results = results.input.replace("?", "");
+    results = results.replace("(", "");
+    results = results.replace(")", "");
+    results = results.split(",");
+    if (results.length != 1) {
+        document.getElementById("listBody").setAttribute("style", "display:none");
+        document.getElementById("commandBody").setAttribute("style", "");
+    }
+    console.log(results);
+
+    function searchNames() {
+        var input, filter, table, tr, td, i, txtValue, counter;
+        input = document.getElementById("commandInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("commandTable1");
+        tr = table.getElementsByTagName("tr");
+        counter = true;
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        input = document.getElementById("commandInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("commandTable2");
+        tr = table.getElementsByTagName("tr");
+        counter = true;
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function searchNumbers() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("numberInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("commandTable1");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("numberInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("commandTable2");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function init()
+    {
+        searchNames();
+        searchNumbers();
+    }
+    
+    var dic = {};
+    {% for commandName in commandNames %}
+        dic["{{commandNumbers[commandNames.index(commandName)]}}"] = "{{commandName}}";
+    {% endfor %}
+    console.log(dic["("+results[0]+","+results[1]+")"]);
+    
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,32 @@
+Packet ID,99
+Parameter Name,Raw Data,Value,Unit
+vbatt,1E-64,7780,mV
+Batt_Curr,00-84,100,mA
+3v3_curr,00-17,23,mA
+5v_curr,00-00,0,mA
+LOtrxvu_temp,0D-7F,34.55,deg
+PAtrxvu_temp,0D-51,34.09,deg
+Eps_temp[0],0C-E4,33,deg
+Eps_temp[1],0D-48,34,deg
+Eps_temp[2],0C-E4,33,deg
+Eps_temp[3],0C-E4,33,deg
+Batt_temp[0],0C-E4,33,deg
+Batt_temp[1],0C-E4,33,deg
+Rxdoppler,00-AC,-20003.456,Hz
+Rxrssi,00-DA,-145.46,dBm
+Txrefl,00-42,66,mW
+Txfrow,00-3C,60,mW
+DelayST,00-03-E8,? ,none
+ControlmodeST,00,0,
+PowerST,00,0,
+EstimationmodeST,00,0,
+TLMsaveST,00-00-00,   ,none
+AltitudeAngelsRoll,00-00,0,deg
+AltitudeAngelsPich,00-00,0,deg
+AltitudeAngelsYaw,00-00,0,deg
+NumberofPics,00-00,0,
+NumberAPRS_packets,00-00,0,
+NumberDelayd_comms,00-00,0,
+Number_Resets,01-00,256,
+Last_Resets,00-00,0,sec
+states,00,0,mV

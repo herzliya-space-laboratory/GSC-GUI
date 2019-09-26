@@ -1,0 +1,12 @@
+.progress_bar {
+  height: 15px;
+  /*background: #d03d20;*/
+  width: 0%; /* Start precent */
+  -moz-transition: all 4s ease;
+  -moz-transition-delay: 1s;
+  -webkit-transition: all 4s ease;
+  -webkit-transition-delay: 1s;
+  transition: all 4s ease;
+  transition-delay: 0.5s;
+  
+}

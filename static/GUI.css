@@ -1,0 +1,123 @@
+
+.commandInput {
+  background-color: transparent;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 15%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  color: White;
+}
+
+.floatLeft {
+    float:left;
+}
+
+.floatRight {
+    float:right;
+}
+.commandTable {
+  border-collapse: collapse;
+  width: 30%;/* Command table size. NOTE: keep size proportional with input size */
+  float: left;
+  border: 1px solid #ddd;
+  font-size: 22px;
+}
+
+
+.commandTable th,  td {
+  text-align: left;
+  padding: 12px;
+   color:White;
+  font-family:Trebuchet MS;
+  -webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
+}
+
+.commandTable tr {
+  border-bottom: 1px solid #ddd;
+  color:White;
+  font-family:Trebuchet MS;
+}
+
+.commandTable tr.header, tr:hover {
+  background-color: #1f4f9c;
+}
+.commandTable tr:hover {
+  background-color: #3f6eba
+}
+
+.paramsInput {
+  color: White;
+}
+
+.mainNav 
+{
+      background-color: #4287f5 !important;
+
+}
+
+.invisible {
+    background-color: transparent;
+}
+
+
+.sendButton{
+  display: inline-block;
+  padding: 20px 50px;
+  margin: 20px 0;
+  position: relative;
+  color: #ecf0f1;
+    border: 2px solid #f0495e;
+  color: #34495e;
+  overflow: hidden;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+
+
+.sendButton:before, .sendButton:after{
+  content: "";
+  z-index: -1;
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  top: 0;
+  left: -50%;
+  background-color: #f0495e;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.sendButton:after{
+  left: 100%;
+}
+
+.sendButton:hover{
+  color: #ecf0ff;
+}
+
+.sendButton:hover:before{
+  left: 0;
+}
+
+.sendButton:hover:after{
+  left: 50%;
+}
+
+/**
+* Make the field a flex-container, reverse the order so label is on top.
+*/
+ 
+.field {
+  display: flex;
+  flex-flow: column-reverse;
+  margin-bottom: 1em;
+}

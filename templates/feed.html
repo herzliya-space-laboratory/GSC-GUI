@@ -1,0 +1,133 @@
+﻿<html>
+
+   <head>
+        <link rel= "icon" type= "image" href= "{{ url_for('static',filename='icon.png') }}">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='feed.css') }}">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <meta charset="utf-8">
+   </head>
+
+   <div id="progressBar" class="progress_bar"></div>
+   <br />
+   <div id="progressBar2" class="progress_bar"></div>
+
+   <body style="height: 100%; margin: 0; background-color: #07244f">
+
+    <br>
+
+    <h1 style="color: aliceblue">TLEMETRY</h1>
+    
+    <br>
+       
+       
+       <script type="text/javascript">
+           var a = "{{ satParams }}";
+           a = JSON.parse(a.split("&#39;").join("\""));
+           
+           String.prototype.lpad = function (length) {
+               var str = this;
+               var missingPad = length - str.length;
+               var a = "0";
+               return a.repeat(missingPad) + str;
+           }
+
+
+
+           progressBars = [];
+           var progress2 = document.getElementById("progressBar2");
+           var fromColor = 13647136; // #d03d20
+           var toColor = 65280; // #00ff00
+           // Pause the animation for 100 so we can animate from 0 to x%
+           progress2.style.background = '#' + fromColor.toString(16).lpad(6);
+           function loadBars() {
+               setTimeout(
+    function () {
+
+
+        // PHP Version:
+        // Set with and color
+        var i = 0;
+        for (; i < progressBars.length; i++) {
+            progressBars[i][0].style.width = progressBars[i][1].toString() + "%";
+            progressBars[i][0].style.backgroundColor = '#' + (toColor * (progressBars[i][1] / 100)).toString(16).lpad(6);
+        }
+    }
+  );
+           }
+    function addBar(bar, min, now, max) {
+        progressBars.push([bar, (now / (max - min)) * 1000]); // Mach bar to its complete precentage.
+    }
+           function addWidget() {
+                
+           }
+    
+    function generateTableHead(table, param_Dict){
+        if(Object.keys(param_Dict) < 1){
+            return;
+        }
+        let thead = table.createTHead();
+        let row = thead.insertRow();
+        var head_exp = param_Dict[Object.keys(param_Dict)[0]];
+        head_exp.unshift(["Name"])
+        head_exp.forEach(key => {
+            let thead_cell = createHeadCell(row, key[0])
+            $(thead_cell).attr("scope", "col")
+        });
+        head_exp.shift()
+        return table
+    }
+
+    function generateAllTable(table, data){
+        var tbody  = table.appendChild(document.createElement("tbody"))
+        Object.keys(data).forEach(telem_param => {
+            let row = tbody.insertRow();
+            let headCell = createHeadCell(row, telem_param);
+            $(headCell).attr("scope", "row")
+            data[telem_param].forEach(param_value => {
+                createCell(row, param_value[1])
+            });
+        });
+        document.body.appendChild(table)
+    }
+    
+    function createCell(row, text){
+        let cell = row.insertCell()
+        let cell_text = document.createTextNode(text)
+        cell.appendChild(cell_text)
+    }
+
+    function createHeadCell(row, text){
+        let head_cell = document.createElement("th");
+        let head_cell_text = document.createTextNode(text);
+        head_cell.appendChild(head_cell_text);
+        row.appendChild(head_cell);
+        return head_cell
+    }
+        
+    
+            // Convert data, given from python to json.
+           var params = JSON.parse('{{satParams}}'.split("&#39;").join('"')); // Split &#39; beacause jinja wrap all data with &#39;.
+
+           addBar(progress2, 0, 0.8, 10);
+           loadBars();
+
+           var seperation = document.createElement("hr")
+           document.body.appendChild(seperation);
+
+           let table = document.createElement("table")
+           $(table).addClass("table").addClass("table-hover").addClass("table-dark");
+
+           generateAllTable(generateTableHead(table, a), a);
+
+           setTimeout(function(){
+               location.reload();
+           }, 1000)
+           
+       </script>
+   </body>
+</html>
+</html>

@@ -1,0 +1,38 @@
+Every message is of the format:
+{
+  'type':(string),
+  'content':(object)
+}
+
+
+Handshake:
+1. You send me
+{
+  'type': 'gui'
+}
+
+2. I send you
+{
+  'type': 'clientid',
+  'content': (number)
+}
+
+
+Format for sending telecommand:
+{
+  'type': 'telecommand',
+  'content':
+  {
+    'ST': (number),
+    'SST': (number),
+    'ExecutionTime': (string of datetime "dd/MM/yyyy HH:mm:ss"),
+    'params': (object of type params)
+  }
+}
+
+Format for params:
+{
+  (param-1 name): (param-1 string value),
+  (param-2 name): (param-2 string value),
+  (param-n name): (param-n string value)
+}
