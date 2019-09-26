@@ -123,12 +123,10 @@
         console.log(results);
 
         function writePacket(params, datetime) {
-
             if (datetime == 0) {
-                datetime = new Date();
+                datetime = new Date('January 1, 1970 00:00:00');
             }
             var packet = "{\"Type\":\"Telecommand\", \"Content\":";
-            var counter = 0;
 
             let dd = datetime.getDate();
             let mm = datetime.getMonth() + 1; //January is 0!
@@ -160,8 +158,12 @@
                 packet += "\"" + arr[0] + "\":\"" + arr[1] + "\",";
 
             }
-            var arr = params[params.length - 1];
-            packet += "\"" + arr[0] + "\":\"" + arr[1] + "\"";
+
+            if (params.length > 0) {
+                var arr = params[params.length - 1];
+                packet += "\"" + arr[0] + "\":\"" + arr[1] + "\"";
+            }
+
 
             packet += "}}}";
             console.log(packet)
