@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import json
 import html
 import ast
+import time
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -112,6 +113,7 @@ def commands():
             s.connect((TCP_IP, TCP_PORT))
             is_tcp_connected = True
             s.send(handshake.encode())
+            time.sleep(0.25)
         for packet in packets:
             print("This is: ", packet)
             print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
