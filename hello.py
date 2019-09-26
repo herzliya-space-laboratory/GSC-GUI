@@ -152,9 +152,8 @@ def home():
 @app.route('/feed')
 def feed():
     params1 = {}
-    praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
-                            "Packet Sat Date Time", "Packet Ground Date Time"], params1)
-    return render_template(feedWeb, satParams=params1)
+    praseCSV("Becon", ["batt_curr", "3v3_curr", "vbatt", "Packet Sat Date Time", "Packet Ground Date Time"], params1)
+    return render_template(feedWeb, satParams = params1)
 
 
 @app.route('/play')
