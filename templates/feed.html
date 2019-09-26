@@ -9,6 +9,13 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
         <meta charset="utf-8">
+
+        <style>
+            div.scrollable-div{
+                max-height: 600px;
+                overflow: auto;
+            }
+        </style>
    </head>
 
    <div id="progressBar" class="progress_bar"></div>
@@ -19,7 +26,7 @@
 
     <br>
 
-    <h1 style="color: aliceblue">TLEMETRY</h1>
+    <h1 style="color: aliceblue">Beacon TELEMETRY</h1>
     
     <br>
        
@@ -71,27 +78,37 @@
         }
         let thead = table.createTHead();
         let row = thead.insertRow();
-        var head_exp = param_Dict[Object.keys(param_Dict)[0]];
-        head_exp.unshift(["Name"])
+        let head_exp = Object.keys(param_Dict);
+        head_exp = satTimeSeperation(head_exp)
         head_exp.forEach(key => {
-            let thead_cell = createHeadCell(row, key[0])
+            let thead_cell = createHeadCell(row, key)
             $(thead_cell).attr("scope", "col")
         });
-        head_exp.shift()
         return table
     }
 
+    function satTimeSeperation(head_col){
+        let temp = head_col[0]
+        let swapIdx = head_col.indexOf("Packet Sat Date Time")
+        head_col[0] = head_col[swapIdx]
+        head_col[swapIdx] = temp;
+        return head_col
+    }
+
     function generateAllTable(table, data){
-        var tbody  = table.appendChild(document.createElement("tbody"))
-        Object.keys(data).forEach(telem_param => {
+        let time_sorted_data = $.extend(true,[],sortByNewestTime(data))
+        let tbody  = table.appendChild(document.createElement("tbody"))
+        time_sorted_data.forEach(telem_param => {
             let row = tbody.insertRow();
-            let headCell = createHeadCell(row, telem_param);
+            let headCell = createHeadCell(row, telem_param[1]);
             $(headCell).attr("scope", "row")
-            data[telem_param].forEach(param_value => {
-                createCell(row, param_value[1])
+            let value_by_time = extractParamFromCSVFiles(telem_param[0], data)
+            value_by_time.splice(Object.keys(data).indexOf("Packet Sat Date Time"), 1);
+            value_by_time.forEach(param_value => {
+                createCell(row, param_value)
             });
         });
-        document.body.appendChild(table)
+        return table
     }
     
     function createCell(row, text){
@@ -107,27 +124,91 @@
         row.appendChild(head_cell);
         return head_cell
     }
-        
+
+    function extractParamFromCSVFiles(file, param_Dict){
+        let param_by_time = []
+        Object.keys(param_Dict).forEach(param_name => {
+            let param_from_file = param_Dict[param_name]
+            param_by_time.push(param_from_file.find(function(file_param){
+                if(file_param[0] == file){
+                    return file_param
+                }
+            })[1])
+        });
+        return param_by_time
+    }
+
+    function dateParser(date_str){
+        date_str = date_str.split(" ");
+        date = date_str[0].split("/");
+        base_str_date = date[2] + "-" + date[1] + "-" + date[0];
+        base_hour_str = "T" + date_str[1];
+        return new Date(base_str_date + base_hour_str);
+    }
+
+    function sortByNewestTime(param_Dict){
+        let currnet_date = new Date();
+        let sat_time  = param_Dict["Packet Sat Date Time"]
+        for (let index = 0; index < sat_time.length - 1; index++) {
+            for (let time_index = 0; time_index < sat_time.length - index - 1; time_index++) {
+                if(currnet_date - dateParser(sat_time[time_index][1]) > currnet_date - dateParser(sat_time[time_index + 1][1])){
+                    let temp = sat_time[time_index];
+                    sat_time[time_index] = sat_time[time_index + 1];
+                    sat_time[time_index + 1] = temp;
+                }
+            }    
+        }
+        return sat_time
+    }
+
     
+
+    function refresh_table()
+    {
+        let table_div = document.getElementById("table-div");
+        table_div.innerHTML = "";
+
+        let table = document.createElement("table");
+        $(table).addClass("table").addClass("table-hover").addClass("table-dark");
+
+        let telem_table = generateAllTable(generateTableHead(table, a), a);
+        table_div.appendChild(telem_table);
+    }
+
             // Convert data, given from python to json.
            var params = JSON.parse('{{satParams}}'.split("&#39;").join('"')); // Split &#39; beacause jinja wrap all data with &#39;.
 
            addBar(progress2, 0, 0.8, 10);
            loadBars();
 
-           var seperation = document.createElement("hr")
+           let seperation = document.createElement("hr")
            document.body.appendChild(seperation);
+
+           let table_div = document.createElement("div");
+           table_div.id = "table-div";
+           $(table_div).addClass("scrollable-div");
 
            let table = document.createElement("table")
            $(table).addClass("table").addClass("table-hover").addClass("table-dark");
 
-           generateAllTable(generateTableHead(table, a), a);
+           let table_head = document.createElement("table")
+           $(table_head).addClass("table").addClass("table-hover").addClass("table-dark");
 
-           setTimeout(function(){
-               location.reload();
-           }, 1000)
+           let telem_table = generateAllTable(table, a);
+           table_div.appendChild(telem_table);
+           
+           document.body.appendChild(generateTableHead(table_head, a))
+           document.body.appendChild(table_div);
+
+        //    let interval = setInterval(function(){
+        //         var a = "{{ satParams }}";
+        //         a = JSON.parse(a.split("&#39;").join("\""));
+        //         refresh_table();
+        //     }, 10000);
            
        </script>
+
+
    </body>
 </html>
 </html>

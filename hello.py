@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import json
 import html
 import ast
+from dateutil.parser import parse
 import time
 
 '''
@@ -12,23 +13,25 @@ Error 10: Unable to parse integer fro telemetry
 
 import socket
 
-TCP_IP = '172.16.1.241'
-TCP_PORT = 61015
+TCP_IP = '127.0.0.1'
+TCP_PORT = 5000
 BUFFER_SIZE = 1024
 
-handshake = "{'Type': 'GUI'}"
 is_tcp_connected = False
+
+handshake = "{'Type': 'GUI'}"
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 f = open("MIB.xml", "r")
 
 soup = BeautifulSoup(f.read(), 'html.parser')
-commandNames = []
+commandNames   = []
 commandNumbers = []
 paramNames = []
 paramTypes = []
-paramUnits = []
+paramUnits  = []
+
 
 for serType in soup.find_all("servicetype"):
     typeVal = serType.get("value")
@@ -46,8 +49,8 @@ for serType in soup.find_all("servicetype"):
         paramTypes.append(types)
         paramUnits.append(units)
         commandNames.append(subtypeName)
-        commandNumbers.append(
-            repr((int(typeVal), subtypeValue)).replace(" ", ""))
+        commandNumbers.append(repr((int(typeVal),subtypeValue)).replace(" ",""))
+        
 f.close()
 
 
@@ -59,16 +62,33 @@ def is_number(s):
     except ValueError:
         return False
 
+def is_date(string, fuzzy=False):
+    """
+    Return whether the string can be interpreted as a date.
 
+    :param string: str, string to check for date
+    :param fuzzy: bool, ignore unknown tokens in string if True
+    """
+    try: 
+        parse(string, fuzzy=fuzzy)
+        return True
+
+    except ValueError:
+        return False
+    
 def getParam(line):
     '''Take last number from line'''
-    line = line.replace(" ", "")
+    line = line.replace("\n", "")
     line = line.split(",")
     for i in range(len(line)):
-        if is_number(line[-(i+1)]):
-            return line[-(i+1)]
-    return None
-
+        param = line[-(i+1)]
+        if is_date(param):
+            return param
+        else:
+            param = param.replace(" ", "")
+            if is_number(param):
+                return param
+    return None  
 
 def praseCSV(directory, paramNames, params={}):
     '''For each file, find param name and append it to param dictionary.'''
@@ -79,14 +99,12 @@ def praseCSV(directory, paramNames, params={}):
             for i in range(len(paramNames)):
                 if line.startswith(paramNames[i]):
                     paramVal = getParam(line)
-                    if not is_number(paramVal):
-                        print("Error 10 unable to read value from file:",
-                              name, " Value: ", paramVal)
+                    if is_number(paramVal):
+                        paramVal = float(paramVal)
                     if paramNames[i] in params.keys():
-                        params[paramNames[i]].append(
-                            [name, float(getParam(line))])
+                        params[paramNames[i]].append([name, getParam(line)])
                     else:
-                        params[paramNames[i]] = [[name, float(getParam(line))]]
+                        params[paramNames[i]] = [[name, getParam(line)]]
     return params
 
 
@@ -97,15 +115,13 @@ index = "index.html"
 feedWeb = "feed.html"
 playground = "playground.html"
 
-
 @app.route('/commands')
 def commands():
     global is_tcp_connected
     global handshake
-    params = ""
-
+    params=""
     if request.args.get("packet") == None:
-        print("Got NoneType")
+        print("Got NoneType")    
     else:
         params = html.unescape(request.args.get("packet"))
         packets = ast.literal_eval(params)
@@ -115,30 +131,28 @@ def commands():
             s.send(handshake.encode())
             time.sleep(0.25)
         for packet in packets:
-            print("This is: ", packet)
+            print("This is: ",packet)
             print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
             sentBytes = s.send(str(packet).encode())
             print("Number of bytes sent: ", sentBytes)
-
-    return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
-
+                
+        
+    return render_template(commandsWeb, commandNames = commandNames, commandNumbers=commandNumbers, paramNames=paramNames,paramTypes=paramTypes, paramUnits=paramUnits)
 
 @app.route('/')
 def home():
     return render_template(index)
 
-
 @app.route('/feed')
 def feed():
     params1 = {}
-    praseCSV("telemFEED", ["Batt_Curr", "3v3_curr",
-                           "Rxdoppler", "vbatt"], params1)
-    return render_template(feedWeb, satParams=params1)
-
+    praseCSV("Becon", ["batt_curr", "3v3_curr", "vbatt", "Packet Sat Date Time", "Packet Ground Date Time"], params1)
+    return render_template(feedWeb, satParams = params1)
 
 @app.route('/play')
 def palyground():
     return render_template(playground)
 
-
 app.run(debug=True)
+
+
