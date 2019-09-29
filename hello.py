@@ -13,8 +13,8 @@ Error 10: Unable to parse integer fro telemetry
 
 import socket
 
-TCP_IP = '172.16.2.6'
-TCP_PORT = 61015
+TCP_IP = '127.0.0.1'
+TCP_PORT = 5000
 BUFFER_SIZE = 1024
 
 is_tcp_connected = False
@@ -149,12 +149,15 @@ def home():
     return render_template(index)
 
 
-@app.route('/feed')
+@app.route('/feed', methods=['GET', 'POST'])
 def feed():
     params1 = {}
-    praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
-                            "Packet Sat Date Time", "Packet Ground Date Time"], params1)
-    return render_template(feedWeb, satParams=params1)
+    praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt", "Packet Sat Date Time", "Packet Ground Date Time"], params1)
+    if request.method == "POST":
+        params1 = {}
+        praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt", "Packet Sat Date Time", "Packet Ground Date Time"], params1)
+        return params1
+    return render_template(feedWeb, satParams = params1)
 
 
 @app.route('/play')

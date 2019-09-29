@@ -34,6 +34,8 @@
        <script type="text/javascript">
            var a = "{{ satParams }}";
            a = JSON.parse(a.split("&#39;").join("\""));
+
+           var order = Object.keys(a);
            
            String.prototype.lpad = function (length) {
                var str = this;
@@ -72,13 +74,13 @@
                 
            }
     
-    function generateTableHead(table, param_Dict){
+    function generateTableHead(table, param_Dict, param_order){
         if(Object.keys(param_Dict) < 1){
             return;
         }
         let thead = table.createTHead();
         let row = thead.insertRow();
-        let head_exp = Object.keys(param_Dict);
+        let head_exp = param_order
         head_exp = satTimeSeperation(head_exp)
         head_exp.forEach(key => {
             let thead_cell = createHeadCell(row, key)
@@ -95,15 +97,15 @@
         return head_col
     }
 
-    function generateAllTable(table, data){
+    function generateAllTable(table, data, param_order){
         let time_sorted_data = $.extend(true,[],sortByNewestTime(data))
         let tbody  = table.appendChild(document.createElement("tbody"))
         time_sorted_data.forEach(telem_param => {
             let row = tbody.insertRow();
             let headCell = createHeadCell(row, telem_param[1]);
             $(headCell).attr("scope", "row")
-            let value_by_time = extractParamFromCSVFiles(telem_param[0], data)
-            value_by_time.splice(Object.keys(data).indexOf("Packet Sat Date Time"), 1);
+            let value_by_time = extractParamFromCSVFiles(telem_param[0], data, param_order)
+            value_by_time.splice(param_order.indexOf("Packet Sat Date Time"), 1);
             value_by_time.forEach(param_value => {
                 createCell(row, param_value)
             });
@@ -125,9 +127,9 @@
         return head_cell
     }
 
-    function extractParamFromCSVFiles(file, param_Dict){
+    function extractParamFromCSVFiles(file, param_Dict, param_order){
         let param_by_time = []
-        Object.keys(param_Dict).forEach(param_name => {
+        param_order.forEach(param_name => {
             let param_from_file = param_Dict[param_name]
             param_by_time.push(param_from_file.find(function(file_param){
                 if(file_param[0] == file){
@@ -163,7 +165,7 @@
 
     
 
-    function refresh_table()
+    function refresh_table(table_params, param_order)
     {
         let table_div = document.getElementById("table-div");
         table_div.innerHTML = "";
@@ -171,7 +173,7 @@
         let table = document.createElement("table");
         $(table).addClass("table").addClass("table-hover").addClass("table-dark");
 
-        let telem_table = generateAllTable(generateTableHead(table, a), a);
+        let telem_table = generateAllTable(table, table_params, param_order);
         table_div.appendChild(telem_table);
     }
 
@@ -180,9 +182,6 @@
 
            addBar(progress2, 0, 0.8, 10);
            loadBars();
-
-           let seperation = document.createElement("hr")
-           document.body.appendChild(seperation);
 
            let table_div = document.createElement("div");
            table_div.id = "table-div";
@@ -194,17 +193,22 @@
            let table_head = document.createElement("table")
            $(table_head).addClass("table").addClass("table-hover").addClass("table-dark");
 
-           let telem_table = generateAllTable(table, a);
+           let telem_table = generateAllTable(table, a, order);
            table_div.appendChild(telem_table);
            
-           document.body.appendChild(generateTableHead(table_head, a))
+           document.body.appendChild(generateTableHead(table_head, a, order))
            document.body.appendChild(table_div);
 
-        //    let interval = setInterval(function(){
-        //         var a = "{{ satParams }}";
-        //         a = JSON.parse(a.split("&#39;").join("\""));
-        //         refresh_table();
-        //     }, 10000);
+           let interval = setInterval(function(){
+            $.ajax({
+                    type: "POST",
+                    url: "/feed",
+                    data: {}
+                    }).done(function( params ) {
+                        a = params;
+                        refresh_table(a, order);
+                        });
+            }, 1000);
            
        </script>
 
