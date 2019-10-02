@@ -13,8 +13,8 @@ Error 10: Unable to parse integer fro telemetry
 
 import socket
 
-TCP_IP = '172.16.2.6'
-TCP_PORT = 61015
+TCP_IP = '127.0.0.1'
+TCP_PORT = 5000
 BUFFER_SIZE = 1024
 
 is_tcp_connected = False
@@ -25,26 +25,28 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 f = open("MIB.xml", "r")
 
-soup = BeautifulSoup(f.read(), 'html.parser')
+soup = BeautifulSoup(f.read(), 'xml')
 commandNames = []
 commandNumbers = []
 paramNames = []
 paramTypes = []
 paramUnits = []
 
+commands = soup.GSCMIB.Telecommands  # .GSCMIB.Telecommands
+# print(commands.find_all("ServiceType"))
 
-for serType in soup.find_all("servicetype"):
-    typeVal = serType.get("value")
-    for subtype in serType.find_all("servicesubtype"):
-        subtypeName = subtype.get("name")
-        subtypeValue = int(subtype.get("value"))
+for serType in commands.find_all("ServiceType"):
+    typeVal = serType.get("Value")
+    for subtype in serType.find_all("ServiceSubtype"):
+        subtypeName = subtype.get("Name")
+        subtypeValue = int(subtype.get("Value"))
         names = []
         types = []
         units = []
-        for param in subtype.find_all("parameter"):
-            names.append(param.get("name"))
-            types.append(param.get("type"))
-            units.append(param.get("unit"))
+        for param in subtype.find_all("Parameter"):
+            names.append(param.get("Name"))
+            types.append(param.get("Type"))
+            units.append(param.get("Unit"))
         paramNames.append(names)
         paramTypes.append(types)
         paramUnits.append(units)
@@ -149,11 +151,17 @@ def home():
     return render_template(index)
 
 
-@app.route('/feed')
+@app.route('/feed', methods=['GET', 'POST'])
 def feed():
     params1 = {}
-    praseCSV("Becon", ["batt_curr", "3v3_curr", "vbatt", "Packet Sat Date Time", "Packet Ground Date Time"], params1)
-    return render_template(feedWeb, satParams = params1)
+    praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
+                            "Packet Sat Date Time", "Packet Ground Date Time"], params1)
+    if request.method == "POST":
+        params1 = {}
+        praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
+                                "Packet Sat Date Time", "Packet Ground Date Time"], params1)
+        return params1
+    return render_template(feedWeb, satParams=params1)
 
 
 @app.route('/play')
