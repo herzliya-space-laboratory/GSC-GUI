@@ -1,0 +1,31 @@
+Packet ID,3115
+Packet Ground Date Time,03/10/2019 15:18:37
+Packet Sat Date Time,30/06/2019 00:17:32
+Packet Total Raw Data,1D-47-02-3C-00-17-00-00-08-20-07-4F-00-18-00-18-00-17-00-18-00-17-00-17-00-CC-00-2A-00-A8-00-86-00-00-00-00-00-00-00-03-00-00-00-00-03-5D-17-FC-88-70
+
+Parameter Name,Raw Data,Value,Unit
+vbatt,1D-47,7495,mv
+batt_curr,02-3C,572,ma
+3v3_curr,00-17,23,ma
+5v_curr,00-00,0,ma
+lotrxvu_temp,08-20,36.0885,deg c
+patrxvu_temp,07-4F,52.11671,deg c
+eps_temp[0],00-18,24,deg c
+eps_temp[1],00-18,24,deg c
+eps_temp[2],00-17,23,deg c
+eps_temp[3],00-18,24,deg c
+batt_temp[0],00-17,23,deg c
+batt_temp[1],00-17,23,deg c
+rxdoppler,00-CC,-19576.192,hz
+rxrssi,00-2A,-150.74,dbm
+txrefl,00-A8,168,mw
+txfrow,00-86,134,mw
+altitudeangelsroll,00-00,0,deg
+altitudeangelspich,00-00,0,deg
+altitudeangelsyaw,00-00,0,deg
+numberofpics,00,0,none
+eps battery state,03,3,none
+numberdelayd_comms,00,0,none
+number_resets,00-00-00-03,3,none
+last_resets,5D-17-FC-88,30/06/2019 00:04:24,sec
+states,70,112,none
