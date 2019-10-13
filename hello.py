@@ -154,12 +154,12 @@ def home():
 @app.route('/feed', methods=['GET', 'POST'])
 def feed():
     params1 = {}
-    praseCSV("HUGE-BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
-                                 "Packet Sat Date Time", "Packet Ground Date Time"], params1)
+    praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
+                            "Packet Sat Date Time", "Packet Ground Date Time"], params1)
     if request.method == "POST":
         params1 = {}
-        praseCSV("HUGE-BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
-                                     "Packet Sat Date Time", "Packet Ground Date Time"], params1)
+        praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
+                                "Packet Sat Date Time", "Packet Ground Date Time"], params1)
         return params1
     return render_template(feedWeb, satParams=params1)
 
