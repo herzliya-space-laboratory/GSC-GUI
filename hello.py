@@ -25,28 +25,27 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 f = open("MIB.xml", "r")
 
-soup = BeautifulSoup(f.read(), 'xml')
+soup = BeautifulSoup(f.read(), "html.parser")
 commandNames = []
 commandNumbers = []
 paramNames = []
 paramTypes = []
 paramUnits = []
 
-commands = soup.GSCMIB.Telecommands  # .GSCMIB.Telecommands
-# print(commands.find_all("ServiceType"))
+commands = soup.find("gscmib").find("telecommands") 
 
-for serType in commands.find_all("ServiceType"):
-    typeVal = serType.get("Value")
-    for subtype in serType.find_all("ServiceSubtype"):
-        subtypeName = subtype.get("Name")
-        subtypeValue = int(subtype.get("Value"))
+for serType in commands.find_all("servicetype"):
+    typeVal = serType.get("value")
+    for subtype in serType.find_all("servicesubtype"):
+        subtypeName = subtype.get("name")
+        subtypeValue = int(subtype.get("value"))
         names = []
         types = []
         units = []
-        for param in subtype.find_all("Parameter"):
-            names.append(param.get("Name"))
-            types.append(param.get("Type"))
-            units.append(param.get("Unit"))
+        for param in subtype.find_all("parameter"):
+            names.append(param.get("name"))
+            types.append(param.get("type"))
+            units.append(param.get("unit"))
         paramNames.append(names)
         paramTypes.append(types)
         paramUnits.append(units)
