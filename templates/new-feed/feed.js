@@ -8,12 +8,15 @@ function drawChart() {
         "blu": "gauge"
     };
     const options = [{
-        width: 400, height: 120,
+        width: 400, height: 200,
         redFrom: 80, redTo: 100,
         minorTicks: 5
-    }, "5",
+    },
     {
-        width: 400, height: 120,
+        redFrom: 80, redTo: 100
+    },
+    {
+        width: 400, height: 200,
         redFrom: 80, redTo: 100,
         minorTicks: 5
     }];//getGaugesOptions(dispType);
@@ -57,12 +60,22 @@ function drawCharts(charts, options, data, dispType) {
         else if (dispType[data[i][0]] === "textbox") {
             const textboxData = data[i];
             charts[i].innerHTML = `${textboxData[0]}: ${textboxData[1]}`;
+            $(charts[i]).css("font-size", "35px");
+            if (textboxData[1] >= options[i]["redFrom"] && textboxData[1] <= options[i]["redTo"]) {
+                $(charts[i]).css("color", "red");
+                $(charts[i]).css("font-weight", "Bold");
+            }
+            else {
+                $(charts[i]).css("color", "black");
+                $(charts[i]).css("font-weight", "Normal");
+            }
         }
     }
 }
 
 function getLatestBeacon() {
     /*let data;
+    let beacon = [];
     $.ajax({
         type: "POST",
         url: "/feed",
@@ -70,14 +83,13 @@ function getLatestBeacon() {
     }).done(function (params) {
         beacon = params;
     });
-
-    let beacon = [];
+    /*
     for (let index = 0; index < data.length; index++) {
         beacon.push(data[index]);
-    }
+    }//
     return beacon;
     */
-    return [["hello", 90], ["bla", 44], ["blu", 40]];
+    return [["hello", Math.floor((Math.random() * 100) + 1)], ["bla", Math.floor((Math.random() * 100) + 1)], ["blu", Math.floor((Math.random() * 100) + 1)]];
 }
 
 function getGaugesOptions(dispType) {
@@ -96,7 +108,10 @@ function getGaugesOptions(dispType) {
             });
         }
         else if (dispType[optionData[0]] === "textbox") {
-            options.push(optionData[1]);
+            options.push({
+                redFrom: optionData[1],
+                redTo: optionsData[2]
+            });
         }
     }
 
