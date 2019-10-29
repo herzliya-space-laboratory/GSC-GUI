@@ -1,0 +1,8 @@
+Packet ID,514
+Packet Ground Date Time,29/10/2019 17:44:15
+Packet Sat Date Time,29/10/2019 18:36:03
+Packet Total Raw Data,06-02-00-00-FC-FF-00-00
+
+Parameter Name,Raw Data,Value,Unit
+log num,06-02-00-00,518,x
+info,FC-FF-00-00,65532,x
