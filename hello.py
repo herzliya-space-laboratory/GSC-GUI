@@ -6,6 +6,7 @@ import html
 import ast
 from dateutil.parser import parse
 import time
+import glob
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -32,7 +33,7 @@ paramNames = []
 paramTypes = []
 paramUnits = []
 
-commands = soup.find("gscmib").find("telecommands") 
+commands = soup.find("gscmib").find("telecommands")
 
 for serType in commands.find_all("servicetype"):
     typeVal = serType.get("value")
@@ -110,6 +111,21 @@ def praseCSV(directory, paramNames, params={}):
                         params[paramNames[i]].append([name, getParam(line)])
                     else:
                         params[paramNames[i]] = [[name, getParam(line)]]
+    return params
+
+
+def praseNewestCSVdir(directory, paramNames, params={}):
+    '''For each file, find param name and append it to param dictionary.'''
+    list_of_files = glob.glob(directory + "/*")
+    latest_file = max(list_of_files, key=os.path.getctime)
+    f = open(latest_file, "r")
+    for line in f:
+        for i in range(len(paramNames)):
+            if line.startswith(paramNames[i]):
+                paramVal = getParam(line)
+                if is_number(paramVal):
+                    paramVal = float(paramVal)
+                params[paramNames[i]] = paramVal
     return params
 
 
