@@ -2,31 +2,48 @@ google.charts.load('current', { 'packages': ['gauge'] });
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
-    let dispType = {};
-    const options = getGaugesOptions(dispType);
-    let gauges = new Array();
-    let texts = new Array();
+    let dispType = {
+        "hello": "gauge",
+        "bla": "textbox",
+        "blu": "gauge"
+    };
+    const options = [{
+        width: 400, height: 120,
+        redFrom: 80, redTo: 100,
+        minorTicks: 5
+    }, "5",
+    {
+        width: 400, height: 120,
+        redFrom: 80, redTo: 100,
+        minorTicks: 5
+    }];//getGaugesOptions(dispType);
+    let charts = new Array();
     let data = getLatestBeacon();
+    let greatDiv = document.createElement("div");
 
     for (let i = 0; i < options.length; i++) {
         if (dispType[data[i][0]] === "gauge") {
             let gauge = document.createElement("div");
-            document.body.appendChild(gauge);
-            gauges.push(new google.visualization.Gauge(gauge));
+            greatDiv.appendChild(gauge);
+            $(gauge).css('display', 'inline-block');
+            charts.push(new google.visualization.Gauge(gauge));
         }
         else if (dispType[data[i][0]] === "textbox") {
             let textbox = document.createElement("textbox");
-            document.body.appendChild(textbox);
-            texts.push(textbox);
+            greatDiv.appendChild(textbox);
+            $(textbox).css('display', 'inline-block');
+            charts.push(textbox);
         }
 
     }
 
-    drawCharts(gauges, options, data, dispType);
+    document.body.appendChild(greatDiv);
+
+    drawCharts(charts, options, data, dispType);
 
     setInterval(function () {
         data = getLatestBeacon();
-        drawCharts(gauges, options, data, dispType);
+        drawCharts(charts, options, data, dispType);
     }, 1000);
 }
 
@@ -34,18 +51,18 @@ function drawCharts(charts, options, data, dispType) {
     for (let i = 0; i < options.length; i++) {
         const option = options[i];
         if (dispType[data[i][0]] === "gauge") {
-            const gaugeData = google.arrayToDataTable(data[i])
+            const gaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], data[i]])
             charts[i].draw(gaugeData, option);
         }
         else if (dispType[data[i][0]] === "textbox") {
-            const data = data[i][1];
-            charts[i].innerHTML = data;
+            const textboxData = data[i];
+            charts[i].innerHTML = `${textboxData[0]}: ${textboxData[1]}`;
         }
     }
 }
 
 function getLatestBeacon() {
-    let data;
+    /*let data;
     $.ajax({
         type: "POST",
         url: "/feed",
@@ -59,6 +76,8 @@ function getLatestBeacon() {
         beacon.push(data[index]);
     }
     return beacon;
+    */
+    return [["hello", 90], ["bla", 44], ["blu", 40]];
 }
 
 function getGaugesOptions(dispType) {
