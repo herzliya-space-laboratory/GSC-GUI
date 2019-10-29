@@ -7,7 +7,7 @@ import ast
 from dateutil.parser import parse
 import time
 import glob
-import log-parser
+import log_parser
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -135,6 +135,7 @@ app = Flask(__name__)
 commandsWeb = "commands.html"
 index = "index.html"
 feedWeb = "feed.html"
+logsWeb = "logs.html"
 playground = "playground.html"
 
 
@@ -178,6 +179,15 @@ def feed():
                                 "Packet Sat Date Time", "Packet Ground Date Time"], params1)
         return params1
     return render_template(feedWeb, satParams=params1)
+
+
+@app.route('/logs', methods=['GET', 'POST'])
+def logs():
+    logsDict = log_parser.ParseAllLogFilesInDirectory(
+        "Event logs", log_parser.EventLogParser)
+    if request.method == "POST":
+        return logsDict
+    return render_template(logsWeb, logParams=logsDict)
 
 
 @app.route('/play')

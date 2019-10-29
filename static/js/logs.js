@@ -1,19 +1,11 @@
+let _param_order = ["Sat Time", "Ground Time", "Data", "Log Type", "System"];
+
 function dateParser(date_str) {
     date_str = date_str.split(" ");
     date = date_str[0].split("/");
     base_str_date = date[2] + "-" + date[1] + "-" + date[0];
     base_hour_str = "T" + date_str[1];
     return new Date(base_str_date + base_hour_str);
-}
-
-function sortByNewestTime(param_Dict) {
-    let sat_time = param_Dict["Packet Sat Date Time"];
-
-    sat_time.forEach(time => {
-        time[1] = dateParser(time[1]);
-    });
-
-    return sat_time.sort((a, b) => b[1] - a[1]);
 }
 
 function createCell(row, text) {
@@ -36,8 +28,7 @@ function generateTableHead(table, param_Dict, param_order) {
     }
     let thead = table.createTHead();
     let row = thead.insertRow();
-    let head_exp = param_order
-    head_exp.forEach(key => {
+    param_order.forEach(key => {
         let thead_cell = createHeadCell(row, key)
         $(thead_cell).attr("scope", "col")
     });
@@ -63,3 +54,49 @@ function sortByNewestTime(param_Dict) {
 
     return param_Dict.sort((a, b) => b["Sat Time"] - a["Sat Time"]);
 }
+
+function refresh_table(table_params, param_order) {
+    let table_div = document.getElementById("table-div");
+    table_div.innerHTML = "";
+
+    let table = document.createElement("table");
+    $(table).addClass("table").addClass("table-hover").addClass("table-dark");
+
+    let head = generateTableHead(table, logDict, _param_order);
+
+    table_div.appendChild(generateAllTable(head, logDict));
+    document.body.appendChild(table_div);
+}
+
+function getLogs() {
+    let logs;
+    $.ajax({
+        type: "POST",
+        url: "/logs",
+        data: {}
+    }).done(function (params) {
+        logs = params;
+    });
+
+    return logs;
+}
+
+function getJinja(logs) {
+    debugger
+    var logDict = logs
+}
+
+let table_div = document.createElement("div");
+table_div.id = "table-div";
+$(table_div).addClass("scrollable-div");
+
+let table = document.createElement("table")
+$(table).addClass("table").addClass("table-hover").addClass("table-dark");
+
+let head = generateTableHead(table, logDict, _param_order);
+
+table_div.appendChild(generateAllTable(head, logDict));
+document.body.appendChild(table_div);
+
+let interval = setInterval(refresh_table(getLogs(), _param_order), 5000);
+
