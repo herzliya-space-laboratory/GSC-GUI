@@ -235,7 +235,9 @@ def logs():
     logsDict = log_parser.ParseAllLogFilesInDirectory(
         "Event logs", log_parser.EventLogParser)
     if request.method == "POST":
-        return logsDict
+        logsDict = log_parser.ParseAllLogFilesInDirectory(
+        "Event logs", log_parser.EventLogParser)
+        return json.dumps(logsDict)
     return render_template(logsWeb, logParams=logsDict)
 
 

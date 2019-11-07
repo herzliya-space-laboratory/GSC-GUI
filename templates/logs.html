@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
 
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="/static/js/logs.js"></script>
-</head>
-<obj onpageshow="fun({{logParams}})">
-
+        <meta id="logs-dict" data-logs="{{logParams}}">
+    </head>
     <body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="/static/js/logs.js"></script>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     </body>
-
 </html>
