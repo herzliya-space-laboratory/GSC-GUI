@@ -97,6 +97,12 @@ def getParam(line):
     return None
 
 
+def getUnit(line):
+    line = line.replace("\n", "")
+    line = line.split(",")
+    return line[-1]
+
+
 def praseCSV(directory, paramNames, params={}):
     '''For each file, find param name and append it to param dictionary.'''
     names = os.listdir(directory)
@@ -130,6 +136,48 @@ def praseNewestCSVdir(directory, paramNames, params={}):
     return params
 
 
+def getUnitsFromNewestCSVdir(directory, paramNames, units={}):
+    list_of_files = glob.glob(directory + "/*")
+    latest_file = max(list_of_files, key=os.path.getctime)
+    f = open(latest_file, "r")
+    for line in f:
+        for i in range(len(paramNames)):
+            if line.startswith(paramNames[i]):
+                units[paramNames[i]] = getUnit(line)
+    return units
+
+
+def minMaxFromType(t):
+    return {
+        'uint16': {"min": 0, "max": 65535},
+        'int16': {"min": -32768, "max": 32767},
+        'uint32': {"min": 0, "max": 4294967295},
+        'byte': {"min": -128, "max": 127},
+        'datetime': {"min": 0, "max": 0}
+    }[t]
+
+
+def getBeaconOptions():
+    f = open("MIB.xml", "r")
+
+    soup = BeautifulSoup(f.read(), "html.parser")
+    options = {}
+
+    beacon = soup.find("gscmib").find("telemetry").find(
+        "servicetype", {"name": "global param"}).find(
+        "servicesubtype", {"name": "beacon"})
+
+    for param in beacon:
+        minAndMax = minMaxFromType(param.get("type"))
+        options[param.get("name")] = {
+            "min": minAndMax["min"],
+            "max": minAndMax["max"],
+            "redFrom": int(param.get("rangestart"))
+        }
+    f.close()
+    return options
+
+
 app = Flask(__name__)
 
 commandsWeb = "commands.html"
@@ -137,6 +185,7 @@ index = "index.html"
 feedWeb = "feed.html"
 logsWeb = "logs.html"
 playground = "playground.html"
+beaconWeb = "new-feed.html"
 
 
 @app.route('/commands')
@@ -188,6 +237,17 @@ def logs():
     if request.method == "POST":
         return logsDict
     return render_template(logsWeb, logParams=logsDict)
+
+
+@app.route('/beacon', methods=['GET', 'POST'])
+def beacon():
+    params = ["batt_curr", "3v3_curr", "vbatt"]
+    data = praseNewestCSVdir(
+        "BeaconDemo", params)
+    if request.method == "POST":
+        return data
+
+    return render_template(beaconWeb, beacon=data, units=getUnitsFromNewestCSVdir("BeaconDemo", params))
 
 
 @app.route('/play')
