@@ -1,9 +1,7 @@
-let _param_order = ["Sat Time", "Ground Time", "Data", "Log Type", "System"];
+let _param_order = ["Sat Time", "Ground Time", "File Name", "Data", "Log Type", "System"];
 
 let logsDict = $("#logs-dict").data("logs");
 logsDict = JSON.parse(logsDict.replace(/'/g, '"'));
-
-console.log(logsDict);
 
 function dateParser(date_str) {
     date_str = date_str.split(" ");
@@ -45,6 +43,7 @@ function genarateRowCelles(telem_param, row){
     createCell(row, telem_param[_param_order[2]]);
     createCell(row, telem_param[_param_order[3]]);
     createCell(row, telem_param[_param_order[4]]);
+    createCell(row, telem_param[_param_order[5]]);
 }
 
 function generateAllTable(table, data) {
@@ -52,6 +51,7 @@ function generateAllTable(table, data) {
     let tbody = table.appendChild(document.createElement("tbody"));
     time_sorted_data.forEach(telem_param => {
         let row = tbody.insertRow();
+        $(row).addClass(telem_param["Color"])
         let headCell = createHeadCell(row, telem_param[_param_order[0]]);
         genarateRowCelles(telem_param, row);
         $(headCell).attr("scope", "row");
@@ -76,6 +76,17 @@ function refresh_table(table_params) {
     table_div.appendChild(generateAllTable(head, table_params));
 }
 
+function getCurrentDate(){
+    let currentDate = new Date();
+    let year = currentDate.getFullYear().toString()
+    let month = (currentDate.getMonth() + 1).toString()
+    let day = currentDate.getDate().toString()
+    let hour = currentDate.getHours().toString()
+    let minute = currentDate.getMinutes().toString()
+    let second = currentDate.getSeconds().toString()
+    return day + "-" + month + "-" + year + "-" + hour + "-" + minute + "-" + second
+}
+
 
 let table_div = document.createElement("div");
 table_div.id = "table-div";
@@ -87,7 +98,18 @@ $(table).addClass("table").addClass("table-hover").addClass("table-dark");
 let head = generateTableHead(table, logsDict, _param_order);
 
 table_div.appendChild(generateAllTable(head, logsDict));
+
+let exportBtn = document.createElement("button");
+exportBtn.innerText = "Export table to csv file";
+$(exportBtn).addClass("btn").addClass("btn-outline-primary");
+
+$(exportBtn).click(function(){
+    let filename = "LogsTable-" + getCurrentDate() + ".csv"
+    exportTableToCSV(filename);
+}) 
+
 document.body.appendChild(table_div);
+document.body.appendChild(exportBtn);
 
 let interval = setInterval(function () {
     $.ajax({

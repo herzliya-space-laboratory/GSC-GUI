@@ -135,6 +135,13 @@ def praseNewestCSVdir(directory, paramNames, params={}):
                 params[paramNames[i]] = paramVal
     return params
 
+def createLogsDict(eventLogDirectory, erroLogDirectory):
+    logsDict = log_parser.ParseAllLogFilesInDirectory(
+        eventLogDirectory, log_parser.EventLogParser)
+    errorlogsDict = log_parser.ParseAllLogFilesInDirectory(
+        erroLogDirectory, log_parser.ErrorLogParser)
+    return logsDict + errorlogsDict
+
 
 def getUnitsFromNewestCSVdir(directory, paramNames, units={}):
     list_of_files = glob.glob(directory + "/*")
@@ -232,12 +239,9 @@ def feed():
 
 @app.route('/logs', methods=['GET', 'POST'])
 def logs():
-    logsDict = log_parser.ParseAllLogFilesInDirectory(
-        "Event logs", log_parser.EventLogParser)
+    logsDict = createLogsDict("Event logs", "Error logs")
     if request.method == "POST":
-        logsDict = log_parser.ParseAllLogFilesInDirectory(
-        "Event logs", log_parser.EventLogParser)
-        return json.dumps(logsDict)
+        return json.dumps(createLogsDict("Event logs", "Error logs"))
     return render_template(logsWeb, logParams=logsDict)
 
 

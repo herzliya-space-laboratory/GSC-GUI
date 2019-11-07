@@ -508,6 +508,11 @@ def GetGroundTime(file_name):
     return ConvertDateFromFileNameFormatToNormal(file_name[index:end_index])
 
 
+def getColor(directory):
+    if directory == "Event logs":
+        return "bg-info text-white"
+    return "bg-danger text-white"
+
 def ParseAllLogFilesInDirectory(directory, logFileParsingFunction):
     output = []
 
@@ -520,8 +525,10 @@ def ParseAllLogFilesInDirectory(directory, logFileParsingFunction):
                 rowDict["System"] = (log[0])
                 rowDict["Log Type"] = (log[1])
                 rowDict["Data"] = (log[2])
+                rowDict["File Name"] = filename
                 rowDict["Sat Time"] = (GetSatTime(filename))
                 rowDict["Ground Time"] = (GetGroundTime(filename))
+                rowDict["Color"] = getColor(directory)
                 output.append(rowDict)
 
     return output
