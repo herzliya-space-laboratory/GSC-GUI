@@ -8,6 +8,7 @@ from dateutil.parser import parse
 import time
 import glob
 import log_parser
+import re
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -121,19 +122,23 @@ def praseCSV(directory, paramNames, params={}):
     return params
 
 
-def praseNewestCSVdir(directory, paramNames, params={}):
-    '''For each file, find param name and append it to param dictionary.'''
-    list_of_files = glob.glob(directory + "/*")
-    latest_file = max(list_of_files, key=os.path.getctime)
-    f = open(latest_file, "r")
+def parseCSVfile(fileName, paramNames, params={}):
+    f = open(fileName, "r")
+
+    j = 0
     for line in f:
+        if j == 2:
+            params["sat_time"] = line.split(",")[-1].replace("\n", "")
+
         for i in range(len(paramNames)):
             if line.startswith(paramNames[i]):
                 paramVal = getParam(line)
                 if is_number(paramVal):
                     paramVal = float(paramVal)
                 params[paramNames[i]] = paramVal
+        j += 1
     return params
+
 
 def createLogsDict(eventLogDirectory, erroLogDirectory):
     logsDict = log_parser.ParseAllLogFilesInDirectory(
@@ -143,15 +148,30 @@ def createLogsDict(eventLogDirectory, erroLogDirectory):
     return logsDict + errorlogsDict
 
 
-def getUnitsFromNewestCSVdir(directory, paramNames, units={}):
-    list_of_files = glob.glob(directory + "/*")
-    latest_file = max(list_of_files, key=os.path.getctime)
-    f = open(latest_file, "r")
+def getParamsFromCSV(fileName):
+    f = open(fileName, "r")
+
+    params = []
+    i = 0
+    for line in f:
+        if i >= 7:
+            params.append(re.search("^(.+?),", line).group(1))
+        i += 1
+    return params
+
+
+def getUnitsFromCSV(fileName, paramNames, units={}):
+    f = open(fileName, "r")
     for line in f:
         for i in range(len(paramNames)):
             if line.startswith(paramNames[i]):
                 units[paramNames[i]] = getUnit(line)
     return units
+
+
+def getNewestFileInDir(directory):
+    list_of_files = glob.glob(directory + "/*")
+    return max(list_of_files, key=os.path.getctime)
 
 
 def minMaxFromType(t):
@@ -170,17 +190,27 @@ def getBeaconOptions():
     soup = BeautifulSoup(f.read(), "html.parser")
     options = {}
 
-    beacon = soup.find("gscmib").find("telemetry").find(
-        "servicetype", {"name": "global param"}).find(
-        "servicesubtype", {"name": "beacon"})
+    sts = soup.find("gscmib").find("telemetry").find_all(
+        "servicetype")
+    beacon = None
 
-    for param in beacon:
-        minAndMax = minMaxFromType(param.get("type"))
-        options[param.get("name")] = {
-            "min": minAndMax["min"],
-            "max": minAndMax["max"],
-            "redFrom": int(param.get("rangestart"))
-        }
+    for st in sts:
+        if st['value'] == '3':
+            beacon = st.find("servicesubtype")
+    ################################ DOTO: REMOVE THE i MECHANISM WHEN MIB IS READY #########################################
+    ################################## IMPORTANT #################################################
+    ################################## VERY IMPORTANT #################################################
+    i = 0
+    for param in beacon.find_all("parameter"):
+        if i < 3:
+            minAndMax = minMaxFromType(param["type"])
+            options[param["name"]] = {
+                "min": minAndMax["min"],
+                "max": minAndMax["max"],
+                "rangeStart": int(param["rangestart"]),
+                "rangeEnd": int(param["rangeend"])
+            }
+        i = i + 1
     f.close()
     return options
 
@@ -247,13 +277,17 @@ def logs():
 
 @app.route('/beacon', methods=['GET', 'POST'])
 def beacon():
-    params = ["batt_curr", "3v3_curr", "vbatt"]
-    data = praseNewestCSVdir(
-        "BeaconDemo", params)
+    latestFile = getNewestFileInDir("BeaconDemo")
+    params = getParamsFromCSV(latestFile)
+    data = parseCSVfile(latestFile, params)
     if request.method == "POST":
         return data
 
-    return render_template(beaconWeb, beacon=data, units=getUnitsFromNewestCSVdir("BeaconDemo", params))
+    paramOptions = getBeaconOptions()
+    beaconUnits = getUnitsFromCSV(latestFile, params)
+    beaconUnits["sat_time"] = "date"
+
+    return render_template(beaconWeb, beacon=data, units=beaconUnits, options=paramOptions)
 
 
 @app.route('/play')

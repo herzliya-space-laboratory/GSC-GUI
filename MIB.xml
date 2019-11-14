@@ -79,9 +79,9 @@
 	<ServiceType Value="3" Name="Global Param">
 	
       <ServiceSubtype Value="25" Name="Beacon">
-        <Parameter Name="vbatt" Type="uint16" Unit="mV" IsLittleEndian="false" />
-        <Parameter Name="Batt_Curr" Type="uint16" Unit="mA" IsLittleEndian="false" />
-        <Parameter Name="3v3_curr" Type="uint16" Unit="mA" IsLittleEndian="false" />
+        <Parameter Name="vbatt" Type="uint16" RangeStart="1" RangeEnd="6" Unit="mV" IsLittleEndian="false" />
+        <Parameter Name="Batt_Curr" Type="uint16" RangeStart="1" RangeEnd="6" Unit="mA" IsLittleEndian="false" />
+        <Parameter Name="3v3_curr" Type="uint16" RangeStart="1" RangeEnd="6" Unit="mA" IsLittleEndian="false" />
         <Parameter Name="5v_curr" Type="uint16" Unit="mA" IsLittleEndian="false" />
         <Parameter Name="LOtrxvu_temp" Type="uint16" Calibration="7" Unit="deg c" IsLittleEndian="false" />
         <Parameter Name="PAtrxvu_temp" Type="uint16" Calibration="7" Unit="deg c" IsLittleEndian="false" />
