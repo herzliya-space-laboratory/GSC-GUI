@@ -525,7 +525,6 @@ def ParseAllLogFilesInDirectory(directory, logFileParsingFunction):
                 rowDict["System"] = (log[0])
                 rowDict["Log Type"] = (log[1])
                 rowDict["Data"] = (log[2])
-                rowDict["File Name"] = filename
                 rowDict["Sat Time"] = (GetSatTime(filename))
                 rowDict["Ground Time"] = (GetGroundTime(filename))
                 rowDict["Color"] = getColor(directory)

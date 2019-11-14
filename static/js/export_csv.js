@@ -31,3 +31,14 @@ function exportTableToCSV(filename) {
     }
     downloadCSV(csv.join("\n"), filename);
 }
+
+function getCurrentDate(){
+    let currentDate = new Date();
+    let year = currentDate.getFullYear().toString()
+    let month = (currentDate.getMonth() + 1).toString()
+    let day = currentDate.getDate().toString()
+    let hour = currentDate.getHours().toString()
+    let minute = currentDate.getMinutes().toString()
+    let second = currentDate.getSeconds().toString()
+    return day + "-" + month + "-" + year + "_" + hour + "-" + minute + "-" + second
+}
