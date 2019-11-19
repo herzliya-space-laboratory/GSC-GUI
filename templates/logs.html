@@ -5,6 +5,8 @@
 
         <meta id="logs-dict" data-logs="{{logParams}}">
 
+        <title>Logs</title>
+
         <style>
             .scrollable-div{
                 max-height: 750px;
@@ -17,16 +19,18 @@
             }
         </style>
     </head>
-    <body>
+    <body class="indigo darken-1">
 
-            <div id="side-bar">
-                <ul id="slide-out" class="sidenav sidenav-fixed">
-                    <li  onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
-                    <li onclick="navChange(this)" class="active"><a href="#!">Logs</a></li>
-                  </ul>
+            <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
+                <li class="logo center-align">
+                    <img src="/static/logo/logo.png" 
+                    class="brand-logo" height="200" width="200">
+                </li>
+                <li  onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
+                <li onclick="navChange(this)" class="active"><a href="/logs">Logs</a></li>
+            </ul>
 
-                  <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            </div>
+                <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <main>
                 <div id="main-bar">
                     <div id="table-container"></div>
