@@ -4,7 +4,7 @@ let logsDict = $("#logs-dict").data("logs");
 logsDict = JSON.parse(logsDict.replace(/'/g, '"'));
 
 let table = document.createElement("table")
-$(table).addClass("table").addClass(",").addClass("table-dark");
+$(table).addClass("table").addClass("highlight").addClass("table-dark");
 
 let head = generateTableHead(table, logsDict, _param_order);
 

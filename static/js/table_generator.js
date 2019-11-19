@@ -62,7 +62,7 @@ function refresh_table(table_params, param_order, table_div_id) {
     table_div.innerHTML = "";
 
     let table = document.createElement("table");
-    $(table).addClass("table").addClass("table-hover").addClass("table-dark");
+    $(table).addClass("table").addClass("highlight").addClass("table-dark");
 
     let head = generateTableHead(table, table_params, param_order);
 
