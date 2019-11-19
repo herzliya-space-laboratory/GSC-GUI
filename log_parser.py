@@ -513,6 +513,7 @@ def getColor(directory):
         return "bg-info text-white"
     return "bg-danger text-white"
 
+
 def ParseAllLogFilesInDirectory(directory, logFileParsingFunction):
     output = []
 
