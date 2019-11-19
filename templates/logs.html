@@ -11,26 +11,40 @@
                 overflow-y: auto;
                 margin-bottom: 30px;
             }
+
+            header, main, footer {
+                padding-left: 315px;
+            }
         </style>
     </head>
     <body>
 
-            <div class="row">
-                <div id="side-bar" class="col-3">
-                    
-                </div>
-                <div id="main-bar" class="col-9">
+            <div id="side-bar">
+                <ul id="slide-out" class="sidenav sidenav-fixed">
+                    <li  onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
+                    <li onclick="navChange(this)" class="active"><a href="#!">Logs</a></li>
+                  </ul>
+
+                  <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            </div>
+            <main>
+                <div id="main-bar">
                     <div id="table-container"></div>
                     <div id="btn-div"></div>
                 </div>
-            </div>
+            </main>
 
         <script src="/static/js/table_generator.js"></script>
         <script src="static/js/export_csv.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/static/js/logs.js"></script>
+        <script src="/static/js/side_bar.js"></script>
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
     </body>
 </html>

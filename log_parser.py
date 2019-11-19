@@ -510,8 +510,8 @@ def GetGroundTime(file_name):
 
 def getColor(directory):
     if directory == "Event logs":
-        return "bg-info text-white"
-    return "bg-danger text-white"
+        return "blue white-text"
+    return "red white-text"
 
 
 def ParseAllLogFilesInDirectory(directory, logFileParsingFunction):
