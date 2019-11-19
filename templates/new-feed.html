@@ -9,12 +9,38 @@
     <meta name="jinUnits" content="{{ units }}" />
     <meta name="jinOptions" content="{{ options }}" />
     <script src="/static/js/feed.js"></script>
+    <style>
+        header,
+        main,
+        footer {
+            padding-left: 315px;
+        }
+
+        .readable {
+            max-width: 1000px;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+    </style>
+    <script src="/static/js/side_bar.js"></script>
     <title>Beacons</title>
 </head>
 
-<body>
-    <h1 class="center-align">Beacons</h1>
+<body class="indigo darken-1">
+
+    <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
+        <li class="logo center-align">
+            <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+        </li>
+        <li onclick="navChange(this)" class="active"><a href="/beacon">Beacons</a></li>
+        <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+    </ul>
+
+    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+    <h1 class="center-align white-text">Beacons</h1>
     <main id="main"></main>
+
 </body>
 
 </html>

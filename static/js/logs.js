@@ -12,7 +12,7 @@ let exportBtn = document.createElement("button");
 exportBtn.innerText = "Export table to csv file";
 exportBtn.className = "btn pink accent-3 white-text waves-effect"
 
-$(exportBtn).click(function(){
+$(exportBtn).click(function () {
     let filename = "LogsTable-" + getCurrentDate() + ".csv"
     exportTableToCSV(filename);
 })

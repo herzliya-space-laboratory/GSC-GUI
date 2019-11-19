@@ -71,7 +71,7 @@ function createCards(dispOrder, div) {
 
     for (let i in dispOrder) {
         let col = document.createElement("div");
-        col.className = "col s2";
+        col.className = "col s4";
 
         let card = document.createElement("div");
         card.className = "card white";
