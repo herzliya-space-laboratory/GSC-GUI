@@ -12,11 +12,21 @@ function createCharts() {
         "OBC": ["number_resets", "numberdelayd_comms", "last_resets", "states"]
     };
 
-    let categoryDivs = {};
+    let categoryCards = {};
+    let greatDiv = document.createElement("div");
+    greatDiv.className = "row";
 
     for (let i in dispOrder) {
-        let div = document.createElement("div");
-        categoryDivs[i] = div;
+        let col = document.createElement("div");
+        col.className = "col s2";
+        let card = document.createElement("div");
+        card.className = "card white";
+        let content = document.createElement("div");
+        content.className = "card-content black-text";
+        col.appendChild(card);
+        card.appendChild(content);
+        categoryCards[i] = content;
+        greatDiv.appendChild(col);
     }
 
     let dispType = {
@@ -35,29 +45,25 @@ function createCharts() {
     options = JSON.parse(options.replace(/'/g, '"'));
 
     let charts = {};
-    let greatDiv = document.createElement("div");
 
 
     for (let category in dispOrder) {
-        let heading = document.createElement("h1");
+        let heading = document.createElement("span");
+        heading.className = "card-title";
         heading.innerHTML = category;
-        categoryDivs[category].appendChild(heading);
+        categoryCards[category].appendChild(heading);
         for (let i in dispOrder[category]) {
             let param = dispOrder[category][i]
             if (dispType[param] === "gauge") {
                 let gauge = document.createElement("div");
-                categoryDivs[category].appendChild(gauge);
-                $(gauge).css("display", "inline-block");
+                categoryCards[category].appendChild(gauge);
                 charts[param] = new google.visualization.Gauge(gauge);
             } else /*if (dispType[param] === "textbox")*/ {
-                let textbox = document.createElement("textbox");
-                categoryDivs[category].appendChild(textbox);
-                $(textbox).css("display", "inline-block");
+                let textbox = document.createElement("h6");
+                categoryCards[category].appendChild(textbox);
                 charts[param] = textbox;
             }
         }
-        $(categoryDivs[category]).css("border-style", "solid")
-        greatDiv.appendChild(categoryDivs[category]);
     }
     document.body.appendChild(greatDiv);
 
@@ -80,15 +86,11 @@ function drawCharts(charts, options, data, dispType, units) {
             charts[i].draw(gaugeData, option);
         } else /*if (dispType[i] === "textbox")*/ {
             charts[i].innerHTML = `${i + "[" + units[i] + "]"}: ${data[i]}`;
-            $(charts[i]).css("font-size", "25px");
+            //$(charts[i]).css("font-size", "25px");
             if (options[i] != undefined && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
-                $(charts[i]).css("color", "red");
-                $(charts[i]).css("font-weight", "Bold");
-                $(charts[i]).css("padding-left", "30px");
+                charts[i].className = "red-text";
             } else {
-                $(charts[i]).css("color", "black");
-                $(charts[i]).css("font-weight", "Normal");
-                $(charts[i]).css("padding-left", "30px");
+                charts[i].className = "black-text";
             }
         }
     }
