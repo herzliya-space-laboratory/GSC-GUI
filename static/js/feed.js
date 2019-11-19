@@ -12,22 +12,9 @@ function createCharts() {
         "OBC": ["number_resets", "numberdelayd_comms", "last_resets", "states"]
     };
 
-    let categoryCards = {};
-    let greatDiv = document.createElement("div");
-    greatDiv.className = "row";
-
-    for (let i in dispOrder) {
-        let col = document.createElement("div");
-        col.className = "col s2";
-        let card = document.createElement("div");
-        card.className = "card white";
-        let content = document.createElement("div");
-        content.className = "card-content black-text";
-        col.appendChild(card);
-        card.appendChild(content);
-        categoryCards[i] = content;
-        greatDiv.appendChild(col);
-    }
+    let row = document.createElement("div");
+    row.className = "row";
+    let categoryCards = createCards(dispOrder, row);
 
     let dispType = {
         "sat_time": "textbox",
@@ -44,34 +31,62 @@ function createCharts() {
     units = JSON.parse(units.replace(/'/g, '"'));
     options = JSON.parse(options.replace(/'/g, '"'));
 
-    let charts = {};
+    let charts = initCardElements(dispOrder, dispType, categoryCards);
 
-
-    for (let category in dispOrder) {
-        let heading = document.createElement("span");
-        heading.className = "card-title";
-        heading.innerHTML = category;
-        categoryCards[category].appendChild(heading);
-        for (let i in dispOrder[category]) {
-            let param = dispOrder[category][i]
-            if (dispType[param] === "gauge") {
-                let gauge = document.createElement("div");
-                categoryCards[category].appendChild(gauge);
-                charts[param] = new google.visualization.Gauge(gauge);
-            } else /*if (dispType[param] === "textbox")*/ {
-                let textbox = document.createElement("h6");
-                categoryCards[category].appendChild(textbox);
-                charts[param] = textbox;
-            }
-        }
-    }
-    document.body.appendChild(greatDiv);
+    $("#main").append(row);
 
     drawCharts(charts, options, data, dispType, units);
 
     setInterval(function () {
         updateCharts(charts, options, dispType, units);
     }, 1000);
+}
+
+function initCardElements(dispOrder, dispType, cards) {
+    let charts = {};
+    for (let category in dispOrder) {
+        let heading = document.createElement("span");
+        heading.className = "card-title";
+        heading.innerHTML = category;
+        cards[category].appendChild(heading);
+        for (let i in dispOrder[category]) {
+            let param = dispOrder[category][i]
+            if (dispType[param] === "gauge") {
+                let gauge = document.createElement("div");
+                cards[category].appendChild(gauge);
+                charts[param] = new google.visualization.Gauge(gauge);
+            } else /*if (dispType[param] === "textbox")*/ {
+                let textbox = document.createElement("h6");
+                cards[category].appendChild(textbox);
+                charts[param] = textbox;
+            }
+        }
+    }
+
+    return charts;
+}
+
+function createCards(dispOrder, div) {
+    let cards = {};
+
+    for (let i in dispOrder) {
+        let col = document.createElement("div");
+        col.className = "col s2";
+
+        let card = document.createElement("div");
+        card.className = "card white";
+
+        let content = document.createElement("div");
+        content.className = "card-content black-text";
+
+        col.appendChild(card);
+        card.appendChild(content);
+        cards[i] = content;
+
+        div.appendChild(col);
+    }
+
+    return cards;
 }
 
 
@@ -86,7 +101,6 @@ function drawCharts(charts, options, data, dispType, units) {
             charts[i].draw(gaugeData, option);
         } else /*if (dispType[i] === "textbox")*/ {
             charts[i].innerHTML = `${i + "[" + units[i] + "]"}: ${data[i]}`;
-            //$(charts[i]).css("font-size", "25px");
             if (options[i] != undefined && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
                 charts[i].className = "red-text";
             } else {
