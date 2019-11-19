@@ -4,13 +4,13 @@ let logsDict = $("#logs-dict").data("logs");
 logsDict = JSON.parse(logsDict.replace(/'/g, '"'));
 
 let table = document.createElement("table")
-$(table).addClass("table").addClass("highlight").addClass("table-dark");
+table.className = "highlight white black-text";
 
 let head = generateTableHead(table, logsDict, _param_order);
 
 let exportBtn = document.createElement("button");
 exportBtn.innerText = "Export table to csv file";
-$(exportBtn).addClass("btn").addClass("btn-outline-primary");
+exportBtn.className = "btn pink accent-3 white-text waves-effect"
 
 $(exportBtn).click(function(){
     let filename = "LogsTable-" + getCurrentDate() + ".csv"
