@@ -180,39 +180,74 @@ def minMaxFromType(t):
         'int16': {"min": -32768, "max": 32767},
         'uint32': {"min": 0, "max": 4294967295},
         'byte': {"min": -128, "max": 127},
-        'datetime': {"min": 0, "max": 0}
+        'dateTime': {"min": 0, "max": 0},
+        'string': {"min": 0, "max": 0}
     }[t]
 
 
-def getBeaconOptions():
+def getCSVPacketId(path):
+    f = open(path, "r")
+    return f.readline().split(",")[1]
+
+
+def findTelemetryInMIB(serviceType, serviceSubType):
     f = open("MIB.xml", "r")
 
     soup = BeautifulSoup(f.read(), "html.parser")
-    options = {}
 
     sts = soup.find("gscmib").find("telemetry").find_all(
         "servicetype")
-    beacon = None
 
     for st in sts:
-        if st['value'] == '3':
-            beacon = st.find("servicesubtype")
-    ################################ DOTO: REMOVE THE i MECHANISM WHEN MIB IS READY #########################################
-    ################################## IMPORTANT #################################################
-    ################################## VERY IMPORTANT #################################################
-    i = 0
-    for param in beacon.find_all("parameter"):
-        if i < 3:
-            minAndMax = minMaxFromType(param["type"])
+        if st['value'] == serviceType:
+            for sst in st.find_all("servicesubtype"):
+                if sst['value'] == serviceSubType:
+                    return sst
+
+    return None
+
+
+def getTelemetryOptions(serviceType, serviceSubType):
+    telemetry = findTelemetryInMIB(serviceType, serviceSubType)
+    options = {}
+
+    for param in telemetry.find_all("parameter"):
+        # minAndMax = minMaxFromType(param["type"])
+        try:
             options[param["name"]] = {
-                "min": minAndMax["min"],
-                "max": minAndMax["max"],
+                # "min": minAndMax["min"],
+                # "max": minAndMax["max"],
                 "rangeStart": int(param["rangestart"]),
                 "rangeEnd": int(param["rangeend"])
             }
-        i = i + 1
+        except:
+            options[param["name"]] = ""
+
     f.close()
     return options
+
+
+def getSubDirs(dirPath):
+    return glob.glob("./" + dirPath + "/*/")
+
+
+def parseDumpDirNames(dirs):
+    dumpNames = {}
+
+    for d in dirs:
+        # Parse service type, subtype and telemetry name from directory name
+        parsedName = re.search("\/ST-(\d*)\ SST-(\d*)\ (.*)\/$", d)
+
+        st = parsedName[1]
+        sst = parsedName[2]
+        name = parsedName[3]
+
+        dumpNames[st + "-" + sst] = {
+            "name": name,
+            "path": d
+        }
+
+    return dumpNames
 
 
 app = Flask(__name__)
@@ -222,7 +257,10 @@ index = "index.html"
 feedWeb = "feed.html"
 logsWeb = "logs.html"
 playground = "playground.html"
-beaconWeb = "new-feed.html"
+beaconWeb = "beacon.html"
+dumpWeb = "dump.html"
+
+dumpDirNames = parseDumpDirNames(getSubDirs("DumpDemo"))
 
 
 @app.route('/commands')
@@ -254,19 +292,6 @@ def home():
     return render_template(index)
 
 
-@app.route('/feed', methods=['GET', 'POST'])
-def feed():
-    params1 = {}
-    praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
-                            "Packet Sat Date Time", "Packet Ground Date Time"], params1)
-    if request.method == "POST":
-        params1 = {}
-        praseCSV("BeaconDemo", ["batt_curr", "3v3_curr", "vbatt",
-                                "Packet Sat Date Time", "Packet Ground Date Time"], params1)
-        return params1
-    return render_template(feedWeb, satParams=params1)
-
-
 @app.route('/logs', methods=['GET', 'POST'])
 def logs():
     logsDict = createLogsDict("Event logs", "Error logs")
@@ -283,7 +308,7 @@ def beacon():
     if request.method == "POST":
         return data
 
-    paramOptions = getBeaconOptions()
+    paramOptions = getTelemetryOptions('3', '25')
     beaconUnits = getUnitsFromCSV(latestFile, params)
     beaconUnits["sat_time"] = "date"
 
@@ -293,6 +318,22 @@ def beacon():
 @app.route('/play')
 def palyground():
     return render_template(playground)
+
+
+@app.route('/dump/<int:st>-<int:sst>', methods=['GET', 'POST'])
+def dump(st, sst):
+    key = str(st) + "-" + str(sst)
+    f = getNewestFileInDir(dumpDirNames[key]["path"])
+    params = getParamsFromCSV(f)
+    data = parseCSVfile(f, params)
+
+    if request.method == "POST":
+        return data
+
+    options = getTelemetryOptions(str(st), str(sst))
+    units = getUnitsFromCSV(f, params)
+
+    return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType=key)
 
 
 app.run(debug=True)

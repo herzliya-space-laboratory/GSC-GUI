@@ -31,6 +31,8 @@ function createCharts() {
     units = JSON.parse(units.replace(/'/g, '"'));
     options = JSON.parse(options.replace(/'/g, '"'));
 
+    console.log(options);
+
     let charts = initCardElements(dispOrder, dispType, categoryCards);
 
     $("#main").append(row);
@@ -74,7 +76,7 @@ function createCards(dispOrder, div) {
         col.className = "col s4";
 
         let card = document.createElement("div");
-        card.className = "card white";
+        card.className = "card medium white";
 
         let content = document.createElement("div");
         content.className = "card-content black-text";
@@ -101,7 +103,7 @@ function drawCharts(charts, options, data, dispType, units) {
             charts[i].draw(gaugeData, option);
         } else /*if (dispType[i] === "textbox")*/ {
             charts[i].innerHTML = `${i + "[" + units[i] + "]"}: ${data[i]}`;
-            if (options[i] != undefined && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
+            if ((options[i] != undefined || options[i] != null) && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
                 charts[i].className = "red-text";
             } else {
                 charts[i].className = "black-text";

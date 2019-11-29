@@ -1,54 +1,59 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
 
-        <meta id="logs-dict" data-logs="{{logParams}}">
+<head>
+    <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
 
-        <title>Logs</title>
+    <meta id="logs-dict" data-logs="{{logParams}}">
 
-        <style>
-            .scrollable-div{
-                max-height: 750px;
-                overflow-y: auto;
-                margin-bottom: 30px;
-            }
+    <title>Logs</title>
 
-            header, main, footer {
-                padding-left: 315px;
-            }
-        </style>
-    </head>
-    <body class="indigo darken-1">
+    <style>
+        .scrollable-div {
+            max-height: 750px;
+            overflow-y: auto;
+            margin-bottom: 30px;
+        }
 
-            <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
-                <li class="logo center-align">
-                    <img src="/static/logo/logo.png" 
-                    class="brand-logo" height="200" width="200">
-                </li>
-                <li  onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
-                <li onclick="navChange(this)" class="active"><a href="/logs">Logs</a></li>
-            </ul>
+        header,
+        main,
+        footer {
+            padding-left: 315px;
+        }
+    </style>
+</head>
 
-                <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <main>
-                <div id="main-bar">
-                    <div id="table-container"></div>
-                    <div id="btn-div"></div>
-                </div>
-            </main>
+<body class="indigo darken-1">
+    <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
+        <li class="logo center-align">
+            <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+        </li>
+        <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
+        <li onclick="navChange(this)" class="active"><a href="/logs">Logs</a></li>
+    </ul>
 
-        <script src="/static/js/table_generator.js"></script>
-        <script src="static/js/export_csv.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="/static/js/logs.js"></script>
-        <script src="/static/js/side_bar.js"></script>
+    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
-        <!-- Compiled and minified CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <h2 class="center-align white-text">Logs</h2>
+    <main>
+        <div id="main-bar">
+            <div id="table-container"></div>
+            <div id="btn-div"></div>
+        </div>
+    </main>
 
-        <!-- Compiled and minified JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-            
-    </body>
+    <script src="/static/js/table_generator.js"></script>
+    <script src="static/js/export_csv.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/static/js/logs.js"></script>
+    <script src="/static/js/side_bar.js"></script>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>
+
 </html>

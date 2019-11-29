@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="jinData" content="{{ data }}" />
+    <meta name="jinUnits" content="{{ units }}" />
+    <meta name="jinOptions" content="{{ options }}" />
+    <meta name="jinTelemType" content="{{ telemType }}" />
+    <meta name="jinTelemName" content="{{ telemName }}" />
+    <script src="/static/js/dump.js"></script>
+    <style>
+        header,
+        main,
+        footer {
+            padding-left: 315px;
+        }
+    </style>
+    <script src="/static/js/side_bar.js"></script>
+</head>
+
+<body class="indigo darken-1">
+
+    <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
+        <li class="logo center-align">
+            <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+        </li>
+        <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
+        <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+    </ul>
+
+    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+    <h2 id="title" class="center-align white-text"></h2>
+    <main id="main"></main>
+
+</body>
+
+</html>
