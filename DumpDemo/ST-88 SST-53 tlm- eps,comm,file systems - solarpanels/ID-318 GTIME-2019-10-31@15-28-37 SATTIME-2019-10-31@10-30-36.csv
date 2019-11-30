@@ -1,0 +1,12 @@
+Packet ID,318
+Packet Ground Date Time,31/10/2019 15:28:37
+Packet Sat Date Time,31/10/2019 10:30:36
+Packet Total Raw Data,90-52-00-00-2F-52-00-00-EB-52-00-00-15-51-00-00-6B-52-00-00-05-52-00-00
+
+Parameter Name,Raw Data,Value,Unit
+sp temp0,90-52-00-00,20.640625,deg
+sp temp1,2F-52-00-00,20.5458984375,deg
+sp temp2,EB-52-00-00,20.7294921875,deg
+sp temp3,15-51-00-00,20.2705078125,deg
+sp temp4,6B-52-00-00,20.6044921875,deg
+sp temp5,05-52-00-00,20.5048828125,deg

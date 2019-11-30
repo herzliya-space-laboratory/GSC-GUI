@@ -1,0 +1,15 @@
+Packet ID,53
+Packet Ground Date Time,31/10/2019 14:44:59
+Packet Sat Date Time,31/10/2019 10:34:58
+Packet Total Raw Data,42-06-2E-01-41-00-38-00-B9-03-D2-08-CE-08-80-00-00-00
+
+Parameter Name,Raw Data,Value,Unit
+bus_volt,42-06,7.81776,v
+total_current,2E-01,50.26477128,ma
+txrefl,41-00,65,mw
+txfrow,38-00,56,mw
+rxrssi,B9-03,-123.41,dbm
+pa_temp,D2-08,22.43768,deg
+locosc_temp,CE-08,22.74444,deg
+ant_temp_a,80-00,153.2484,deg
+ant_temp_b,00-00,190.65,deg

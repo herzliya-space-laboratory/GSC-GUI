@@ -1,0 +1,10 @@
+Packet ID,386
+Packet Ground Date Time,17/10/2019 18:04:11
+Packet Sat Date Time,16/10/2019 16:43:19
+Packet Total Raw Data,02-0D-08-00
+
+Parameter Name,Raw Data,Value,Unit
+adcs operation modes,02,2,none
+adcs enabled components,0D,13,none
+adcs error occured,08,8,none
+adcs misc operation flags,00,0,none

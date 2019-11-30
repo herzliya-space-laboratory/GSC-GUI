@@ -1,0 +1,9 @@
+Packet ID,18
+Packet Ground Date Time,28/10/2019 16:02:03
+Packet Sat Date Time,28/10/2019 17:01:58
+Packet Total Raw Data,0A-00-00-00-00-00-00-00-00-00-00-00
+
+Parameter Name,Raw Data,Value,Unit
+command subtype,0A-00-00-00,10,none
+command return value,00-00-00-00,0,none
+i2c ack value,00-00-00-00,0,none

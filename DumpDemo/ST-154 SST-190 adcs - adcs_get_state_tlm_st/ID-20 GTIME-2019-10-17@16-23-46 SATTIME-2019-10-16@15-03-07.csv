@@ -1,0 +1,29 @@
+Packet ID,20
+Packet Ground Date Time,17/10/2019 16:23:46
+Packet Sat Date Time,16/10/2019 15:03:07
+Packet Total Raw Data,FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF-FF
+
+Parameter Name,Raw Data,Value,Unit
+current state,FF,255,none
+failed to recover an adcs node by successive resets,FF-FF,-1,none
+roll angle,FF-FF,-1,[deg]
+pitch angle,FF-FF,-0.01,[deg]
+yaw angle,FF-FF,-0.01,[deg]
+quaternion error q1 component,FF-FF,-0.0001,none
+quaternion error q2 component,FF-FF,-0.0001,none
+quaternion error q3 component,FF-FF,-0.0001,none
+x angular rate,FF-FF,-0.01,[deg/sec]
+y angular rate,FF-FF,-0.01,[deg/sec]
+z angular rate,FF-FF,-0.01,[deg/sec]
+eci referenced x-pos vector,FF-FF,-0.25,[km]
+eci referenced y-pos vector,FF-FF,-0.25,[km]
+eci referenced z-pos vector,FF-FF,-0.25,[km]
+eci referenced x-velocity,FF-FF,-0.25,[m/sec]
+eci referenced y-velocity,FF-FF,-0.25,[m/sec]
+eci referenced z-velocity,FF-FF,-0.25,[m/sec]
+latitude angle,FF-FF,-0.01,[deg]
+longitude angle,FF-FF,-0.01,[deg]
+altitude angle,FF-FF,-0.01,[deg]
+ecef x position,FF-FF,-1,[m]
+ecef y position,FF-FF,-1,[m]
+ecef z position,FF-FF,-1,[m]

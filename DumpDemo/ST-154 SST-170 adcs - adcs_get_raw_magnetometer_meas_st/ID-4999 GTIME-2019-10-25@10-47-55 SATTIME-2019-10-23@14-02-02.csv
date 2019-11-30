@@ -1,0 +1,9 @@
+Packet ID,4999
+Packet Ground Date Time,25/10/2019 10:47:55
+Packet Sat Date Time,23/10/2019 14:02:02
+Packet Total Raw Data,6F-22-8D
+
+Parameter Name,Raw Data,Value,Unit
+magnetic_x,6F,111,none
+magnetic_y,22,34,none
+magnetic_z,8D,141,none

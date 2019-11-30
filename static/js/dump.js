@@ -9,27 +9,27 @@ function createCharts() {
     let telemType = $("meta[name=jinTelemType]").attr("content");
     let telemName = $("meta[name=jinTelemName]").attr("content");
 
-    document.head.title.innerHTML = telemName;
-    $("#title").html(telemName);
+    let title = document.createElement("title");
+    title.innerHTML = telemName;
+    document.head.appendChild(title);
+    document.getElementById("title").innerHTML = telemName;
 
     data = JSON.parse(data.replace(/'/g, '"'));
     units = JSON.parse(units.replace(/'/g, '"'));
     options = JSON.parse(options.replace(/'/g, '"'));
 
-    let charts = initCardElements(card);
-
-    $("#main").append(row);
+    let charts = initCardElements(card, data);
+    document.getElementById("main").appendChild(row);
 
     drawCharts(charts, options, data, units);
 
     setInterval(function () {
-        updateCharts(charts, options, dispType, units, telemType);
+        updateCharts(charts, options, units, telemType);
     }, 1000);
 }
 
 function initCardElements(card, data) {
     let charts = {};
-    debugger;
     for (let param in data) {
         let textbox = document.createElement("h6");
         card.appendChild(textbox);
@@ -59,7 +59,7 @@ function createCard(div) {
 
 function drawCharts(charts, options, data, units) {
     for (let i in data) {
-        charts[i].innerHTML = `${i + "[" + units[i] + "]"}: ${data[i]}`;
+        charts[i].innerHTML = `${i + " [" + units[i] + "]"}: ${data[i]}`;
 
         if ((options[i] != undefined || options[i] != null) && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
             charts[i].className = "red-text";
@@ -73,7 +73,7 @@ function updateCharts(charts, options, units, telemType) {
     let data = {};
     $.ajax({
         type: "POST",
-        url: "/dump" + telemType,
+        url: "/dump/" + telemType,
         data: {}
     }).done(function (params) {
         data = params;
@@ -81,5 +81,5 @@ function updateCharts(charts, options, units, telemType) {
     });
 }
 
-createCharts();
+window.onload = createCharts();
 

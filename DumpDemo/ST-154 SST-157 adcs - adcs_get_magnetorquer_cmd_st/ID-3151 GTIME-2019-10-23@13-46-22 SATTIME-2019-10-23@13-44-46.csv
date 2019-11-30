@@ -1,0 +1,9 @@
+Packet ID,3151
+Packet Ground Date Time,23/10/2019 13:46:22
+Packet Sat Date Time,23/10/2019 13:44:46
+Packet Total Raw Data,00-00-FC-FF-00-00
+
+Parameter Name,Raw Data,Value,Unit
+magcmd_x,00-00,0,[msec]
+magcmd_y,FC-FF,-4,[msec]
+magcmd_z,00-00,0,[msec]

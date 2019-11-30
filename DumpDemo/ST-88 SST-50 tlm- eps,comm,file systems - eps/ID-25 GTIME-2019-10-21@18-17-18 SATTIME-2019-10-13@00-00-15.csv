@@ -1,0 +1,33 @@
+Packet ID,25
+Packet Ground Date Time,21/10/2019 18:17:18
+Packet Sat Date Time,13/10/2019 00:00:15
+Packet Total Raw Data,13-0F-61-0E-90-0E-00-00-00-00-02-00-1A-00-AC-1E-6D-00-05-00-00-00-03-00-03-00-07-00-00-00-18-00-19-00-18-00-19-00-18-00-18-00-BD-06-00-00-00-01-00-31-03
+
+Parameter Name,Raw Data,Value,Unit
+photovoltaic3,13-0F,3859,mv
+photovoltaic2,61-0E,3681,mv
+photovoltaic1,90-0E,3728,mv
+photocurrent3,00-00,0,ma
+photocurrent2,00-00,0,ma
+photocurrent1,02-00,2,ma
+total photo current,1A-00,26,ma
+battery voltage,AC-1E,7852,mv
+total system current,6D-00,109,ma
+currentchanel1,05-00,5,ma
+currentchanel2,00-00,0,ma
+currentchanel3,03-00,3,ma
+currentchanel4,03-00,3,ma
+currentchanel5,07-00,7,ma
+currentchanel6,00-00,0,ma
+temp1,18-00,24,deg
+temp2,19-00,25,deg
+temp3,18-00,24,deg
+temp4,19-00,25,deg
+batt temp 1,18-00,24,deg
+batt temp 2,18-00,24,deg
+number of eps reboots,BD-06-00-00,1725,counter
+cause of last reset,00,0,none
+pptmode,01,1,can be 1/2/3
+channelstatus,00,0,every bit
+system state,31,49,ԅ(≖‿≖ԅ)
+eps state numnber,03,3,every bit

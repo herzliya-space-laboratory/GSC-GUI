@@ -1,0 +1,8 @@
+Packet ID,2
+Packet Ground Date Time,28/10/2019 15:57:49
+Packet Sat Date Time,28/10/2019 16:57:44
+Packet Total Raw Data,81-32-04-00-BB-02
+
+Parameter Name,Raw Data,Value,Unit
+unix time,81-32-04-00,04/01/1970 04:24:33,none
+mili second,BB-02,699,none

@@ -1,0 +1,21 @@
+Packet ID,9
+Packet Ground Date Time,21/10/2019 12:29:01
+Packet Sat Date Time,20/10/2019 08:44:55
+Packet Total Raw Data,05-00-03-03-05-00-03-03-00-00-01-00-00-00-00-00-00-00-00-00-00-00-00-00-01-00-00-00-0B-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-10-5E-5F-00-00-00-00-00-35-00-C3-3F-40-04-00-00
+
+Parameter Name,Raw Data,Value,Unit
+register 0,05-00-03-03,50528261,none
+register 1,05-00-03-03,50528261,none
+register 2,00-00-01-00,65536,none
+register 3,00-00-00-00,0,none
+register 4,00-00-00-00,0,none
+register 5,00-00-00-00,0,none
+register 6,01-00-00-00,1,none
+register 7,0B-00-00-00,11,none
+register 8,00-00-00-00,0,none
+register 9,00-00-00-00,0,none
+register 10,00-00-00-00,0,none
+register 11,10-5E-5F-00,6250000,none
+register 12,00-00-00-00,0,none
+register 13,35-00-C3-3F,1069744181,none
+register 14,40-04-00-00,1088,none

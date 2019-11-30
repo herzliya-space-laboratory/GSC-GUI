@@ -1,0 +1,9 @@
+Packet ID,425
+Packet Ground Date Time,22/10/2019 16:05:47
+Packet Sat Date Time,21/10/2019 12:08:24
+Packet Total Raw Data,29-F3-5D-FB-69-F1
+
+Parameter Name,Raw Data,Value,Unit
+magnetic field x,29-F3,-3287,[ut]
+magnetic field y,5D-FB,-1187,[ut]
+magnetic field z,69-F1,-3735,[ut]

@@ -1,0 +1,9 @@
+Packet ID,52
+Packet Ground Date Time,28/10/2019 16:11:40
+Packet Sat Date Time,28/10/2019 17:11:35
+Packet Total Raw Data,00-00-00-00-00-00
+
+Parameter Name,Raw Data,Value,Unit
+estimated x ang rate,00-00,0,[deg/sec]
+estimated y ang rate,00-00,0,[deg/sec]
+estimated z ang rate,00-00,0,[deg/sec]

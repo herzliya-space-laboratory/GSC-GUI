@@ -1,0 +1,9 @@
+Packet ID,7997
+Packet Ground Date Time,23/10/2019 14:47:26
+Packet Sat Date Time,23/10/2019 14:02:10
+Packet Total Raw Data,84-00-1A-00-12-00
+
+Parameter Name,Raw Data,Value,Unit
+cubecontrol 3v3 current,84-00,132,[ma]
+cubecontrol 5v current,1A-00,26,[ma]
+cubecontrol vbat current,12-00,18,[ma]

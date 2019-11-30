@@ -1,0 +1,8 @@
+Packet ID,15
+Packet Ground Date Time,03/11/2019 11:56:00
+Packet Sat Date Time,10/12/2019 00:00:08
+Packet Total Raw Data,E3-05-00-00-00-00-00-00
+
+Parameter Name,Raw Data,Value,Unit
+log num,E3-05-00-00,1507,x
+info,00-00-00-00,0,x

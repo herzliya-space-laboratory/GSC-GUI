@@ -1,0 +1,10 @@
+Packet ID,3789
+Packet Ground Date Time,01/11/2019 15:25:22
+Packet Sat Date Time,13/10/2019 00:53:29
+Packet Total Raw Data,00-A0-F1-77-00-70-F9-75-00-30-F8-01-00-00-00-00
+
+Parameter Name,Raw Data,Value,Unit
+total,00-A0-F1-77,2012323840,byte
+free,00-70-F9-75,1979281408,byte
+used,00-30-F8-01,33042432,byte
+bad,00-00-00-00,0,byte

@@ -1,0 +1,9 @@
+Packet ID,1002
+Packet Ground Date Time,29/10/2019 18:54:26
+Packet Sat Date Time,29/10/2019 18:48:16
+Packet Total Raw Data,21-00-EA-FF-F1-FF
+
+Parameter Name,Raw Data,Value,Unit
+x angular rate,21-00,33,[deg/s]
+y angular rate,EA-FF,-22,[deg/s]
+z angular rate,F1-FF,-15,[deg/s]

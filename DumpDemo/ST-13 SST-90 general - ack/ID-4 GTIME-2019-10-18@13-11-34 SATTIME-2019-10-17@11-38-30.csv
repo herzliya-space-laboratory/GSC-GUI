@@ -1,0 +1,9 @@
+Packet ID,4
+Packet Ground Date Time,18/10/2019 13:11:34
+Packet Sat Date Time,17/10/2019 11:38:30
+Packet Total Raw Data,00-00-03-E9-00-00
+
+Parameter Name,Raw Data,Value,Unit
+commandid,00-00-03-E9,1001,mv
+acktype,00,0,x
+errortype,00,0,x

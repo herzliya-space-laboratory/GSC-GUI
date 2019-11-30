@@ -1,0 +1,10 @@
+Packet ID,14
+Packet Ground Date Time,17/10/2019 16:22:39
+Packet Sat Date Time,16/10/2019 15:01:59
+Packet Total Raw Data,FF-FF-FF-FF
+
+Parameter Name,Raw Data,Value,Unit
+adcs operation modes,FF,255,none
+adcs enabled components,FF,255,none
+adcs error occured,FF,255,none
+adcs misc operation flags,FF,255,none

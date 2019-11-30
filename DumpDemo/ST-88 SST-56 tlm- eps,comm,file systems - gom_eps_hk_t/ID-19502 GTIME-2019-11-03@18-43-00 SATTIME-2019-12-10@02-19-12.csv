@@ -1,0 +1,72 @@
+Packet ID,19502
+Packet Ground Date Time,03/11/2019 18:43:00
+Packet Sat Date Time,10/12/2019 02:19:12
+Packet Total Raw Data,08-00-94-0C-A9-0C-19-0D-62-1C-02-00-00-00-00-00-1A-00-DE-02-00-00-05-00-00-00-03-00-0B-00-07-00-00-00-01-00-00-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-2C-01-00-00-80-F4-03-00-05-05-07-03-00-00-04-00-00-00-00-00-00-00-00-00-00-00-0D-08-00-00-1A-00-1B-00-1A-00-1B-00-19-00-19-00-02-03-01-00-00
+
+Parameter Name,Raw Data,Value,Unit
+commandreply,08-00,8,mv
+vboost[0],94-0C,3220,mv
+vboost[1],A9-0C,3241,mv
+vboost[2],19-0D,3353,mv
+vbatt,62-1C,7266,mv
+curin[0],02-00,2,ma
+curin[1],00-00,0,ma
+curin[2],00-00,0,ma
+cursun,1A-00,26,none
+cursys,DE-02,734,none
+reserved1,00-00,0,none
+curout[0],05-00,5,ma
+curout[1],00-00,0,ma
+curout[2],03-00,3,ma
+curout[3],0B-00,11,ma
+curout[4],07-00,7,ma
+curout[5],00-00,0,ma
+output[0],01,1,none
+output[1],00,0,none
+output[2],00,0,none
+output[3],01,1,none
+output[4],00,0,none
+output[5],00,0,none
+output[6],00,0,none
+output[7],00,0,none
+output_on_delta[0],00-00,0,none
+output_on_delta[1],00-00,0,none
+output_on_delta[2],00-00,0,none
+output_on_delta[3],00-00,0,none
+output_on_delta[4],00-00,0,none
+output_on_delta[5],00-00,0,none
+output_on_delta[6],00-00,0,none
+output_on_delta[7],00-00,0,none
+output_off_delta[0],00-00,0,none
+output_off_delta[1],00-00,0,none
+output_off_delta[2],00-00,0,none
+output_off_delta[3],00-00,0,none
+output_off_delta[4],00-00,0,none
+output_off_delta[5],00-00,0,none
+output_off_delta[6],00-00,0,none
+output_off_delta[7],00-00,0,none
+latchup [0],00-00,0,none
+latchup [1],00-00,0,none
+latchup [2],00-00,0,none
+latchup [3],00-00,0,none
+latchup [4],00-00,0,none
+latchup [5],00-00,0,none
+wdt_i2c_time_left,2C-01-00-00,300,none
+wdt_gnd_time_left,80-F4-03-00,259200,none
+wdt_csp_pings_left [0],05,5,none
+wdt_csp_pings_left [1],05,5,none
+counter_wdt_i2c,07-03-00-00,775,none
+counter_wdt_gnd,04-00-00-00,4,none
+counter_wdt_csp [0],00-00-00-00,0,none
+counter_wdt_csp [1],00-00-00-00,0,none
+counter_boot,0D-08-00-00,2061,none
+temp[0],1A-00,26,deg
+temp[1],1B-00,27,deg
+temp[2],1A-00,26,deg
+temp[3],1B-00,27,deg
+temp[4],19-00,25,deg
+temp[5],19-00,25,deg
+bootcause,02,2,none
+battmode,03,3,none
+pptmode,01,1,none
+reserved2,00-00,0,none

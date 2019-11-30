@@ -1,0 +1,9 @@
+Packet ID,5002
+Packet Ground Date Time,25/10/2019 10:47:56
+Packet Sat Date Time,23/10/2019 14:02:05
+Packet Total Raw Data,45-22-91
+
+Parameter Name,Raw Data,Value,Unit
+magnetic_x,45,69,none
+magnetic_y,22,34,none
+magnetic_z,91,145,none

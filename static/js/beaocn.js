@@ -98,11 +98,11 @@ function drawCharts(charts, options, data, dispType, units) {
         if (dispType[i] === "gauge") {
             const gaugeData = google.visualization.arrayToDataTable([
                 ["Label", "Value"],
-                [i + "[" + units[i] + "]", data[i]]
+                [i + " [" + units[i] + "]", data[i]]
             ]);
             charts[i].draw(gaugeData, option);
         } else /*if (dispType[i] === "textbox")*/ {
-            charts[i].innerHTML = `${i + "[" + units[i] + "]"}: ${data[i]}`;
+            charts[i].innerHTML = `${i + " [" + units[i] + "]"}: ${data[i]}`;
             if ((options[i] != undefined || options[i] != null) && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
                 charts[i].className = "red-text";
             } else {
