@@ -88,14 +88,12 @@
                         </div>
                     </div>
                     <button onclick="sendPlaylist()">Send!</button>
-                    <input type="" id="playlistName" class="nameInput" placeholder="Playlist's name"
-                        title="Type in a name">
-                    <button
-                        onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
-                    <select class="select-css">
-                        <option>Hi!</option>
-                        <option>Hello!</option>
+                    <input type="" id="playlistName" class="nameInput"
+                        placeholder="Playlist's name" title="Type in a name">
+                    <button onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
+                    <select class="select-css" id="playlistNameOptions">
                     </select>
+                    <button onclick="getPlaylist(options.options[options.selectedIndex].innerHTML)">Get!</button>
                 </font>
 
 
@@ -290,10 +288,11 @@
 
         function sendPacket(packets, isNow, div) {
             showParams(false);
-            if (isNow) {
-                window.location.assign("?packet=[" + packets.toString() + "]" + str);
-                lastPacket = packets.toString();
-                // Change URL to add query variable of (writePacket()).
+            if (isNow)
+            {   
+            window.location.assign("?packet=[" + packets.toString() + "]");
+            lastPacket = packets.toString();
+            // Change URL to add query variable of (writePacket()).
             }
             else {
                 div.setAttribute("value", packets);
@@ -567,6 +566,15 @@
 
         // Get a reference to the database service
         var database = firebase.database();
+        var options = document.getElementById("playlistNameOptions")
+        database.ref().once("value", function(snapshot){
+            snapshot.forEach(function(child){ 
+                var option = document.createElement("option");
+                option.innerHTML = child.key;
+                options.appendChild(option);
+                console.log(child.key);
+            })});
+
         function getPlaylist(name, root) {
 
             var playlistPath = database.ref(name);

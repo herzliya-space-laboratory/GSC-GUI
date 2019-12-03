@@ -16,7 +16,7 @@ Error 10: Unable to parse integer fro telemetry
 
 import socket
 
-TCP_IP = '80.178.203.191'
+TCP_IP = '127.0.0.1'
 TCP_PORT = 61015
 BUFFER_SIZE = 1024
 
@@ -278,15 +278,20 @@ def commands():
         params = html.unescape(request.args.get("packet"))
         packets = ast.literal_eval(params)
         if not is_tcp_connected:
+            print("in")
             s.connect((TCP_IP, TCP_PORT))
+            print("Connected")
             is_tcp_connected = True
             s.send(handshake.encode())
             time.sleep(0.25)
+            print("End")
         for packet in packets:
             print("This is: ", packet)
             print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
             sentBytes = s.send(str(packet).encode())
             print("Number of bytes sent: ", sentBytes)
+            print("Server respo: ",s.recv(1024))
+            time.sleep(0.1)
 
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
