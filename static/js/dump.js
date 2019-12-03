@@ -71,14 +71,12 @@ function drawCharts(charts, options, data, units) {
 }
 
 function updateCharts(charts, options, units, telemType) {
-    let data = {};
     $.ajax({
         type: "POST",
         url: "/dump?st=" + telemType["st"] + "&sst=" + telemType["sst"],
         data: {}
     }).done(function (params) {
-        data = params;
-        drawCharts(charts, options, data, units);
+        drawCharts(charts, options, params, units);
     });
 }
 

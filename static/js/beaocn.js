@@ -113,14 +113,12 @@ function drawCharts(charts, options, data, dispType, units) {
 }
 
 function updateCharts(charts, options, dispType, units) {
-    let beacon = {};
     $.ajax({
         type: "POST",
         url: "/beacon",
         data: {}
     }).done(function (params) {
-        beacon = params;
-        drawCharts(charts, options, beacon, dispType, units);
+        drawCharts(charts, options, params, dispType, units);
     });
 }
 
