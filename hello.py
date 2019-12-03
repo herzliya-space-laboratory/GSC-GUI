@@ -232,23 +232,25 @@ def getTelemetryOptions(serviceType, serviceSubType):
 
 
 def getSubDirs(dirPath):
-    return glob.glob("./" + dirPath + "/*/")
+    return next(os.walk(dirPath))[1]
 
 
-def parseDumpDirNames(dirs):
+def parseDumpDirNames(dirs, path):
     dumpNames = {}
 
     for d in dirs:
         # Parse service type, subtype and telemetry name from directory name
-        parsedName = re.search("\/ST-(\d*)\ SST-(\d*)\ (.*)\/$", d)
+        parsedName = re.search("ST-(\d*)\ SST-(\d*)\ (.*)$", d)
 
         st = parsedName[1]
         sst = parsedName[2]
         name = parsedName[3]
 
+        print(path + d)
+
         dumpNames[st + "-" + sst] = {
             "name": name,
-            "path": d
+            "path": path + d
         }
 
     return dumpNames
@@ -264,7 +266,7 @@ playground = "playground.html"
 beaconWeb = "beacon.html"
 dumpWeb = "dump.html"
 
-dumpDirNames = parseDumpDirNames(getSubDirs("DumpDemo"))
+dumpDirNames = parseDumpDirNames(getSubDirs("DumpDemo"), "DumpDemo/")
 
 
 @app.route('/commands')
