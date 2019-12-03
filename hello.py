@@ -16,8 +16,8 @@ Error 10: Unable to parse integer fro telemetry
 
 import socket
 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 5000
+TCP_IP = '80.178.203.191'
+TCP_PORT = 61015
 BUFFER_SIZE = 1024
 
 is_tcp_connected = False
@@ -245,8 +245,6 @@ def parseDumpDirNames(dirs, path):
         st = parsedName[1]
         sst = parsedName[2]
         name = parsedName[3]
-
-        print(path + d)
 
         dumpNames[st + "-" + sst] = {
             "name": name,

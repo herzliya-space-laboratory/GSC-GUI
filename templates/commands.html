@@ -1,4 +1,4 @@
-﻿<html class="bg">
+﻿<html>
 <!--Import all css, and images-->
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/materialize.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='GUI.css') }}">
@@ -14,72 +14,99 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="/static/js/side_bar.js"></script>
+    <script src="https://cdn.rawgit.com/RubaXa/Sortable/master/Sortable.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <head>
 
-    <body class="bg">
-        <!-- Logo and top bar-->
-        <nav class="mainNav">
-            <div class="nav-wrapper">
-                <img src="static/logo/logo.png" class="brand-logo" alt="Logo1" height="100%" width="5%">
+    <body class="indigo darken-1">
 
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="control.html">Control</a></li>
-                    <li><a href="about.html">Help and Feedback</a></li>
-                </ul>
-            </div>
-        </nav>
+        <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
+                <li class="logo center-align">
+                    <img src="/static/logo/logo.png" 
+                    class="brand-logo" height="200" width="200">
+                </li>
+                <li>
+                    <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
+                        <input id="dump-seacrh" placeholder="st-sst">
+                        <label for="dump-seacrh" class="active">Dump</label>
+                        <a class="waves-effect waves-light btn-small" onclick="searchDump('dump-seacrh')"><i class="material-icons left">search</i> Search Dump</a>
+                    </div>
+                </li>
+                <li onclick="navChange(this)" class="active"><a href="/commands">Commands</a></li>
+                <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
+                <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+            </ul>
+
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
 
         <!--Command list body(command table)-->
-        <div bgcolor="#07224f" id="listBody">
-            <!--Search inputs-->
-            <input type="" id="commandInput" class="commandInput " onkeyup="searchNames()"
-                placeholder="Search for names.." title="Type in a name">
-            <input type="" id="numberInput" class="commandInput " onkeyup="searchNumbers()"
-                placeholder="Search for ordered pair.." title="Type in an ordered pair">
-            <br />
-            <font face="Trebuchet MS" color="white">
-                <!--Command table-->
-                <table id="commandTable" class="commandTable" bgcolor="#102952">
+        <main>
+            <div bgcolor="#07224f" id="listBody">
+                <!--Search inputs-->
+                <input type="" id="nameInput" class="nameInput " onkeyup="searchNames()"
+                    placeholder="Search for names.." title="Type in a name">
+                <input type="" id="numberInput" class="nameInput " onkeyup="searchNumbers()"
+                    placeholder="Search for ordered pair.." title="Type in an ordered pair">
+                <br />
+                <font face="Trebuchet MS" color="white">
+                    <!--Command table-->
+                    <div id="commandsContainer" class="commandsContainer">
 
-                    <!--Headers, names-->
-                    <tr class="header">
-                        <th style="width:60%;color: white">Command</th>
-                        <th style="width:40%;color: white">Command number</th>
-                    </tr>
-
-                    <!--Push command info to table, each cell contains command with type, subtype and name.-->
-                    <!--Onclick add query variable to the end-->
-                    {% for commandName in commandNames %}
-                    <tr class="commandTr"
-                        onclick="location.href = '?{{commandNumbers[commandNames.index(commandName)]}}'">
-                        <td>{{commandName}}</td>
-                        <td>{{commandNumbers[commandNames.index(commandName)]}}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </font>
+                        <!--Headers, names-->
+                        <div class="row commandsTitle" >
+                            <div class="column unselectable" >Command</div>
+                            <div class="column unselectable" >Command number</div>
+                        </div>
 
 
+                        <!--Push command info to table, each cell contains command with type, subtype and name.-->
+                        <!--Onclick add query variable to the end-->
+                        {% for commandName in commandNames %}
+                        <div class="row" 
+                                onclick="showParams(true); generateInputs{{commandNumbers[commandNames.index(commandName)]}};thisCommand=this;" id="{{commandNumbers[commandNames.index(commandName)]}}">
+                            <!--onclick="location.href = '?{{commandNumbers[commandNames.index(commandName)]}}'">-->
+                            <div class="column unselectable" >{{commandName}}</div>
+                            <div class="column unselectable" >{{commandNumbers[commandNames.index(commandName)]}}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
 
-        </div>
-        <font face="Trebuchet MS" color="white">
-            <div id="commandBody" style="display:none">
+
+                    <div id="playlistContainer" class="playlistContainer">
+                        <div class="row commandsTitle" value="HEADER">
+                            <div class="column unselectable" >Command</div>
+                            <div class="column unselectable" >Command number</div>
+                        </div>
+                    </div>
+                    <button onclick="sendPlaylist()">Send!</button>
+                    <input type="" id="playlistName" class="nameInput"
+                        placeholder="Playlist's name" title="Type in a name">
+                    <button onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
+                    <select class="select-css">
+                        <option>Hi!</option>
+                        <option>Hello!</option>
+                    </select>
+                </font>
 
 
-                <a href="#" class="sendButton" onclick="sendCommand()" id="button-3">إرسال أمر</a>
 
             </div>
-        </font>
+            <font face="Trebuchet MS" color="white">
+                <div id="commandBody" style="display:none">
+
+
+                    <a href="#" class="sendButton" onclick="sendCommand()">إرسال أمر</a>
+                    <a href="#" class="addToPlaylistButton" onclick="addToPlaylist()" id="playlistButton">إضافة إلى مجموعة</a>
+
+                </div>
+            </font>
+        </main>
     </body>
-    <style>
-        .bg {
-            background-color: #07224f
-        }
-    </style>
+
 
 
     <!-- Datetime librarys, JQuery bootstrap-->
@@ -101,8 +128,26 @@
             $('#datetimepicker1').datetimepicker();
         });
     </script>
-    <script>
 
+    <!-- Firebase modules -->
+
+      <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
+  
+    <script>
+        var playlistsNames = [];
+        var lastPacket = null;
+        var st = 0
+        var sst = 0;
+        var thisCommand = null;
         var datetimeCounter = 0;
         var debug = "{{DEBUG}}";
         console.log("DEBUG: " + debug);
@@ -111,18 +156,45 @@
         var results = regex.exec(location.search);
         if (results.input.search("packet") != -1) {
             window.location.assign("?");
+            if (results.input.search("playlist"))
+            {
+                alert("This packet is going to playlist");
+            }
         }
         results = results.input.replace("?", "");
         results = results.replace("(", "");
         results = results.replace(")", "");
+        results = results.replace("&",",");
         results = results.split(",");
-        if (results.length != 1) {
-            document.getElementById("listBody").setAttribute("style", "display:none");
-            document.getElementById("commandBody").setAttribute("style", "");
+        if (isInteger(results[0]) && isInteger(results[1])) {
+            alert("yes");
+            showParams(true);
+            if (results.length==3 && results[2] == "playlist")
+            {
+                alert("Playlist");
+
+            }
+            else
+            {
+                document.getElementById("playlistButton").setAttribute("style", "display:none");
+            }
         }
         console.log(results);
 
-        function writePacket(params, datetime) {
+        function showParams(show)   {
+            if (show)
+            {
+                document.getElementById("listBody").setAttribute("style", "display:none");
+                document.getElementById("commandBody").setAttribute("style", "");
+            }
+            else
+            {
+                document.getElementById("listBody").setAttribute("style", "");
+                document.getElementById("commandBody").setAttribute("style", "display:none");
+            }
+        }
+
+        function writePacket(st,sst,params, datetime) {
             if (datetime == 0) {
                 datetime = new Date('January 1, 1970 00:00:00');
             }
@@ -152,7 +224,7 @@
             }
             let execTime = dd + '/' + mm + '/' + yyyy + " " + hours + ":" + min + ":" + sec;
 
-            packet += "{\"ST\":\"" + results[0] + "\",\"SST\":\"" + results[1] + "\"" + ",\"ExecutionTime\":\"" + execTime + "\",\"Params\":{";
+            packet += "{\"ST\":\"" + st + "\",\"SST\":\"" + sst + "\"" + ",\"ExecutionTime\":\"" + execTime + "\",\"Params\":{";
             for (var i = 0; i < params.length - 1; i++) {
                 var arr = params[i];
                 packet += "\"" + arr[0] + "\":\"" + arr[1] + "\",";
@@ -169,9 +241,26 @@
             console.log(packet)
             return packet;
         }
-
+        function clearInputs()
+        {
+            var body = document.getElementById("commandBody");
+            var bodyChildren = body.children;
+            var length = bodyChildren.length;
+            for(var i = 0;i<bodyChildren.length;i++)
+            {
+                if(bodyChildren[i].tagName == "DIV") {
+                    bodyChildren[i].parentNode.removeChild(bodyChildren[i]);
+                    i--;
+                }
+            }
+        }
+        function isInteger(str) {
+            var n = Math.floor(Number(str));
+            return n !== Infinity && String(n) === str && n >= 0;
+        }
 
         function sendCommand() {
+            alert("Send command");
             var inputParams = document.getElementsByName("paramInput");
             var params = [];
             for (var i = 0; i < inputParams.length; i++) {
@@ -180,67 +269,119 @@
                 param.push(inputParams[i].lastElementChild.value);
                 params.push(param);
             }
-            var packet = [writePacket(params, 0)];
-            sendPacket(packet);
+            var packet = writePacket(st,sst,params, 0);
+            sendPacket(packet, true, null);
         }
 
-        function sendPacket(packets) {
-            window.location.assign("?packet=[" + packets.toString() + "]");
+        function addToPlaylist() {
+            alert("Command added");
+            var inputParams = document.getElementsByName("paramInput");
+            var params = [];
+            for (var i = 0; i < inputParams.length; i++) {
+                var param = [];
+                param.push(inputParams[i].getAttribute("paramName"));
+                param.push(inputParams[i].lastElementChild.value);
+                params.push(param);
+            }
+            var packet = writePacket(st,sst,params, 0);
+            sendPacket(packet, false, thisCommand);
+        }
+
+
+        function sendPacket(packets, isNow, div) {
+            showParams(false);
+            if (isNow)
+            {   
+            window.location.assign("?packet=[" + packets.toString() + "]" + str);
+            lastPacket = packets.toString();
             // Change URL to add query variable of (writePacket()).
+            }
+            else
+            {
+                div.setAttribute("value", packets);
+                console.log(div);
+            }
         }
 
         function searchNames() {
-            var input, filter, table, tr, td, i, txtValue, counter;
-            input = document.getElementById("commandInput");
+            var input, filter, table, trDiv, tdDiv, i, txtValue;
+            input = document.getElementById("nameInput");
             filter = input.value.toUpperCase();
-            table = document.getElementById("commandTable");
-            tr = table.getElementsByTagName("tr");
-            counter = true;
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
+            table = document.getElementById("commandsContainer");
+            trDiv = table.getElementsByTagName("div");
+            for (i = 1; i < trDiv.length; i++) {
+                tdDiv = trDiv[i].getElementsByTagName("div")[0];
+                if (tdDiv) {
+                    txtValue = tdDiv.textContent || tdDiv.innerText;
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
+                        trDiv[i].style.display = "";
                     } else {
-                        tr[i].style.display = "none";
+                        trDiv[i].style.display = "none";
                     }
                 }
             }
         }
         function searchNumbers() {
-            var input, filter, table, tr, td, i, txtValue;
+            var input, filter, table, trDiv, tdDiv, i, txtValue;
             input = document.getElementById("numberInput");
             filter = input.value.toUpperCase();
-            table = document.getElementById("commandTable");
-            tr = table.getElementsByTagName("tr");
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
+            table = document.getElementById("commandsContainer");
+            trDiv = table.getElementsByTagName("div");
+            for (i = 1; i < trDiv.length; i++) {
+                tdDiv = trDiv[i].getElementsByTagName("div")[1];
+                if (tdDiv) {
+                    txtValue = tdDiv.textContent || tdDiv.innerText;
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
+                        trDiv[i].style.display = "";
                     } else {
-                        tr[i].style.display = "none";
+                        trDiv[i].style.display = "none";
                     }
                 }
             }
         }
-        function validate(evt) {
+        function validate(evt, type) {
             var theEvent = evt || window.event;
-
-            // Handle paste
-            if (theEvent.type === 'paste') {
-                key = event.clipboardData.getData('text/plain');
-            } else {
-                // Handle key press
-                var key = theEvent.keyCode || theEvent.which;
-                key = String.fromCharCode(key);
-            }
-            var regex = /[0-9, -]|\./;
-            if (!regex.test(key)) {
-                theEvent.returnValue = false;
-                if (theEvent.preventDefault) theEvent.preventDefault();
+            switch(type)
+            {
+            case("int"):
+                // Handle paste
+                if (theEvent.type === 'paste') {
+                    key = event.clipboardData.getData('text/plain');
+                } else {
+                    // Handle key press
+                    var key = theEvent.keyCode || theEvent.which;
+                    key = String.fromCharCode(key);
+                }
+                var regex = /[0-9]/;
+                if (!regex.test(key)) {
+                    theEvent.returnValue = false;
+                    if (theEvent.preventDefault) theEvent.preventDefault();
+                }
+                
+                if (parseInt(theEvent.target.value)>=Number.MAX_SAFE_INTEGER) {
+                    theEvent.returnValue = false;
+                    theEvent.preventDefault();
+                }
+                break;
+            case("char"):
+                // Handle paste
+                if (theEvent.type === 'paste') {
+                    key = event.clipboardData.getData('text/plain');
+                } else {
+                    // Handle key press
+                    var key = theEvent.keyCode || theEvent.which;
+                    key = String.fromCharCode(key);
+                }
+                var regex = /[0-9]/;
+                if (!regex.test(key)) {
+                    theEvent.returnValue = false;
+                    if (theEvent.preventDefault) theEvent.preventDefault();
+                }
+                if (parseInt(theEvent.target.value+theEvent.key)>255) {
+                    theEvent.returnValue = false;
+                    theEvent.preventDefault();
+                }
+                break;
             }
         }
         function init() {
@@ -286,6 +427,7 @@
             inputContainer.setAttribute("name", "paramInput");
             inputContainer.setAttribute("paramName", paramName);
 
+
             var inputInfo = document.createElement("div");
             inputInfo.innerHTML = paramName + ((paramUnit == "None") ? " " : " In " + paramUnit) + ":";
             inputContainer.appendChild(inputInfo);
@@ -293,13 +435,12 @@
             var body = document.getElementById("commandBody");
 
             var intInput = document.createElement("input");
-            intInput.setAttribute("maxlength", "5");
             //intInput.setAttribute("type", "numbers");
-            intInput.setAttribute("onkeypress", "validate(event)");
+            intInput.setAttribute("onkeypress", "validate(event, \"int\")");
             intInput.setAttribute("class", "paramsInput");
 
             var charInput = document.createElement("input");
-            charInput.setAttribute("maxlength", "1");
+            charInput.setAttribute("onkeypress", "validate(event, \"char\")");
             charInput.setAttribute("class", "paramsInput");
 
             var datetimeInput = document.createElement("input");
@@ -332,13 +473,13 @@
                     console.log("Char input");
                     break;
 
-                case ("datetime"):
+                case ("dateTime"):
                     inputContainer.appendChild(datetimeInput);
 
                     $(function () {
                         $('#datetime' + datetimeCounter.toString()).datetimepicker();
                     });
-
+                    
                     console.log("Datetime ho no");
                     break;
                 default:
@@ -346,13 +487,172 @@
             }
             body.appendChild(inputContainer);
         }
-        if (results.length == 2) {
-            for (var i = 0; i < paramTypes[commandNames.indexOf(dic["(" + results[0] + "," + results[1] + ")"])].length; i++) {
-                generateInput(paramTypes[commandNames.indexOf(dic["(" + results[0] + "," + results[1] + ")"])][i], paramNames[commandNames.indexOf(dic["(" + results[0] + "," + results[1] + ")"])][i], paramUnits[commandNames.indexOf(dic["(" + results[0] + "," + results[1] + ")"])][i]);
+        function generateInputs(type, subtype)
+        {
+             st = type;
+             sst = subtype;
+            clearInputs();
+            for (var i = 0; i < paramTypes[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])].length; i++) {
+                generateInput(paramTypes[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])][i], paramNames[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])][i], paramUnits[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])][i]);
             }
         }
+        if (results.length == 2 || results.length == 3) {
+
+        }
+        var e = 0;
+        // Setup draggable columns
+    new Sortable(commandsContainer, {
+            group: {
+                name: 'shared',
+                pull: 'clone',
+                put: false // Do not allow items to be put into this list
+            },
+            animation: 150,
+            sort: false, // To disable sorting: set sort to false
+             filter: '.commandsTitle',
+            onEnd:(evt)=>{
+                    evt.item.setAttribute("inlist", "true");
+                    e=evt;
+            }
+    });
+
+
+    new Sortable(playlistContainer, {
+            group: 'shared',
+            animation: 150,
+            filter: '.commandsTitle',
+    });
+    function sendPlaylist() {
+        var playlist = document.getElementById("playlistContainer");
+        var allCommands = "";
+        var i = 0;
+        while(i<playlist.children.length && playlist.children[i].getAttribute("value") != "HEADER")
+        {
+            i++;
+        }
+        i++;
+        if (playlist.children.length <= i)
+        {
+            return;
+        }
+        for(;i < playlist.children.length - 1;i++)
+        {
+            var value = playlist.children[i].getAttribute("value");
+            if (value == null)
+            {
+                alert("Command " + playlist.children[i].innerText + " is null");
+            }
+            else
+            {
+                allCommands += value+",";
+            }
+        }
+        var value = playlist.children[i].getAttribute("value");
+        if (value == null)
+        {
+            alert("Command " + playlist.children[i].innerText + " is null");
+        }
+        else if(value=="HEADER")
+        {
+            
+        }
+        else
+        {
+            allCommands += value;
+        }
+        alert("All commands:" + allCommands);
+        window.location.assign("?packet=["+allCommands+"]")
+
+    }
     </script>
 
+    <script>
+        var playlist = document.getElementById("playlistContainer");
+        var x = "tryhard";
+        var config = {
+            apiKey: "AIzaSyDQWbidUuP-2zwyCsV9w3ylRnBRi2et_Zk",
+            authDomain: "gsc-gui.firebaseapp.com",
+            databaseURL: "https://gsc-gui.firebaseio.com",
+            storageBucket: "bucket.appspot.com"
+        };
+        firebase.initializeApp(config);
+
+        // Get a reference to the database service
+        var database = firebase.database();
+        function getPlaylist(name, root) {
+
+            var playlistPath = database.ref(name);
+            var commandList = document.getElementById("playlistContainer");
+            playlistPath.once("value", function (snapshot) {
+                snapshot.forEach(function (child) {
+                    console.log(child.key + ": " + child.val());
+                    child = child.val();
+                    var newCommand = document.createElement("div");
+                    newCommand.setAttribute("class", "row");
+                    newCommand.setAttribute("onclick", "showParams(true); generateInputs" + child["id"] + ";thisCommand=this;");
+                    newCommand.setAttribute("id", child["id"]);
+                    newCommand.setAttribute("draggable", "false");
+                    newCommand.setAttribute("inlist", "true");
+                    newCommand.setAttribute("value", child["value"]);
+                    var newCommandName = document.createElement("div");
+                    newCommandName.setAttribute("class", "column unselectable");
+                    newCommandName.innerHTML = dic[child["id"]];
+                    var newCommandNumber = document.createElement("div");
+                    newCommandNumber.setAttribute("class", "column unselectable");
+                    newCommandNumber.innerHTML = child["id"];
+                    newCommand.appendChild(newCommandName);
+                    newCommand.appendChild(newCommandNumber);
+                    commandList.appendChild(newCommand);
+                });
+            });
+        }
+        function savePlaylist(name, root) {
+            console.log("   Name: " + name);
+            var playlistPath = database.ref(name);
+            playlistPath.set({});
+            var i = 0;
+            while (i < root.children.length && root.children[i].getAttribute("value") != "HEADER") {
+                i++;
+            }
+            i++;
+            if (root.children.length <= i) {
+                return;
+            }
+            for (; i < root.children.length - 1; i++) {
+                var child = root.children[i];
+                var id = child.getAttribute("id");
+                var value = child.getAttribute("value");
+                var json = {};
+                json["id"] = id;
+                json["value"] = value;
+                playlistPath.push(json);
+            }
+            var child = root.children[i];
+            var id = child.getAttribute("id");
+            var value = child.getAttribute("value");
+
+            var json = {};
+            json["id"] = id;
+            json["value"] = value;
+            playlistPath.push(json);
+
+        }
+
+        function updatePlaylistNames() 
+        {
+            var playlistPath = database.ref();
+            var commandList = document.getElementById("playlistContainer");
+            playlistPath.once("value", function (snapshot) {
+                snapshot.forEach(function (child) {
+                    console.log(child.key + ": " + child.val());
+                    playlistsNames.push(child.key);
+
+                });
+            });
+        }
+
+
+  </script>
     </body>
 
 </html>

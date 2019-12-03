@@ -68,3 +68,10 @@ function refresh_table(table_params, param_order, table_div_id) {
 
     table_div.appendChild(generateAllTable(head, table_params));
 }
+
+function exportBtnGenerator(){
+    let exportBtn = document.createElement("button");
+    exportBtn.innerText = "Export table to csv file";
+    exportBtn.className = "btn pink accent-3 white-text waves-effect"   
+    return exportBtn
+}

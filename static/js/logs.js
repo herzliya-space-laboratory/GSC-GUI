@@ -8,11 +8,9 @@ table.className = "highlight white black-text";
 
 let head = generateTableHead(table, logsDict, _param_order);
 
-let exportBtn = document.createElement("button");
-exportBtn.innerText = "Export table to csv file";
-exportBtn.className = "btn pink accent-3 white-text waves-effect"
+let logsExportBtn = exportBtnGenerator();
 
-$(exportBtn).click(function () {
+$(logsExportBtn).click(function () {
     let filename = "LogsTable-" + getCurrentDate() + ".csv"
     exportTableToCSV(filename);
 })
@@ -20,7 +18,7 @@ $(exportBtn).click(function () {
 $("#table-container").addClass("scrollable-div");
 
 $("#table-container").append(generateAllTable(head, logsDict));
-$("#btn-div").append(exportBtn);
+$("#btn-div").append(logsExportBtn);
 
 let interval = setInterval(function () {
     $.ajax({
