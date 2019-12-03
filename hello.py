@@ -163,7 +163,8 @@ def getParamsFromCSV(fileName):
     return params
 
 
-def getUnitsFromCSV(fileName, paramNames, units={}):
+def getUnitsFromCSV(fileName, paramNames):
+    units = {}
     f = open(fileName, "r")
     for line in f:
         for i in range(len(paramNames)):
