@@ -1,4 +1,5 @@
-﻿<html>
+﻿<!DOCTYPE html>
+<html>
 <!--Import all css, and images-->
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/materialize.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='GUI.css') }}">
@@ -10,35 +11,38 @@
 <link rel="stylesheet"
     href="{{ url_for('static', filename='styles/datetimePicker/build/css/bootstrap-datetimepicker.min.css')}}">
 
+
 <head>
+    <title>Commands</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="/static/js/side_bar.js"></script>
     <script src="https://cdn.rawgit.com/RubaXa/Sortable/master/Sortable.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/static/js/side_bar.js"></script>
 
     <head>
 
     <body class="indigo darken-1">
 
         <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
-                <li class="logo center-align">
-                    <img src="/static/logo/logo.png" 
-                    class="brand-logo" height="200" width="200">
-                </li>
-                <li>
-                    <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
-                        <input id="dump-seacrh" placeholder="st-sst">
-                        <label for="dump-seacrh" class="active">Dump</label>
-                        <a class="waves-effect waves-light btn-small" onclick="searchDump('dump-seacrh')"><i class="material-icons left">search</i> Search Dump</a>
-                    </div>
-                </li>
-                <li onclick="navChange(this)" class="active"><a href="/commands">Commands</a></li>
-                <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
-                <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
-            </ul>
+            <li class="logo center-align">
+                <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+            </li>
+            <li>
+                <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
+                    <input id="dump-seacrh" placeholder="Telemetry Name" class="autocomplete">
+                    <label for="dump-seacrh" class="active">Dump</label>
+                    <a class="waves-effect waves-light btn-small" onclick="searchDump('dump-seacrh')"><i
+                            class="material-icons left">search</i> Search Dump</a>
+                </div>
+            </li>
+            <li onclick="navChange(this)" class="active"><a href="/commands">Commands</a></li>
+            <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
+            <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+        </ul>
 
         <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
@@ -57,20 +61,21 @@
                     <div id="commandsContainer" class="commandsContainer">
 
                         <!--Headers, names-->
-                        <div class="row commandsTitle" >
-                            <div class="column unselectable" >Command</div>
-                            <div class="column unselectable" >Command number</div>
+                        <div class="row commandsTitle">
+                            <div class="column unselectable">Command</div>
+                            <div class="column unselectable">Command number</div>
                         </div>
 
 
                         <!--Push command info to table, each cell contains command with type, subtype and name.-->
                         <!--Onclick add query variable to the end-->
                         {% for commandName in commandNames %}
-                        <div class="row" 
-                                onclick="showParams(true); generateInputs{{commandNumbers[commandNames.index(commandName)]}};thisCommand=this;" id="{{commandNumbers[commandNames.index(commandName)]}}">
+                        <div class="row"
+                            onclick="showParams(true); generateInputs{{commandNumbers[commandNames.index(commandName)]}};thisCommand=this;"
+                            id="{{commandNumbers[commandNames.index(commandName)]}}">
                             <!--onclick="location.href = '?{{commandNumbers[commandNames.index(commandName)]}}'">-->
-                            <div class="column unselectable" >{{commandName}}</div>
-                            <div class="column unselectable" >{{commandNumbers[commandNames.index(commandName)]}}</div>
+                            <div class="column unselectable">{{commandName}}</div>
+                            <div class="column unselectable">{{commandNumbers[commandNames.index(commandName)]}}</div>
                         </div>
                         {% endfor %}
                     </div>
@@ -78,14 +83,15 @@
 
                     <div id="playlistContainer" class="playlistContainer">
                         <div class="row commandsTitle" value="HEADER">
-                            <div class="column unselectable" >Command</div>
-                            <div class="column unselectable" >Command number</div>
+                            <div class="column unselectable">Command</div>
+                            <div class="column unselectable">Command number</div>
                         </div>
                     </div>
                     <button onclick="sendPlaylist()">Send!</button>
-                    <input type="" id="playlistName" class="nameInput"
-                        placeholder="Playlist's name" title="Type in a name">
-                    <button onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
+                    <input type="" id="playlistName" class="nameInput" placeholder="Playlist's name"
+                        title="Type in a name">
+                    <button
+                        onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
                     <select class="select-css">
                         <option>Hi!</option>
                         <option>Hello!</option>
@@ -100,7 +106,8 @@
 
 
                     <a href="#" class="sendButton" onclick="sendCommand()">إرسال أمر</a>
-                    <a href="#" class="addToPlaylistButton" onclick="addToPlaylist()" id="playlistButton">إضافة إلى مجموعة</a>
+                    <a href="#" class="addToPlaylistButton" onclick="addToPlaylist()" id="playlistButton">إضافة إلى
+                        مجموعة</a>
 
                 </div>
             </font>
@@ -131,17 +138,17 @@
 
     <!-- Firebase modules -->
 
-      <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
 
-  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
 
-  <!-- Add Firebase products that you want to use -->
-  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
-  
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
+
     <script>
         var playlistsNames = [];
         var lastPacket = null;
@@ -156,45 +163,40 @@
         var results = regex.exec(location.search);
         if (results.input.search("packet") != -1) {
             window.location.assign("?");
-            if (results.input.search("playlist"))
-            {
+            if (results.input.search("playlist")) {
                 alert("This packet is going to playlist");
             }
         }
         results = results.input.replace("?", "");
         results = results.replace("(", "");
         results = results.replace(")", "");
-        results = results.replace("&",",");
+        results = results.replace("&", ",");
         results = results.split(",");
         if (isInteger(results[0]) && isInteger(results[1])) {
             alert("yes");
             showParams(true);
-            if (results.length==3 && results[2] == "playlist")
-            {
+            if (results.length == 3 && results[2] == "playlist") {
                 alert("Playlist");
 
             }
-            else
-            {
+            else {
                 document.getElementById("playlistButton").setAttribute("style", "display:none");
             }
         }
         console.log(results);
 
-        function showParams(show)   {
-            if (show)
-            {
+        function showParams(show) {
+            if (show) {
                 document.getElementById("listBody").setAttribute("style", "display:none");
                 document.getElementById("commandBody").setAttribute("style", "");
             }
-            else
-            {
+            else {
                 document.getElementById("listBody").setAttribute("style", "");
                 document.getElementById("commandBody").setAttribute("style", "display:none");
             }
         }
 
-        function writePacket(st,sst,params, datetime) {
+        function writePacket(st, sst, params, datetime) {
             if (datetime == 0) {
                 datetime = new Date('January 1, 1970 00:00:00');
             }
@@ -241,14 +243,12 @@
             console.log(packet)
             return packet;
         }
-        function clearInputs()
-        {
+        function clearInputs() {
             var body = document.getElementById("commandBody");
             var bodyChildren = body.children;
             var length = bodyChildren.length;
-            for(var i = 0;i<bodyChildren.length;i++)
-            {
-                if(bodyChildren[i].tagName == "DIV") {
+            for (var i = 0; i < bodyChildren.length; i++) {
+                if (bodyChildren[i].tagName == "DIV") {
                     bodyChildren[i].parentNode.removeChild(bodyChildren[i]);
                     i--;
                 }
@@ -269,7 +269,7 @@
                 param.push(inputParams[i].lastElementChild.value);
                 params.push(param);
             }
-            var packet = writePacket(st,sst,params, 0);
+            var packet = writePacket(st, sst, params, 0);
             sendPacket(packet, true, null);
         }
 
@@ -283,21 +283,19 @@
                 param.push(inputParams[i].lastElementChild.value);
                 params.push(param);
             }
-            var packet = writePacket(st,sst,params, 0);
+            var packet = writePacket(st, sst, params, 0);
             sendPacket(packet, false, thisCommand);
         }
 
 
         function sendPacket(packets, isNow, div) {
             showParams(false);
-            if (isNow)
-            {   
-            window.location.assign("?packet=[" + packets.toString() + "]" + str);
-            lastPacket = packets.toString();
-            // Change URL to add query variable of (writePacket()).
+            if (isNow) {
+                window.location.assign("?packet=[" + packets.toString() + "]" + str);
+                lastPacket = packets.toString();
+                // Change URL to add query variable of (writePacket()).
             }
-            else
-            {
+            else {
                 div.setAttribute("value", packets);
                 console.log(div);
             }
@@ -341,47 +339,46 @@
         }
         function validate(evt, type) {
             var theEvent = evt || window.event;
-            switch(type)
-            {
-            case("int"):
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9]/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault) theEvent.preventDefault();
-                }
-                
-                if (parseInt(theEvent.target.value)>=Number.MAX_SAFE_INTEGER) {
-                    theEvent.returnValue = false;
-                    theEvent.preventDefault();
-                }
-                break;
-            case("char"):
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9]/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault) theEvent.preventDefault();
-                }
-                if (parseInt(theEvent.target.value+theEvent.key)>255) {
-                    theEvent.returnValue = false;
-                    theEvent.preventDefault();
-                }
-                break;
+            switch (type) {
+                case ("int"):
+                    // Handle paste
+                    if (theEvent.type === 'paste') {
+                        key = event.clipboardData.getData('text/plain');
+                    } else {
+                        // Handle key press
+                        var key = theEvent.keyCode || theEvent.which;
+                        key = String.fromCharCode(key);
+                    }
+                    var regex = /[0-9]/;
+                    if (!regex.test(key)) {
+                        theEvent.returnValue = false;
+                        if (theEvent.preventDefault) theEvent.preventDefault();
+                    }
+
+                    if (parseInt(theEvent.target.value) >= Number.MAX_SAFE_INTEGER) {
+                        theEvent.returnValue = false;
+                        theEvent.preventDefault();
+                    }
+                    break;
+                case ("char"):
+                    // Handle paste
+                    if (theEvent.type === 'paste') {
+                        key = event.clipboardData.getData('text/plain');
+                    } else {
+                        // Handle key press
+                        var key = theEvent.keyCode || theEvent.which;
+                        key = String.fromCharCode(key);
+                    }
+                    var regex = /[0-9]/;
+                    if (!regex.test(key)) {
+                        theEvent.returnValue = false;
+                        if (theEvent.preventDefault) theEvent.preventDefault();
+                    }
+                    if (parseInt(theEvent.target.value + theEvent.key) > 255) {
+                        theEvent.returnValue = false;
+                        theEvent.preventDefault();
+                    }
+                    break;
             }
         }
         function init() {
@@ -479,7 +476,7 @@
                     $(function () {
                         $('#datetime' + datetimeCounter.toString()).datetimepicker();
                     });
-                    
+
                     console.log("Datetime ho no");
                     break;
                 default:
@@ -487,10 +484,9 @@
             }
             body.appendChild(inputContainer);
         }
-        function generateInputs(type, subtype)
-        {
-             st = type;
-             sst = subtype;
+        function generateInputs(type, subtype) {
+            st = type;
+            sst = subtype;
             clearInputs();
             for (var i = 0; i < paramTypes[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])].length; i++) {
                 generateInput(paramTypes[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])][i], paramNames[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])][i], paramUnits[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])][i]);
@@ -501,7 +497,7 @@
         }
         var e = 0;
         // Setup draggable columns
-    new Sortable(commandsContainer, {
+        new Sortable(commandsContainer, {
             group: {
                 name: 'shared',
                 pull: 'clone',
@@ -509,61 +505,53 @@
             },
             animation: 150,
             sort: false, // To disable sorting: set sort to false
-             filter: '.commandsTitle',
-            onEnd:(evt)=>{
-                    evt.item.setAttribute("inlist", "true");
-                    e=evt;
+            filter: '.commandsTitle',
+            onEnd: (evt) => {
+                evt.item.setAttribute("inlist", "true");
+                e = evt;
             }
-    });
+        });
 
 
-    new Sortable(playlistContainer, {
+        new Sortable(playlistContainer, {
             group: 'shared',
             animation: 150,
             filter: '.commandsTitle',
-    });
-    function sendPlaylist() {
-        var playlist = document.getElementById("playlistContainer");
-        var allCommands = "";
-        var i = 0;
-        while(i<playlist.children.length && playlist.children[i].getAttribute("value") != "HEADER")
-        {
+        });
+        function sendPlaylist() {
+            var playlist = document.getElementById("playlistContainer");
+            var allCommands = "";
+            var i = 0;
+            while (i < playlist.children.length && playlist.children[i].getAttribute("value") != "HEADER") {
+                i++;
+            }
             i++;
-        }
-        i++;
-        if (playlist.children.length <= i)
-        {
-            return;
-        }
-        for(;i < playlist.children.length - 1;i++)
-        {
+            if (playlist.children.length <= i) {
+                return;
+            }
+            for (; i < playlist.children.length - 1; i++) {
+                var value = playlist.children[i].getAttribute("value");
+                if (value == null) {
+                    alert("Command " + playlist.children[i].innerText + " is null");
+                }
+                else {
+                    allCommands += value + ",";
+                }
+            }
             var value = playlist.children[i].getAttribute("value");
-            if (value == null)
-            {
+            if (value == null) {
                 alert("Command " + playlist.children[i].innerText + " is null");
             }
-            else
-            {
-                allCommands += value+",";
-            }
-        }
-        var value = playlist.children[i].getAttribute("value");
-        if (value == null)
-        {
-            alert("Command " + playlist.children[i].innerText + " is null");
-        }
-        else if(value=="HEADER")
-        {
-            
-        }
-        else
-        {
-            allCommands += value;
-        }
-        alert("All commands:" + allCommands);
-        window.location.assign("?packet=["+allCommands+"]")
+            else if (value == "HEADER") {
 
-    }
+            }
+            else {
+                allCommands += value;
+            }
+            alert("All commands:" + allCommands);
+            window.location.assign("?packet=[" + allCommands + "]")
+
+        }
     </script>
 
     <script>
@@ -638,8 +626,7 @@
 
         }
 
-        function updatePlaylistNames() 
-        {
+        function updatePlaylistNames() {
             var playlistPath = database.ref();
             var commandList = document.getElementById("playlistContainer");
             playlistPath.once("value", function (snapshot) {
@@ -652,7 +639,7 @@
         }
 
 
-  </script>
+    </script>
     </body>
 
 </html>

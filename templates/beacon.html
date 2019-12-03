@@ -2,9 +2,11 @@
 <html>
 
 <head>
+    <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <meta name="jinBeacon" content="{{ beacon }}" />
     <meta name="jinUnits" content="{{ units }}" />
     <meta name="jinOptions" content="{{ options }}" />
@@ -15,7 +17,7 @@
             padding-left: 315px;
         }
 
-        ::placeholder{
+        ::placeholder {
             color: #fff;
         }
     </style>
@@ -25,22 +27,22 @@
 
 <body class="indigo darken-1">
 
-        <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
-                <li class="logo center-align">
-                    <img src="/static/logo/logo.png" 
-                    class="brand-logo" height="200" width="200">
-                </li>
-                <li>
-                    <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
-                        <input id="dump-seacrh" placeholder="st-sst">
-                        <label for="dump-seacrh" class="active">Dump</label>
-                        <a class="waves-effect waves-light btn-small" onclick="searchDump('dump-seacrh')"><i class="material-icons left">search</i> Search Dump</a>
-                    </div>
-                </li>
-                <li onclick="navChange(this)"><a href="/commands">Commands</a></li>
-                <li onclick="navChange(this)" class="active"><a href="/beacon">Beacons</a></li>
-                <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
-            </ul>
+    <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
+        <li class="logo center-align">
+            <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+        </li>
+        <li>
+            <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
+                <input id="dump-seacrh" placeholder="Telemetry Name" class="autocomplete">
+                <label for="dump-seacrh" class="active">Dump</label>
+                <a class="waves-effect waves-light btn-small" onclick="searchDump('dump-seacrh')"><i
+                        class="material-icons left">search</i> Search Dump</a>
+            </div>
+        </li>
+        <li onclick="navChange(this)"><a href="/commands">Commands</a></li>
+        <li onclick="navChange(this)" class="active"><a href="/beacon">Beacons</a></li>
+        <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+    </ul>
 
     <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 

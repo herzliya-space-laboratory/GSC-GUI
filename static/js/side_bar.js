@@ -1,37 +1,45 @@
+let dumpDict = {};
+
 function navChange(btn) {
     $("li").removeClass("active");
     $(btn).addClass("active");
 }
 
-function searchDump(inputId){
-    let searchInputValue = $("#" + inputId).val().split("-");
+function searchDump(inputId) {
+    let searchInputValue = $("#" + inputId).val();
+    let st = dumpDict[searchInputValue]["st"];
+    let sst = dumpDict[searchInputValue]["sst"];
     let winLocation = window.location;
-    let queryValue = "?st=" + searchInputValue[0] + "&sst=" + searchInputValue[1];
-    if(String(winLocation).includes("dump"))
-    {
+    let queryValue = "?st=" + st + "&sst=" + sst;
+    if (String(winLocation).includes("dump")) {
         window.location = queryValue;
         return;
     }
-    window.location = "dump" + queryValue; 
+    window.location = "dump" + queryValue;
+}
+
+function createDumpNameDict(dumpDict) {
+    let dumpNames = {};
+    for (let name in dumpDict) {
+        dumpNames[name] = null;
+    }
+
+    return dumpNames;
 }
 
 function autoDumpSearch() {
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: "/getDumpNames",
         data: {}
     }).done(function (params) {
-        
+        dumpDict = params;
+        $(document).ready(function () {
+            $('input.autocomplete').autocomplete({
+                data: createDumpNameDict(params)
+            });
+        });
     });
 }
 
-$(document).ready(function(){
-    $('input.autocomplete').autocomplete({
-      data: {
-        "Apple": null,
-        "Microsoft": null,
-        "Google": 'https://placehold.it/250x250'
-      },
-    });
-  });
-        
+window.onload = autoDumpSearch();

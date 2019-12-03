@@ -343,4 +343,16 @@ def dump():
     return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType={"st": st, "sst": sst})
 
 
+@app.route('/getDumpNames')
+def getDumpNames():
+    dumpTypes = {}
+    for key in dumpDirNames:
+        split = key.split("-")
+        dumpTypes[dumpDirNames[key]["name"]] = {
+            "st": split[0],
+            "sst": split[1]
+        }
+    return dumpTypes
+
+
 app.run(debug=True)
