@@ -82,4 +82,3 @@ function updateCharts(charts, options, units, telemType) {
 }
 
 window.onload = createCharts();
-

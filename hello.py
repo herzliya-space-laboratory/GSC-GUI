@@ -122,9 +122,9 @@ def praseCSV(directory, paramNames, params={}):
     return params
 
 
-def parseCSVfile(fileName, paramNames, params={}):
+def parseCSVfile(fileName, paramNames):
+    params = {}
     f = open(fileName, "r")
-
     j = 0
     for line in f:
         if j == 2:
@@ -152,11 +152,14 @@ def getParamsFromCSV(fileName):
     f = open(fileName, "r")
 
     params = []
-    i = 0
     for line in f:
-        if i >= 7:
-            params.append(re.search("^(.+?),", line).group(1))
-        i += 1
+        match = re.search("^(.+?),", line)
+        if match != None:
+            param = match.group(1)
+
+        if param != 'Packet ID' and param != 'Packet Ground Date Time' and param != 'Packet Sat Date Time' and param != 'Packet Total Raw Data' and param != 'Parameter Name':
+            params.append(param)
+
     return params
 
 
@@ -333,6 +336,7 @@ def dump(st, sst):
     options = getTelemetryOptions(str(st), str(sst))
     units = getUnitsFromCSV(f, params)
 
+    print(data)
     return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType=key)
 
 
