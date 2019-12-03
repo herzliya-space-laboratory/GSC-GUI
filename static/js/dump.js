@@ -17,6 +17,7 @@ function createCharts() {
     data = JSON.parse(data.replace(/'/g, '"'));
     units = JSON.parse(units.replace(/'/g, '"'));
     options = JSON.parse(options.replace(/'/g, '"'));
+    telemType = JSON.parse(telemType.replace(/'/g, '"'));
 
     let charts = initCardElements(card, data);
     document.getElementById("main").appendChild(row);
@@ -73,7 +74,7 @@ function updateCharts(charts, options, units, telemType) {
     let data = {};
     $.ajax({
         type: "POST",
-        url: "/dump/" + telemType,
+        url: "/dump?st=" + telemType["st"] + "&sst=" + telemType["sst"],
         data: {}
     }).done(function (params) {
         data = params;

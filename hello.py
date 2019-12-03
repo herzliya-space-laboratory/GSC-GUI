@@ -324,8 +324,11 @@ def palyground():
     return render_template(playground)
 
 
-@app.route('/dump/<int:st>-<int:sst>', methods=['GET', 'POST'])
-def dump(st, sst):
+@app.route('/dump', methods=['GET', 'POST'])
+def dump():
+    st = request.args.get('st')
+    sst = request.args.get('sst')
+
     key = str(st) + "-" + str(sst)
     f = getNewestFileInDir(dumpDirNames[key]["path"])
     params = getParamsFromCSV(f)
@@ -337,8 +340,7 @@ def dump(st, sst):
     options = getTelemetryOptions(str(st), str(sst))
     units = getUnitsFromCSV(f, params)
 
-    print(data)
-    return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType=key)
+    return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType={"st": st, "sst": sst})
 
 
 app.run(debug=True)
