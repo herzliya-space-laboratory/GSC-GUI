@@ -4,12 +4,13 @@ function navChange(btn) {
 }
 
 function searchDump(inputId){
-    let searchInputValue = $("#" + inputId).val();
+    let searchInputValue = $("#" + inputId).val().split("-");
     let winLocation = window.location;
+    let queryValue = "?st=" + searchInputValue[0] + "&sst=" + searchInputValue[1];
     if(String(winLocation).includes("dump"))
     {
-        window.location = searchInputValue;
+        window.location = queryValue;
         return;
     }
-    window.location = "dump/" + searchInputValue; 
+    window.location = "dump" + queryValue; 
 }
