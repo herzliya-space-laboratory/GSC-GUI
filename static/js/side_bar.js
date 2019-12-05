@@ -47,4 +47,10 @@ function autoDumpSearch() {
     });
 }
 
+document.onkeyup = function throwPrompt(e) {
+    if (e.keyCode == 13) {
+        searchDump("dump-seacrh") 
+    }
+}
+
 window.onload = autoDumpSearch();
