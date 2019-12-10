@@ -101,31 +101,31 @@
 	<ServiceType Value="3" Name="Global Param">
 	
       <ServiceSubtype Value="25" Name="Beacon">
-        <Parameter Name="vbatt" description="EPS" Type="uint16" Unit="mV" IsLittleEndian="false" />
-        <Parameter Name="Batt_Curr" description="EPS" Type="uint16" Unit="mA" IsLittleEndian="false" />
-        <Parameter Name="3v3_curr" description="EPS" Type="uint16" Unit="mA" IsLittleEndian="false" />
-        <Parameter Name="5v_curr" description="EPS" Type="uint16" Unit="mA" IsLittleEndian="false" />
+        <Parameter Name="vbatt" description="EPS,Battery Voltage" Type="uint16" Unit="mV" IsLittleEndian="false" />
+        <Parameter Name="Batt_Curr" description="EPS,Output Current" Type="uint16" Unit="mA" IsLittleEndian="false" />
+        <Parameter Name="3v3_curr" description="EPS,3v3 Output Current" Type="uint16" Unit="mA" IsLittleEndian="false" />
+        <Parameter Name="5v_curr" description="EPS,5v Output Current" Type="uint16" Unit="mA" IsLittleEndian="false" />
         <Parameter Name="LOtrxvu_temp" description="Comms,Local Oscillator Temp" Type="uint16" Calibration="7" Unit="deg c" IsLittleEndian="false" RangeStart="-40" RangeEnd="60" />
         <Parameter Name="PAtrxvu_temp" description="Comms,Power Amplifier Temp" Type="uint16" Calibration="7" Unit="deg c" IsLittleEndian="false" RangeStart="-40" RangeEnd="95" />
-        <Parameter Name="Eps_temp[0]" description="EPS" Type="int16" Unit="deg c" IsLittleEndian="false" />
-        <Parameter Name="Eps_temp[1]" description="EPS" Type="int16" Unit="deg c" IsLittleEndian="false" />
-        <Parameter Name="Eps_temp[2]" description="EPS" Type="int16" Unit="deg c" IsLittleEndian="false" />
-        <Parameter Name="Eps_temp[3]" description="EPS" Type="int16" Unit="deg c" IsLittleEndian="false" />
-        <Parameter Name="Batt_temp[0]" description="EPS" Type="int16" Unit="deg c" IsLittleEndian="false" />
-        <Parameter Name="Batt_temp[1]" description="EPS" Type="int16" Unit="deg c" IsLittleEndian="false" />
-        <Parameter Name="Rxdoppler" description="Comms,RX Doppler" Type="uint16" Calibration="6" Unit="Hz" IsLittleEndian="false" />
+        <Parameter Name="Eps_temp[0]" description="EPS,Board Temp Sensor 0" Type="int16" Unit="deg c" IsLittleEndian="false" RangeStart="-40" RangeEnd="125" />
+        <Parameter Name="Eps_temp[1]" description="EPS,Board Temp Sensor 1" Type="int16" Unit="deg c" IsLittleEndian="false" RangeStart="-40" RangeEnd="125"  />
+        <Parameter Name="Eps_temp[2]" description="EPS,Board Temp Sensor 2" Type="int16" Unit="deg c" IsLittleEndian="false" RangeStart="-40" RangeEnd="125"  />
+        <Parameter Name="Eps_temp[3]" description="EPS,Board Temp Sensor 3" Type="int16" Unit="deg c" IsLittleEndian="false" RangeStart="0" RangeEnd="45"  />
+        <Parameter Name="Batt_temp[0]" description="EPS,Battery Temp Sensor 0" Type="int16" Unit="deg c" IsLittleEndian="false" RangeStart="0" RangeEnd="45" />
+        <Parameter Name="Batt_temp[1]" description="EPS,Battery Temp Sensor 1" Type="int16" Unit="deg c" IsLittleEndian="false" RangeStart="0" RangeEnd="45" />
+        <Parameter Name="Rxdoppler" description="Comms,RX Doppler" Type="uint16" Calibration="6" Unit="Hz" IsLittleEndian="false" RangeStart="0" RangeEnd="45" />
         <Parameter Name="Rxrssi" description="Comms,RX RSSI" Type="uint16" Calibration="5" Unit="dBm" IsLittleEndian="false" />
         <Parameter Name="Txrefl" description="Comms,TX Reflected SWR" Type="uint16" Unit="mW" IsLittleEndian="false" />
         <Parameter Name="Txfrow" description="Comms,TX Forward SWR" Type="uint16" Unit="mW" IsLittleEndian="false" />
         <Parameter Name="AltitudeAngelsRoll" description="ADCS,Attitude Angles Roll" Type="int16" Unit="deg" IsLittleEndian="false" />
         <Parameter Name="AltitudeAngelsPich" description="ADCS,Attitude Angles Pitch" Type="int16" Unit="deg" IsLittleEndian="false" />
         <Parameter Name="AltitudeAngelsYaw" description="ADCS,Attitude Angles Yaw" Type="int16" Unit="deg" IsLittleEndian="false" />
-        <Parameter Name="FileSystem last error" Type="byte" IsLittleEndian="false" />
-        <Parameter Name="EPS battery state" description="EPS" Type="byte" IsLittleEndian="false" />
-        <Parameter Name="NumberDelayd_comms" Type="byte" IsLittleEndian="false" />
-        <Parameter Name="Number_Resets" Type="uint32" IsLittleEndian="false" />
-        <Parameter Name="Last_Resets" Type="dateTime" Unit="sec" IsLittleEndian="false" />
-        <Parameter Name="states" Type="byte" IsLittleEndian="false" />
+        <Parameter Name="FileSystem last error" description="OBC,File System Last Error" Type="byte" IsLittleEndian="false" />
+        <Parameter Name="EPS battery state" description="EPS,Logic State Number" Type="byte" IsLittleEndian="false" />
+        <Parameter Name="NumberDelayd_comms" description="OBC,Number of Stored Delayed Commands" Type="byte" IsLittleEndian="false" />
+        <Parameter Name="Number_Resets" description="OBC,Number of Resets" Type="uint32" IsLittleEndian="false" />
+        <Parameter Name="Last_Resets"  description="OBC,Last Boot Time" Type="dateTime" Unit="sec" IsLittleEndian="false" />
+        <Parameter Name="states" Type="byte"  description="OBC,Magic number that only Elai can understand" IsLittleEndian="false" />
       </ServiceSubtype>
     
 	</ServiceType>

@@ -2,15 +2,17 @@ google.charts.load("current", { packages: ["gauge"] });
 google.charts.setOnLoadCallback(createCharts);
 
 function createCharts() {
-    let dispOrder = {
-        "Info": ["sat_time"],
-        "EPS": ["vbatt", "batt_curr", "3v3_curr", "5v_curr", "eps_temp[0]", "eps_temp[1]",
-            "eps_temp[2]", "eps_temp[3]", "batt_temp[0]", "batt_temp[1]", "eps battery state"],
-        "ADCS": ["altitudeangelsroll", "altitudeangelspich", "altitudeangelsyaw"],
-        "TRXVU": ["lotrxvu_temp", "patrxvu_temp", "rxdoppler", "rxrssi", "txrefl", "txfrow"],
-        "Payload": ["numberofpics"],
-        "OBC": ["number_resets", "numberdelayd_comms", "last_resets", "states"]
-    };
+    let options = $("meta[name=jinOptions]").attr("content");
+    let data = $("meta[name=jinBeacon]").attr("content");
+    let units = $("meta[name=jinUnits]").attr("content");
+    let dispOrder = $("meta[name=jinDispOrder]").attr("content");
+    let paramNames = $("meta[name=jinParamNames]").attr("content");
+
+    data = JSON.parse(data.replace(/'/g, '"'));
+    units = JSON.parse(units.replace(/'/g, '"'));
+    options = JSON.parse(options.replace(/'/g, '"'));
+    dispOrder = JSON.parse(dispOrder.replace(/'/g, '"'));
+    paramNames = JSON.parse(paramNames.replace(/'/g, '"'));
 
     let row = document.createElement("div");
     row.className = "row";
@@ -22,18 +24,6 @@ function createCharts() {
         "batt_curr": "textbox",
         "vbatt": "textbox"
     };
-
-    let options = $("meta[name=jinOptions]").attr("content");
-    let data = $("meta[name=jinBeacon]").attr("content");
-    let units = $("meta[name=jinUnits]").attr("content");
-    let dispOrder1 = $("meta[name=jinDispOrder]").attr("content");
-    let paramNames = $("meta[name=jinParamNames]").attr("content");
-
-    data = JSON.parse(data.replace(/'/g, '"'));
-    units = JSON.parse(units.replace(/'/g, '"'));
-    options = JSON.parse(options.replace(/'/g, '"'));
-    dispOrder1 = JSON.parse(dispOrder1.replace(/'/g, '"'));
-    paramNames = JSON.parse(paramNames.replace(/'/g, '"'));
 
     let charts = initCardElements(dispOrder, dispType, categoryCards);
 
@@ -107,9 +97,9 @@ function drawCharts(charts, options, data, dispType, units, paramNames) {
         } else /*if (dispType[i] === "textbox")*/ {
             charts[i].innerHTML = `${paramName + " [" + units[i] + "]"}: ${data[i]}`;
             if ((options[i] != undefined || options[i] != null) && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
-                charts[i].className = "red-text";
+                charts[i].className = "black-text"//"red-text";
             } else {
-                charts[i].className = "black-text";
+                charts[i].className = "green-text";//"black-text";
             }
         }
     }

@@ -213,6 +213,7 @@ def findTelemetryInMIB(serviceType, serviceSubType):
 def getParameterSubSystems(serviceType, serviceSubType):
     telemetry = findTelemetryInMIB(serviceType, serviceSubType)
     paramSubSystem = {}
+    paramSubSystem["Info"] = ["sat_time"]
 
     for param in telemetry.find_all("parameter"):
         try:
@@ -237,7 +238,6 @@ def getParameterReadableNames(serviceType, serviceSubType):
         except:
             pass
 
-    print(paramNames)
     return paramNames
 
 
@@ -350,6 +350,7 @@ def beacon():
     paramOptions = getTelemetryOptions('3', '25')
     dispOrder = getParameterSubSystems('3', '25')
     readableNames = getParameterReadableNames('3', '25')
+    readableNames["sat_time"] = "Satellite Time"
     beaconUnits = getUnitsFromCSV(latestFile, params)
     beaconUnits["sat_time"] = "date"
 
@@ -394,5 +395,5 @@ def getDumpNames():
 # I'm Alon Grossman and I scribbled on the code
 
 
-webbrowser.open('http://127.0.0.1:5000/')
-app.run()
+# webbrowser.open('http://127.0.0.1:5000/')
+app.run(debug=True)
