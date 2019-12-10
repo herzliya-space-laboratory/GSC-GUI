@@ -225,6 +225,21 @@ def getParameterSubSystems(serviceType, serviceSubType):
     return paramSubSystem
 
 
+def getParameterReadableNames(serviceType, serviceSubType):
+    telemetry = findTelemetryInMIB(serviceType, serviceSubType)
+    paramNames = {}
+
+    for param in telemetry.find_all("parameter"):
+        try:
+            readableName = param["description"].split(",")[1]
+            paramNames[param["name"].lower()] = readableName
+        except:
+            pass
+    
+    print(paramNames)
+    return paramNames
+
+
 def getTelemetryOptions(serviceType, serviceSubType):
     telemetry = findTelemetryInMIB(serviceType, serviceSubType)
     options = {}
@@ -333,10 +348,11 @@ def beacon():
 
     paramOptions = getTelemetryOptions('3', '25')
     dispOrder = getParameterSubSystems('3', '25')
+    readableNames = getParameterReadableNames('3', '25')
     beaconUnits = getUnitsFromCSV(latestFile, params)
     beaconUnits["sat_time"] = "date"
 
-    return render_template(beaconWeb, beacon=data, units=beaconUnits, options=paramOptions, dispOrder=dispOrder)
+    return render_template(beaconWeb, beacon=data, units=beaconUnits, options=paramOptions, dispOrder=dispOrder, readableNames=readableNames)
 
 
 @app.route('/play')

@@ -27,22 +27,22 @@ function createCharts() {
     let data = $("meta[name=jinBeacon]").attr("content");
     let units = $("meta[name=jinUnits]").attr("content");
     let dispOrder1 = $("meta[name=jinDispOrder]").attr("content");
+    let paramNames = $("meta[name=jinParamNames]").attr("content");
 
     data = JSON.parse(data.replace(/'/g, '"'));
     units = JSON.parse(units.replace(/'/g, '"'));
     options = JSON.parse(options.replace(/'/g, '"'));
     dispOrder1 = JSON.parse(dispOrder1.replace(/'/g, '"'));
-
-    console.log(dispOrder1);
+    paramNames = JSON.parse(paramNames.replace(/'/g, '"'));
 
     let charts = initCardElements(dispOrder, dispType, categoryCards);
 
     $("#main").append(row);
 
-    drawCharts(charts, options, data, dispType, units);
+    drawCharts(charts, options, data, dispType, units, paramNames);
 
     setInterval(function () {
-        updateCharts(charts, options, dispType, units);
+        updateCharts(charts, options, dispType, units, paramNames);
     }, 1000);
 }
 
@@ -94,17 +94,18 @@ function createCards(dispOrder, div) {
 }
 
 
-function drawCharts(charts, options, data, dispType, units) {
+function drawCharts(charts, options, data, dispType, units, paramNames) {
     for (let i in data) {
         const option = options[i];
+        paramName = paramNames[i] != null ? paramNames[i] : i;
         if (dispType[i] === "gauge") {
             const gaugeData = google.visualization.arrayToDataTable([
                 ["Label", "Value"],
-                [i + " [" + units[i] + "]", data[i]]
+                [paramName + " [" + units[i] + "]", data[i]]
             ]);
             charts[i].draw(gaugeData, option);
         } else /*if (dispType[i] === "textbox")*/ {
-            charts[i].innerHTML = `${i + " [" + units[i] + "]"}: ${data[i]}`;
+            charts[i].innerHTML = `${paramName + " [" + units[i] + "]"}: ${data[i]}`;
             if ((options[i] != undefined || options[i] != null) && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
                 charts[i].className = "red-text";
             } else {
@@ -114,13 +115,13 @@ function drawCharts(charts, options, data, dispType, units) {
     }
 }
 
-function updateCharts(charts, options, dispType, units) {
+function updateCharts(charts, options, dispType, units, paramNames) {
     $.ajax({
         type: "POST",
         url: "/beacon",
         data: {}
     }).done(function (params) {
-        drawCharts(charts, options, params, dispType, units);
+        drawCharts(charts, options, params, dispType, units, paramNames);
     });
 }
 
