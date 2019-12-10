@@ -9,6 +9,7 @@ import time
 import glob
 import log_parser
 import re
+import webbrowser
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -235,7 +236,7 @@ def getParameterReadableNames(serviceType, serviceSubType):
             paramNames[param["name"].lower()] = readableName
         except:
             pass
-    
+
     print(paramNames)
     return paramNames
 
@@ -393,4 +394,5 @@ def getDumpNames():
 # I'm Alon Grossman and I scribbled on the code
 
 
-app.run(debug=True)
+webbrowser.open('http://127.0.0.1:5000/')
+app.run()
