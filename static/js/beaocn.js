@@ -26,12 +26,14 @@ function createCharts() {
     let options = $("meta[name=jinOptions]").attr("content");
     let data = $("meta[name=jinBeacon]").attr("content");
     let units = $("meta[name=jinUnits]").attr("content");
+    let dispOrder1 = $("meta[name=jinDispOrder]").attr("content");
 
     data = JSON.parse(data.replace(/'/g, '"'));
     units = JSON.parse(units.replace(/'/g, '"'));
     options = JSON.parse(options.replace(/'/g, '"'));
+    dispOrder1 = JSON.parse(dispOrder1.replace(/'/g, '"'));
 
-    console.log(options);
+    console.log(dispOrder1);
 
     let charts = initCardElements(dispOrder, dispType, categoryCards);
 

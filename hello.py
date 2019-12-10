@@ -87,14 +87,12 @@ def getParam(line):
     '''Take last number from line'''
     line = line.replace("\n", "")
     line = line.split(",")
-    for i in range(len(line)):
-        param = line[-(i+1)]
-        if is_date(param):
-            return param
-        else:
-            param = param.replace(" ", "")
-            if is_number(param):
-                return param
+    param = line[2]
+    if is_date(param):
+        return param
+    else:
+        param = param.replace(" ", "")
+        return param
     return None
 
 
@@ -211,6 +209,22 @@ def findTelemetryInMIB(serviceType, serviceSubType):
     return None
 
 
+def getParameterSubSystems(serviceType, serviceSubType):
+    telemetry = findTelemetryInMIB(serviceType, serviceSubType)
+    paramSubSystem = {}
+
+    for param in telemetry.find_all("parameter"):
+        try:
+            subsystem = param["description"].split(",")[0]
+            if not subsystem in paramSubSystem:
+                paramSubSystem[subsystem] = []
+            paramSubSystem[subsystem].append(param["name"])
+        except:
+            pass
+
+    return paramSubSystem
+
+
 def getTelemetryOptions(serviceType, serviceSubType):
     telemetry = findTelemetryInMIB(serviceType, serviceSubType)
     options = {}
@@ -290,7 +304,7 @@ def commands():
             print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
             sentBytes = s.send(str(packet).encode())
             print("Number of bytes sent: ", sentBytes)
-            print("Server respo: ",s.recv(1024))
+            print("Server respo: ", s.recv(1024))
             time.sleep(0.1)
 
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
@@ -318,10 +332,11 @@ def beacon():
         return data
 
     paramOptions = getTelemetryOptions('3', '25')
+    dispOrder = getParameterSubSystems('3', '25')
     beaconUnits = getUnitsFromCSV(latestFile, params)
     beaconUnits["sat_time"] = "date"
 
-    return render_template(beaconWeb, beacon=data, units=beaconUnits, options=paramOptions)
+    return render_template(beaconWeb, beacon=data, units=beaconUnits, options=paramOptions, dispOrder=dispOrder)
 
 
 @app.route('/play')
@@ -358,6 +373,8 @@ def getDumpNames():
             "sst": split[1]
         }
     return dumpTypes
+
+# I'm Alon Grossman and I scribbled on the code
 
 
 app.run(debug=True)
