@@ -18,12 +18,7 @@ function createCharts() {
     row.className = "row";
     let categoryCards = createCards(dispOrder, row);
 
-    let dispType = {
-        "sat_time": "textbox",
-        "3v3_curr": "textbox",
-        "batt_curr": "textbox",
-        "vbatt": "textbox"
-    };
+    let dispType = {};
 
     let charts = initCardElements(dispOrder, dispType, categoryCards);
 

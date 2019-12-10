@@ -23,7 +23,7 @@ txfrow,00-39,57,mw
 altitudeangelsroll,00-00,0,deg
 altitudeangelspich,00-00,0,deg
 altitudeangelsyaw,00-00,0,deg
-numberofpics,00,0,none
+filesystem last error,00,0,none
 eps battery state,03,3,none
 numberdelayd_comms,00,0,none
 number_resets,00-00-00-06,6,none

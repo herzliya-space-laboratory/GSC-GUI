@@ -220,7 +220,7 @@ def getParameterSubSystems(serviceType, serviceSubType):
             subsystem = param["description"].split(",")[0]
             if not subsystem in paramSubSystem:
                 paramSubSystem[subsystem] = []
-            paramSubSystem[subsystem].append(param["name"])
+            paramSubSystem[subsystem].append(param["name"].lower())
         except:
             pass
 
@@ -394,7 +394,6 @@ def getDumpNames():
 
 # I'm Alon Grossman and I scribbled on the code
 
-app.run(debug=True)
 
 # webbrowser.open('http://127.0.0.1:5000/')
 app.run(debug=True)
