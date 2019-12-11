@@ -644,7 +644,7 @@
 			<Parameter Name="Firmware version (minor)" 			Type="byte" IsLittleEndian="true" />
 		</ServiceSubtype>
 		<ServiceSubtype Value="140" Name="Get ADCS unix time">
-			<Parameter Name="unix time" 	Description="time" 		Type="dateTime" IsLittleEndian="true" RangeStart = "864000 RangeEnd = "2213136000"/>
+			<Parameter Name="unix time" 	Description="time" 		Type="dateTime" IsLittleEndian="true" RangeStart = "864000" RangeEnd = "2213136000"/>
 			<Parameter Name="mili second" 	Description="time" 		Type="uint16" IsLittleEndian="true" RangeStart = "0" RangeEnd = "1000"/>
 		</ServiceSubtype>
 		<ServiceSubtype Value="142" Name="ADCS_GET_SRAM_LATCHUP_COUNTERS_ST">
@@ -677,16 +677,16 @@
 			</Parameter>
 			<Parameter Name="ADCS Enabled Components" Type="bitmap" IsLittleEndian="true" >
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeControl Signal enable status" RangeStart = "0" RangeEnd = "10" />
-				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeControl Motor enable status"  RangeStart = "0" RangeEnd = "10" />
+				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeControl Motor enable status" RangeStart = "0" RangeEnd = "10" />
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeSense enable status" RangeStart = "0" RangeEnd = "10"	/>
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeWheel 1 enable status" RangeStart = "0" RangeEnd = "10"	/>
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeWheel 2 enable status" RangeStart = "0" RangeEnd = "10"	/>
-				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeWheel 3 enable status"RangeStart = "0" RangeEnd = "10"	/>
-				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeStar enable status"RangeStart = "0" RangeEnd = "0"	/>
-				<bitfield isnull = "false" calibration ="1" size = "1" Name = "GPS receiver enable status"RangeStart = "0" RangeEnd = "0"	/>
-				<bitfield isnull = "false" calibration ="1" size = "1" Name = "GPS antenna LNA enable status"RangeStart = "0" RangeEnd = "0"	/>
-				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Motor driver enable status"RangeStart = "0" RangeEnd = "10"	/>
-				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Sun is above the local horizon enable status"RangeStart = "0" RangeEnd = "1"	/>
+				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeWheel 3 enable status" RangeStart = "0" RangeEnd = "10"	/>
+				<bitfield isnull = "false" calibration ="1" size = "1" Name = "CubeStar enable status" RangeStart = "0" RangeEnd = "0"	/>
+				<bitfield isnull = "false" calibration ="1" size = "1" Name = "GPS receiver enable status" RangeStart = "0" RangeEnd = "0"	/>
+				<bitfield isnull = "false" calibration ="1" size = "1" Name = "GPS antenna LNA enable status" RangeStart = "0" RangeEnd = "0"	/>
+				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Motor driver enable status" RangeStart = "0" RangeEnd = "10"	/>
+				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Sun is above the local horizon enable status" RangeStart = "0" RangeEnd = "1"	/>
 			</Parameter>
 			<Parameter Name="ADCS Error Occured" Type="bitmap" IsLittleEndian="true" >
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Comm error occurred with the CubeSense" RangeStart = "false" RangeEnd = "false"	/>
@@ -715,7 +715,7 @@
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Orbit Parameters are not in allowed bounds"	RangeStart = "false" RangeEnd = "false"/>
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Magnetorquer configuration or CSS in invalid."	RangeStart = "false" RangeEnd = "false"/>
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Attempt was made to select control mode without appropriate estimator"	RangeStart = "false" RangeEnd = "false"/>
-				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Attempt was made to change to an estimation mode that would be inappropriate for the current ctrl mode"RangeStart = "false" RangeEnd = "false"	/>
+				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Attempt was made to change to an estimation mode that would be inappropriate for the current ctrl mode" RangeStart = "false" RangeEnd = "false"	/>
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Modelled and measured magnetic field differs in size by mode than 5000 nT"	RangeStart = "false" RangeEnd = "false"/>
 				<bitfield isnull = "false" calibration ="1" size = "1" Name = "Failed to Recover an ADCS Node by successive resets"	RangeStart = "false" RangeEnd = "false"/>
 			</Parameter>

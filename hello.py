@@ -186,7 +186,6 @@ def getNewestFileInDir(directory):
         list_of_files = glob.glob(directory + "/*")
         return max(list_of_files, key=os.path.getctime)
     return None
-    
 
 
 def minMaxFromType(t):
@@ -404,7 +403,7 @@ def getDumpNames():
         }
     return dumpTypes
 
-# I'm Alon Grossman and I scribbled on the code
+# I'm Alon Grossman and I have scribbled on the code
 
 
 # webbrowser.open('http://127.0.0.1:5000/')
