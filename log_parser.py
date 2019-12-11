@@ -475,7 +475,7 @@ def ParseLogFile(path, logFileParsingFunction):
         output = logFileParsingFunction(log_type)
         output.append(log_data)
     except:
-        pass  # print("-E-\t Error ("") at file: "+path)
+       pass #print("-E-\t Error ("") at file: "+path)
     else:
         if None in output:
             output = None

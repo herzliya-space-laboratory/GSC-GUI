@@ -122,6 +122,9 @@ def praseCSV(directory, paramNames, params={}):
 
 
 def parseCSVfile(fileName, paramNames):
+    if fileName == None:
+        return {}
+
     params = {}
     f = open(fileName, "r")
     j = 0
@@ -148,6 +151,9 @@ def createLogsDict(eventLogDirectory, erroLogDirectory):
 
 
 def getParamsFromCSV(fileName):
+    if fileName == None:
+        return []
+
     f = open(fileName, "r")
 
     params = []
@@ -163,6 +169,9 @@ def getParamsFromCSV(fileName):
 
 
 def getUnitsFromCSV(fileName, paramNames):
+    if fileName == None:
+        return {}
+
     units = {}
     f = open(fileName, "r")
     for line in f:
@@ -173,8 +182,11 @@ def getUnitsFromCSV(fileName, paramNames):
 
 
 def getNewestFileInDir(directory):
-    list_of_files = glob.glob(directory + "/*")
-    return max(list_of_files, key=os.path.getctime)
+    if len(os.listdir(directory)) > 0:
+        list_of_files = glob.glob(directory + "/*")
+        return max(list_of_files, key=os.path.getctime)
+    return None
+    
 
 
 def minMaxFromType(t):
