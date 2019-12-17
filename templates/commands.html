@@ -285,11 +285,11 @@
             params.push(param);
         }
         var packet = writePacket(st, sst, params, 0);
-        sendPacket(packet, false, thisCommand);
+        sendPacket(packet, false, thisCommand, params);
     }
 
 
-    function sendPacket(packets, isNow, div) {
+    function sendPacket(packets, isNow, div, params) {
         showParams(false);
         if (isNow) {
             window.location.assign("?packet=[" + packets.toString() + "]");
@@ -297,8 +297,14 @@
             // Change URL to add query variable of (writePacket()).
         }
         else {
+            let text = div.firstElementChild.innerHTML;
+            paramsArr = params.toString().split(",");
+            params = "";
+            for (let i = 0; i < paramsArr.length; i += 2) {
+                params += `${paramsArr[i]}: ${paramsArr[i + 1]}\n`;
+            }
+            div.firstElementChild.innerHTML = `<abbr title="${params}">${text}</abbr>`;
             div.setAttribute("value", packets);
-            console.log(div);
         }
     }
 
@@ -580,6 +586,14 @@
         })
     });
 
+    function objToString(obj) {
+        let str = "";
+        for (key in obj) {
+            str += `${key}: ${obj[key]}\n`
+        }
+
+        return str;
+    }
     function getPlaylist(name, root) {
 
         var playlistPath = database.ref(name);
@@ -599,7 +613,8 @@
                 newCommand.setAttribute("value", child["value"]);
                 var newCommandName = document.createElement("div");
                 newCommandName.setAttribute("class", "column unselectable");
-                newCommandName.innerHTML = dic[child["id"]];
+                params = objToString(JSON.parse(child["value"]).Content.Params);
+                newCommandName.innerHTML = `<abbr title="${params}">${dic[child["id"]]}</abbr>`;
                 var newCommandNumber = document.createElement("div");
                 newCommandNumber.setAttribute("class", "column unselectable");
                 newCommandNumber.innerHTML = child["id"];
