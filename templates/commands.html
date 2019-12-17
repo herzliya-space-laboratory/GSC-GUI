@@ -1,15 +1,15 @@
 ﻿<!DOCTYPE html>
 <html>
 <!--Import all css, and images-->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/materialize.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='GUI.css') }}">
-    <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
-    <!--Import datetime-->
-    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/flatly/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet"
-        href="{{ url_for('static', filename='styles/datetimePicker/build/css/bootstrap-datetimepicker.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/materialize.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='GUI.css') }}">
+<link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
+<!--Import datetime-->
+<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/flatly/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='styles/datetimePicker/build/css/bootstrap-datetimepicker.min.css')}}">
 
 
 <head>
@@ -25,7 +25,7 @@
 
 </head>
 
-    <body class="indigo darken-1">
+<body class="indigo darken-1">
 
     <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
         <li class="logo center-align">
@@ -88,11 +88,14 @@
                     </div>
                 </div>
                 <button class="btn" onclick="sendPlaylist()">Send!</button>
-                <input style="margin: 10px;" type="" id="playlistName" class="nameInput" placeholder="Playlist's name" title="Type in a name">
-                <button class="btn"  onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
+                <input style="margin: 10px;" type="" id="playlistName" class="nameInput" placeholder="Playlist's name"
+                    title="Type in a name">
+                <button class="btn"
+                    onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
                 <select style="margin-bottom: 16px;" class="select-css" id="playlistNameOptions">
                 </select>
-                <button class="btn" onclick="getPlaylist(options.options[options.selectedIndex].innerHTML)">Get!</button>
+                <button class="btn"
+                    onclick="getPlaylist(options.options[options.selectedIndex].innerHTML)">Get!</button>
             </font>
 
 
@@ -103,7 +106,8 @@
 
 
                 <a href="#" class="sendButton" onclick="sendCommand()">Send Packet</a>
-                <a href="#" class="addToPlaylistButton" onclick="addToPlaylist()" id="playlistButton">Add To Playlist</a>
+                <a href="#" class="addToPlaylistButton" onclick="addToPlaylist()" id="playlistButton">Add To
+                    Playlist</a>
 
             </div>
         </font>
@@ -128,7 +132,9 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#datetimepicker1').datetimepicker();
+        $('#datetimepicker1').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
     });
 </script>
 
@@ -236,7 +242,6 @@
 
 
         packet += "}}}";
-        console.log(packet)
         return packet;
     }
     function clearInputs() {
@@ -470,7 +475,9 @@
                 inputContainer.appendChild(datetimeInput);
 
                 $(function () {
-                    $('#datetime' + datetimeCounter.toString()).datetimepicker();
+                    $('#datetime' + datetimeCounter.toString()).datetimepicker({
+                        format: 'DD/MM/YYYY'
+                    });
                 });
 
                 console.log("Datetime ho no");
@@ -577,6 +584,8 @@
 
         var playlistPath = database.ref(name);
         var commandList = document.getElementById("playlistContainer");
+        commandList.innerHTML = "<div class=\"row commandsTitle\" value=\"HEADER\"><div class=\"column unselectable\">Command</div><div class=\"column unselectable\">Command number</div></div>";
+
         playlistPath.once("value", function (snapshot) {
             snapshot.forEach(function (child) {
                 console.log(child.key + ": " + child.val());
