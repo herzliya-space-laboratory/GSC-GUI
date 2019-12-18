@@ -285,11 +285,11 @@
             params.push(param);
         }
         var packet = writePacket(st, sst, params, 0);
-        sendPacket(packet, false, thisCommand, params);
+        sendPacket(packet, false, thisCommand);
     }
 
 
-    function sendPacket(packets, isNow, div, params) {
+    function sendPacket(packets, isNow, div) {
         showParams(false);
         if (isNow) {
             window.location.assign("?packet=[" + packets.toString() + "]");
@@ -297,12 +297,9 @@
             // Change URL to add query variable of (writePacket()).
         }
         else {
-            let text = div.firstElementChild.innerHTML;
-            paramsArr = params.toString().split(",");
-            params = "";
-            for (let i = 0; i < paramsArr.length; i += 2) {
-                params += `${paramsArr[i]}: ${paramsArr[i + 1]}\n`;
-            }
+            let child = div.firstElementChild.firstElementChild || div.firstElementChild;
+            let text = child.innerHTML;
+            let params = objToString(JSON.parse(packets).Content.Params);
             div.firstElementChild.innerHTML = `<abbr title="${params}">${text}</abbr>`;
             div.setAttribute("value", packets);
         }
