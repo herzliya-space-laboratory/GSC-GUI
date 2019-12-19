@@ -198,37 +198,10 @@
         }
     }
 
-    function writePacket(st, sst, params, datetime) {
-        if (datetime == 0) {
-            datetime = new Date('January 1, 1970 00:00:00');
-        }
+    function writePacket(st, sst, params, execTime) {
         var packet = "{\"Type\":\"Telecommand\", \"Content\":";
 
-        let dd = datetime.getDate();
-        let mm = datetime.getMonth() + 1; //January is 0!
-        let yyyy = datetime.getFullYear();
-        let hours = datetime.getHours() + 1;
-        let min = datetime.getMinutes() + 1;
-        let sec = datetime.getSeconds() + 1;
-
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-        if (hours < 10) {
-            hours = '0' + hours;
-        }
-        if (min < 10) {
-            min = '0' + min;
-        }
-        if (sec < 10) {
-            sec = '0' + sec;
-        }
-        let execTime = dd + '/' + mm + '/' + yyyy + " " + hours + ":" + min + ":" + sec;
-
-        packet += "{\"ST\":\"" + st + "\",\"SST\":\"" + sst + "\"" + ",\"ExecutionTime\":\"" + execTime + "\",\"Params\":{";
+        packet += "{\"ST\":\"" + st + "\",\"SST\":\"" + sst + "\"" + ",\"ExecutionTime\":\"" + execTime[1] + "\",\"Params\":{";
         for (var i = 0; i < params.length - 1; i++) {
             var arr = params[i];
             packet += "\"" + arr[0] + "\":\"" + arr[1] + "\",";
@@ -270,7 +243,8 @@
             param.push(inputParams[i].lastElementChild.value);
             params.push(param);
         }
-        var packet = writePacket(st, sst, params, 0);
+        let execTime = params.pop();
+        var packet = writePacket(st, sst, params, execTime);
         sendPacket(packet, true, null);
     }
 
@@ -284,7 +258,8 @@
             param.push(inputParams[i].lastElementChild.value);
             params.push(param);
         }
-        var packet = writePacket(st, sst, params, 0);
+        let execTime = params.pop();
+        var packet = writePacket(st, sst, params, execTime);
         sendPacket(packet, false, thisCommand);
     }
 
@@ -453,6 +428,7 @@
         stringInput.setAttribute("class", "paramInput movingLable");
         stringInput.setAttribute("style", "color: white");
 
+
         switch (type) {
             case ("uint16"):
                 inputContainer.appendChild(intInput);
@@ -476,27 +452,30 @@
 
             case ("dateTime"):
                 inputContainer.appendChild(datetimeInput);
-
                 $(function () {
                     $('#datetime' + datetimeCounter.toString()).datetimepicker({
-                        format: 'DD/MM/YYYY hh:mm:ss'
+                        format: 'DD/MM/YYYY hh:mm:ss',
+                        defaultDate: '1970/01/01 00:00:00'
                     });
                 });
-
                 console.log("Datetime ho no");
                 break;
             default:
                 console.log("Error!! Unknown type in MIB.xml parameter type '" + type.toString() + "'");
         }
+
+
         body.appendChild(inputContainer);
     }
     function generateInputs(type, subtype) {
         st = type;
         sst = subtype;
         clearInputs();
-        for (var i = 0; i < paramTypes[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])].length; i++) {
-            generateInput(paramTypes[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])][i], paramNames[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])][i], paramUnits[commandNames.indexOf(dic["(" + type + "," + subtype + ")"])][i]);
+        let nameIndex = commandNames.indexOf(dic["(" + type + "," + subtype + ")"]);
+        for (var i = 0; i < paramTypes[nameIndex].length; i++) {
+            generateInput(paramTypes[nameIndex][i], paramNames[nameIndex][i], paramUnits[nameIndex][i]);
         }
+        generateInput("dateTime", "Execution Time", "sec");
     }
     if (results.length == 2 || results.length == 3) {
 
@@ -523,6 +502,13 @@
         group: 'shared',
         animation: 150,
         filter: '.commandsTitle',
+        onEnd(evt) {
+            let target = evt.originalEvent.target;
+            let command = evt.item;
+            if (playlistContainer !== target && !playlistContainer.contains(target)) {
+                command.remove();
+            }
+        }
     });
     function sendPlaylist() {
         var playlist = document.getElementById("playlistContainer");
