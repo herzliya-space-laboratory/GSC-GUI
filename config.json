@@ -1,0 +1,7 @@
+{
+    "telemetryFolderPath": "./DumpDemo",
+    "beaconFolderPath": "./BeaconDemo",
+    "eventLogsFolderPath": "./Event logs",
+    "errorLogsFolderPath": "./Error logs",
+    "mibPath": "./MIB.xml"
+}

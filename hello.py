@@ -27,7 +27,11 @@ handshake = "{'Type': 'GUI'}"
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-f = open("MIB.xml", "r")
+with open('config.json', 'r') as file:
+    config = file.read().replace('\n', '')
+config = json.loads(config)
+
+f = open(config["mibPath"], "r")
 
 soup = BeautifulSoup(f.read(), "html.parser")
 commandNames = []
@@ -205,7 +209,7 @@ def getCSVPacketId(path):
 
 
 def findTelemetryInMIB(serviceType, serviceSubType):
-    f = open("MIB.xml", "r")
+    f = open(config["mibPath"], "r")
 
     soup = BeautifulSoup(f.read(), "html.parser")
 
@@ -305,7 +309,8 @@ playground = "playground.html"
 beaconWeb = "beacon.html"
 dumpWeb = "dump.html"
 
-dumpDirNames = parseDumpDirNames(getSubDirs("DumpDemo"), "DumpDemo/")
+dumpDirNames = parseDumpDirNames(getSubDirs(
+    config["telemetryFolderPath"]), config["telemetryFolderPath"]+"/")
 
 
 @app.route('/commands')
@@ -344,15 +349,16 @@ def home():
 
 @app.route('/logs', methods=['GET', 'POST'])
 def logs():
-    logsDict = createLogsDict("Event logs", "Error logs")
+    logsDict = createLogsDict(
+        config["eventLogsFolderPath"], config["errorLogsFolderPath"])
     if request.method == "POST":
-        return json.dumps(createLogsDict("Event logs", "Error logs"))
+        return json.dumps(createLogsDict(config["eventLogsFolderPath"], config["errorLogsFolderPath"]))
     return render_template(logsWeb, logParams=logsDict)
 
 
 @app.route('/beacon', methods=['GET', 'POST'])
 def beacon():
-    latestFile = getNewestFileInDir("BeaconDemo")
+    latestFile = getNewestFileInDir(config["beaconFolderPath"])
     params = getParamsFromCSV(latestFile)
     data = parseCSVfile(latestFile, params)
     if request.method == "POST":
@@ -403,7 +409,7 @@ def getDumpNames():
         }
     return dumpTypes
 
-# I'm Alon Grossman and I have scribbled on the code
+# I'm Alon Grossman and I have scribbled on the GSC-GUI code
 
 
 # webbrowser.open('http://127.0.0.1:5000/')
