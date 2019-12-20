@@ -17,9 +17,13 @@ Error 10: Unable to parse integer fro telemetry
 
 import socket
 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 61015
-BUFFER_SIZE = 1024
+with open('config.json', 'r') as file:
+    config = file.read().replace('\n', '')
+config = json.loads(config)
+
+TCP_IP = config["baseIP"]
+TCP_PORT = config["basePort"]
+BUFFER_SIZE = config["bufferSize"]
 
 is_tcp_connected = False
 
@@ -27,9 +31,6 @@ handshake = "{'Type': 'GUI'}"
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-with open('config.json', 'r') as file:
-    config = file.read().replace('\n', '')
-config = json.loads(config)
 
 f = open(config["mibPath"], "r")
 
