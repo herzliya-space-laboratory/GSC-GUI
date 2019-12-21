@@ -19,6 +19,15 @@
             padding-left: 315px;
         }
 
+        @media only screen and (max-width : 992px) {
+
+            header,
+            main,
+            footer {
+                padding-left: 0;
+            }
+        }
+
         ::placeholder {
             color: #fff;
         }
@@ -44,11 +53,17 @@
         <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
         <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
     </ul>
-    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
+            class="material-icons">menu</i></a>
 
     <h2 id="title" class="center-align white-text"></h2>
     <main id="main"></main>
     <script src="/static/js/dump.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+        });
+    </script>
 </body>
 
 </html>

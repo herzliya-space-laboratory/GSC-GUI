@@ -16,8 +16,18 @@
         header,
         main,
         footer {
-            padding-left: 315px;
+            padding-left: 300px;
         }
+
+        @media only screen and (max-width : 992px) {
+
+            header,
+            main,
+            footer {
+                padding-left: 0;
+            }
+        }
+
 
         ::placeholder {
             color: #fff;
@@ -45,13 +55,18 @@
         <li onclick="navChange(this)" class="active"><a href="/beacon">Beacons</a></li>
         <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
     </ul>
-
-    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
+            class="material-icons">menu</i></a>
 
     <h2 class="center-align white-text">Beacons</h2>
     <main id="main"></main>
     <script src="/static/js/beaocn.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+        });
+    </script>
 </body>
 
 </html>

@@ -60,7 +60,7 @@ function createCards(dispOrder, div) {
 
     for (let i in dispOrder) {
         let col = document.createElement("div");
-        col.className = "col s4";
+        col.className = "col l4 m6 s12";
 
         let card = document.createElement("div");
         card.className = "card medium white";
