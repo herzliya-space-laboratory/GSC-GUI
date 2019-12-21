@@ -14,7 +14,7 @@
 
 <head>
     <title>Commands</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.rawgit.com/RubaXa/Sortable/master/Sortable.min.js"></script>
@@ -139,9 +139,6 @@
 
 
 <!-- Datetime librarys, JQuery bootstrap-->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
@@ -476,8 +473,7 @@
                 break;
 
             case ("dateTime"):
-                if (placeholder == "") placeholder = '01/01/1970 00:00:00';
-                console.log(placeholder);
+                if (placeholder == "") placeholder = '01/01/1970 01:01:01';
                 inputContainer.appendChild(datetimeInput);
                 $(function () {
                     $('#datetime' + datetimeCounter.toString()).datetimepicker({
@@ -505,6 +501,7 @@
         sst = subtype;
         clearInputs();
         let params = packet != null ? JSON.parse(packet).Content.Params : {};
+        console.log(packet);
         let nameIndex = commandNames.indexOf(dic["(" + type + "," + subtype + ")"]);
         for (var i = 0; i < paramTypes[nameIndex].length; i++) {
             generateInput(paramTypes[nameIndex][i], paramNames[nameIndex][i], paramUnits[nameIndex][i], params[paramNames[nameIndex][i]]);
@@ -623,7 +620,7 @@
                 child = child.val();
                 var newCommand = document.createElement("div");
                 newCommand.setAttribute("class", "row");
-                newCommand.setAttribute("onclick", "showParams(true); generateInputs" + child["id"] + ";thisCommand=this;");
+                newCommand.setAttribute("onclick", "showParams(true); let type = parseJinja('" + child["id"] + "');generateInputs(type[0],type[1],this.getAttribute('value'));thisCommand=this;");
                 newCommand.setAttribute("id", child["id"]);
                 newCommand.setAttribute("draggable", "false");
                 newCommand.setAttribute("inlist", "true");
@@ -631,6 +628,7 @@
                 var newCommandName = document.createElement("div");
                 newCommandName.setAttribute("class", "column unselectable");
                 params = objToString(JSON.parse(child["value"]).Content.Params);
+                params += `Execution time: ${JSON.parse(child["value"]).Content.ExecutionTime}`;
                 newCommandName.innerHTML = `<abbr title="${params}">${dic[child["id"]]}</abbr>`;
                 var newCommandNumber = document.createElement("div");
                 newCommandNumber.setAttribute("class", "column unselectable");
