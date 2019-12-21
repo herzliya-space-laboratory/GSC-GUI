@@ -71,7 +71,7 @@
                     <!--Onclick add query variable to the end-->
                     {% for commandName in commandNames %}
                     <div class="row"
-                        onclick="showParams(true); generateInputs{{commandNumbers[commandNames.index(commandName)]}};thisCommand=this;"
+                        onclick="showParams(true); let type = parseJinja('{{commandNumbers[commandNames.index(commandName)]}}');generateInputs(type[0],type[1],this.getAttribute('value'));thisCommand=this;"
                         id="{{commandNumbers[commandNames.index(commandName)]}}">
                         <!--onclick="location.href = '?{{commandNumbers[commandNames.index(commandName)]}}'">-->
                         <div class="column unselectable">{{commandName}}</div>
@@ -275,6 +275,7 @@
             let child = div.firstElementChild.firstElementChild || div.firstElementChild;
             let text = child.innerHTML;
             let params = objToString(JSON.parse(packets).Content.Params);
+            params += `Execution time: ${JSON.parse(packets).Content.ExecutionTime}`;
             div.firstElementChild.innerHTML = `<abbr title="${params}">${text}</abbr>`;
             div.setAttribute("value", packets);
         }
@@ -397,7 +398,9 @@
     dic["{{commandNumbers[commandNames.index(commandName)]}}"] = "{{commandName}}";
     {% endfor %}
 
-    function generateInput(type, paramName, paramUnit) {
+    function generateInput(type, paramName, paramUnit, placeholder) {
+        if (!placeholder) placeholder = "";
+
         var inputContainer = document.createElement("div");
         inputContainer.setAttribute("style", "position:relative");
         inputContainer.setAttribute("name", "paramInput");
@@ -421,44 +424,45 @@
 
         var datetimeInput = document.createElement("input");
         datetimeInput.setAttribute("type", "text");
-        datetimeInput.setAttribute("class", "form-control");
+        datetimeInput.setAttribute("class", "paramsInput form-control");
         datetimeInput.setAttribute("id", "datetime" + datetimeCounter.toString());
 
         var stringInput = document.createElement("input");
-        stringInput.setAttribute("class", "paramInput movingLable");
+        stringInput.setAttribute("class", "paramsInput movingLable");
         stringInput.setAttribute("style", "color: white");
 
 
         switch (type) {
             case ("uint16"):
+                intInput.setAttribute("value", placeholder);
                 inputContainer.appendChild(intInput);
-                console.log("Int input");
                 break;
 
             case ("uint32"):
+                intInput.setAttribute("value", placeholder);
                 inputContainer.appendChild(intInput);
-                console.log("Int input");
                 break;
 
             case ("string"):
+                stringInput.setAttribute("value", placeholder);
                 inputContainer.appendChild(stringInput);
-                console.log("String input");
                 break;
 
             case ("byte"):
+                charInput.setAttribute("value", placeholder);
                 inputContainer.appendChild(charInput);
-                console.log("Char input");
                 break;
 
             case ("dateTime"):
+                if (placeholder == "") placeholder = '01/01/1970 00:00:00';
+                console.log(placeholder);
                 inputContainer.appendChild(datetimeInput);
                 $(function () {
                     $('#datetime' + datetimeCounter.toString()).datetimepicker({
                         format: 'DD/MM/YYYY hh:mm:ss',
-                        defaultDate: '1970/01/01 00:00:00'
+                        defaultDate: placeholder
                     });
                 });
-                console.log("Datetime ho no");
                 break;
             default:
                 console.log("Error!! Unknown type in MIB.xml parameter type '" + type.toString() + "'");
@@ -467,15 +471,23 @@
 
         body.appendChild(inputContainer);
     }
-    function generateInputs(type, subtype) {
+
+    function parseJinja(jinja) {
+        jinja = jinja.slice(1, -1);
+        jinja = jinja.split(',');
+        return [parseInt(jinja[0]), parseInt(jinja[1])];
+    }
+
+    function generateInputs(type, subtype, packet) {
         st = type;
         sst = subtype;
         clearInputs();
+        let params = packet != null ? JSON.parse(packet).Content.Params : {};
         let nameIndex = commandNames.indexOf(dic["(" + type + "," + subtype + ")"]);
         for (var i = 0; i < paramTypes[nameIndex].length; i++) {
-            generateInput(paramTypes[nameIndex][i], paramNames[nameIndex][i], paramUnits[nameIndex][i]);
+            generateInput(paramTypes[nameIndex][i], paramNames[nameIndex][i], paramUnits[nameIndex][i], params[paramNames[nameIndex][i]]);
         }
-        generateInput("dateTime", "Execution Time", "sec");
+        generateInput("dateTime", "Execution Time", "sec", packet != null ? JSON.parse(packet).Content.ExecutionTime : "");
     }
     if (results.length == 2 || results.length == 3) {
 
