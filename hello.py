@@ -311,7 +311,7 @@ beaconWeb = "beacon.html"
 dumpWeb = "dump.html"
 
 dumpDirNames = parseDumpDirNames(getSubDirs(
-    config["telemetryFolderPath"]), config["telemetryFolderPath"]+"/")
+    config["telemetryFolderPath"]), config["telemetryFolderPath"])
 
 
 @app.route('/commands')
