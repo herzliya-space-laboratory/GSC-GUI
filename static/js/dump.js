@@ -63,9 +63,9 @@ function drawCharts(charts, options, data, units) {
         charts[i].innerHTML = `${i + " [" + units[i] + "]"}: ${data[i]}`;
 
         if ((options[i] != undefined || options[i] != null) && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
-            charts[i].className = "black-text";//"red-text";
+            charts[i].className = "red-text";
         } else {
-            charts[i].className = "green-text";
+            charts[i].className = "black-text";
         }
     }
 }
