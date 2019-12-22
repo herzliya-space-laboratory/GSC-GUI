@@ -264,14 +264,14 @@ def getTelemetryOptions(serviceType, serviceSubType):
     for param in telemetry.find_all("parameter"):
         # minAndMax = minMaxFromType(param["type"])
         try:
-            options[param["name"]] = {
+            options[param["name"].lower()] = {
                 # "min": minAndMax["min"],
                 # "max": minAndMax["max"],
                 "rangeStart": int(param["rangestart"]),
                 "rangeEnd": int(param["rangeend"])
             }
         except:
-            options[param["name"]] = ""
+            options[param["name"].lower()] = ""
 
     f.close()
     return options

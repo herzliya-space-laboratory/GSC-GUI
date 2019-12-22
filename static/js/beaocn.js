@@ -91,10 +91,14 @@ function drawCharts(charts, options, data, dispType, units, paramNames) {
             charts[i].draw(gaugeData, option);
         } else /*if (dispType[i] === "textbox")*/ {
             charts[i].innerHTML = `${paramName + " [" + units[i] + "]"}: ${data[i]}`;
-            if ((options[i] != undefined || options[i] != null) && (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"])) {
+            console.log(options);
+            if (!options[i]) {
+                charts[i].className = "black-text";
+            }
+            else if (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"]) {
                 charts[i].className = "red-text";
             } else {
-                charts[i].className = "black-text";
+                charts[i].className = "green-text";
             }
         }
     }
