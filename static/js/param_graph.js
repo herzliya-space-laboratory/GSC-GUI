@@ -8,7 +8,8 @@ let paramArray = Object.keys(paramValues).map(function(key) {
 
 let sortedArr = sortByNewestTime(paramArray);
 
-google.charts.load('current', {packages: ['corechart']});
+// google.charts.load('current', {packages: ['corechart']});
+google.charts.load('current', {'packages':['line', 'corechart']});
 google.charts.setOnLoadCallback(drawGraph);
 
 function drawGraph(){
@@ -37,8 +38,8 @@ function drawGraph(){
     };
 
     var container = document.getElementById('chart_div');
-    var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-    google.visualization.events.addListener(chart, 'ready', function () {
+    var materialChart = new google.charts.Line(document.getElementById('chart_div'));
+    google.visualization.events.addListener(materialChart, 'ready', function () {
       var labels = container.getElementsByTagName('text');
       Array.prototype.forEach.call(labels, function(label) {
         if (label.getAttribute('text-anchor') === 'middle') {
@@ -46,7 +47,7 @@ function drawGraph(){
         }
       });
     });
-    chart.draw(data, options);
+    materialChart.draw(data, options);
 }
 
 function dateParser(date_str) {
