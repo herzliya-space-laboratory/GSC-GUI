@@ -1,5 +1,9 @@
 import os
+import json
 
+with open('config.json', 'r') as file:
+    config = file.read().replace('\n', '')
+config = json.loads(config)
 
 # =============================================================================
 # First Part: Normal log parser
@@ -475,7 +479,7 @@ def ParseLogFile(path, logFileParsingFunction):
         output = logFileParsingFunction(log_type)
         output.append(log_data)
     except:
-       pass #print("-E-\t Error ("") at file: "+path)
+         pass #print("-E-\t Error ("") at file: "+path)
     else:
         if None in output:
             output = None
@@ -509,9 +513,9 @@ def GetGroundTime(file_name):
 
 
 def getColor(directory):
-    if directory == "Event logs":
-        return "green white-text"
-    return "blue white-text"
+    if directory == config["eventLogsFolderPath"]:
+        return "blue white-text"
+    return "red white-text"
 
 
 def ParseAllLogFilesInDirectory(directory, logFileParsingFunction):
