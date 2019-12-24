@@ -183,6 +183,43 @@ def getParamsFromCSV(fileName):
     return params
 
 
+def parseCSVfileForGraph(fileName, parameterName):
+    if fileName == None:
+        return None
+
+    f = open(fileName, "r")
+
+    j = 0
+    for line in f:
+        if j == 2 and parameterName == "Packet Sat Date Time":
+            return line.split(",")[-1].replace("\n", "")
+            
+        if line.startswith(parameterName):
+            return getParamForGraph(line)
+        
+        j += 1
+
+    return None
+
+def getParamForGraph(line):
+    '''Take last number from line'''
+    line = line.replace("\n", "")
+    line = line.split(",")
+    param = line[2]
+    param = param.replace(" ", "")
+    return param
+
+def getParameterFromDieractory (directoryName, parameterName):
+    paramFromDirectory = {}
+    names = os.listdir(directoryName)
+
+    for name in names:
+        fileName = directoryName + "/"+ name
+        satTime = parseCSVfileForGraph(fileName, "Packet Sat Date Time")
+        paramFromDirectory[satTime] = parseCSVfileForGraph(fileName, parameterName)
+    
+    return paramFromDirectory
+
 def getUnitsFromCSV(fileName, paramNames):
     if fileName == None:
         return {}
@@ -404,6 +441,15 @@ def dump():
 
     return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType={"st": st, "sst": sst})
 
+@app.route('/parameterGraph', methods=['GET', 'POST'])
+def parameterGraph():
+    st = request.args.get('st')
+    sst = request.args.get('sst')
+    parameterName = request.args.get('paramName')
+    key = str(st) + "-" + str(sst)
+
+    paramValues = getParameterFromDieractory(dumpDirNames[key]["path"], parameterName)
+    return render_template(graphPage, paramData=paramValues)
 
 @app.route('/getDumpNames')
 def getDumpNames():
