@@ -64,6 +64,16 @@ for serType in commands.find_all("servicetype"):
 
 f.close()
 
+app = Flask(__name__)
+
+commandsWeb = "commands.html"
+index = "index.html"
+feedWeb = "feed.html"
+logsWeb = "logs.html"
+playground = "playground.html"
+beaconWeb = "beacon.html"
+dumpWeb = "dump.html"
+
 
 def is_number(s):
     '''Finds out if string is a number'''
@@ -300,45 +310,32 @@ def parseDumpDirNames(dirs, path):
     return dumpNames
 
 
-app = Flask(__name__)
-
-commandsWeb = "commands.html"
-index = "index.html"
-feedWeb = "feed.html"
-logsWeb = "logs.html"
-playground = "playground.html"
-beaconWeb = "beacon.html"
-dumpWeb = "dump.html"
-
-dumpDirNames = parseDumpDirNames(getSubDirs(
-    config["telemetryFolderPath"]), config["telemetryFolderPath"])
-
-
 @app.route('/commands')
 def commands():
     global is_tcp_connected
     global handshake
     params = ""
+    is_tcp_connected = False
+
     if request.args.get("packet") == None:
         print("Got NoneType")
     else:
-        params = html.unescape(request.args.get("packet"))
-        packets = ast.literal_eval(params)
-        if not is_tcp_connected:
-            print("in")
+        try:
+            params = html.unescape(request.args.get("packet"))
+            packets = ast.literal_eval(params)
             s.connect((TCP_IP, TCP_PORT))
             print("Connected")
-            is_tcp_connected = True
             s.send(handshake.encode())
             time.sleep(0.25)
-            print("End")
-        for packet in packets:
-            print("This is: ", packet)
-            print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
-            sentBytes = s.send(str(packet).encode())
-            print("Number of bytes sent: ", sentBytes)
-            print("Server respo: ", s.recv(1024))
-            time.sleep(0.1)
+            for packet in packets:
+                print("This is: ", packet)
+                print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
+                sentBytes = s.send(str(packet).encode())
+                print("Number of bytes sent: ", sentBytes)
+                print("Server respo: ", s.recv(1024))
+                time.sleep(0.1)
+        except:
+            print("Couldn't connect to GSC")
 
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
@@ -412,6 +409,9 @@ def getDumpNames():
 
 # I'm Alon Grossman and I have scribbled on the GSC-GUI code
 
+
+dumpDirNames = parseDumpDirNames(getSubDirs(
+    config["telemetryFolderPath"]), config["telemetryFolderPath"])
 
 # webbrowser.open('http://127.0.0.1:5000/')
 app.run(debug=True)
