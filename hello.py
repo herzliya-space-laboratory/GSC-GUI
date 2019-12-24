@@ -313,9 +313,8 @@ def parseDumpDirNames(dirs, path):
 @app.route('/commands')
 def commands():
     global is_tcp_connected
-    global handshake
+    global s
     params = ""
-    is_tcp_connected = False
 
     if request.args.get("packet") == None:
         print("Got NoneType")
@@ -323,9 +322,16 @@ def commands():
         try:
             params = html.unescape(request.args.get("packet"))
             packets = ast.literal_eval(params)
-            s.connect((TCP_IP, TCP_PORT))
-            print("Connected")
-            s.send(handshake.encode())
+            if not is_tcp_connected:
+                s.connect((TCP_IP, TCP_PORT))
+                is_tcp_connected = True
+                print("Connected")
+            try:
+                s.send(handshake.encode())
+            except:
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect((TCP_IP, TCP_PORT))
+                s.send(handshake.encode())
             time.sleep(0.25)
             for packet in packets:
                 print("This is: ", packet)
@@ -334,6 +340,7 @@ def commands():
                 print("Number of bytes sent: ", sentBytes)
                 print("Server respo: ", s.recv(1024))
                 time.sleep(0.1)
+            s.close()
         except:
             print("Couldn't connect to GSC")
 
