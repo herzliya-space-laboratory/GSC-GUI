@@ -1,8 +1,8 @@
 {
-    "telemetryFolderPath": "./DumpDemo",
-    "beaconFolderPath": "./BeaconDemo",
-    "eventLogsFolderPath": "./Event logs",
-    "errorLogsFolderPath": "./Error logs",
+    "telemetryFolderPath": "./DumpDemo/",
+    "beaconFolderPath": "./BeaconDemo/",
+    "eventLogsFolderPath": "./Event logs/",
+    "errorLogsFolderPath": "./Error logs/",
     "mibPath": "./MIB.xml",
     "baseIP": "127.0.0.1",
     "basePort": 61015,
