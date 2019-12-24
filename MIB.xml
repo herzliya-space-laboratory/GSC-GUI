@@ -113,7 +113,7 @@
         <Parameter Name="Eps_temp[3]" description="EPS,Board Temp Sensor 3" Type="int16" Unit="deg c" IsLittleEndian="false" RangeStart="0" RangeEnd="45"  />
         <Parameter Name="Batt_temp[0]" description="EPS,Battery Temp Sensor 0" Type="int16" Unit="deg c" IsLittleEndian="false" RangeStart="0" RangeEnd="45" />
         <Parameter Name="Batt_temp[1]" description="EPS,Battery Temp Sensor 1" Type="int16" Unit="deg c" IsLittleEndian="false" RangeStart="0" RangeEnd="45" />
-        <Parameter Name="Rxdoppler" description="Comms,RX Doppler" Type="uint16" Calibration="6" Unit="Hz" IsLittleEndian="false" RangeStart="0" RangeEnd="45" />
+        <Parameter Name="Rxdoppler" description="Comms,RX Doppler" Type="uint16" Calibration="6" Unit="Hz" IsLittleEndian="false"/>
         <Parameter Name="Rxrssi" description="Comms,RX RSSI" Type="uint16" Calibration="5" Unit="dBm" IsLittleEndian="false" />
         <Parameter Name="Txrefl" description="Comms,TX Reflected SWR" Type="uint16" Unit="mW" IsLittleEndian="false" />
         <Parameter Name="Txfrow" description="Comms,TX Forward SWR" Type="uint16" Unit="mW" IsLittleEndian="false" />

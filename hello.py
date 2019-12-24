@@ -308,41 +308,43 @@ def parseDumpDirNames(dirs, path):
         }
 
     return dumpNames
+    
 
+def sendPacket(params):
+    packets = ast.literal_eval(params)
+    time.sleep(0.25)
+    for packet in packets:
+        print("This is: ", packet)
+        print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
+        sentBytes = s.send(str(packet).encode())
+        print("Number of bytes sent: ", sentBytes)
+        print("Server respo: ", s.recv(1024))
+        time.sleep(0.1)
 
 @app.route('/commands')
 def commands():
     global is_tcp_connected
     global s
+
     params = ""
 
     if request.args.get("packet") == None:
         print("Got NoneType")
     else:
+        if not is_tcp_connected:
+            s.connect((TCP_IP, TCP_PORT))
+            is_tcp_connected = True
+            s.send(handshake.encode())
+            print("Connected")
+        params = html.unescape(request.args.get("packet"))
         try:
-            params = html.unescape(request.args.get("packet"))
-            packets = ast.literal_eval(params)
-            if not is_tcp_connected:
-                s.connect((TCP_IP, TCP_PORT))
-                is_tcp_connected = True
-                print("Connected")
-            try:
-                s.send(handshake.encode())
-            except:
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                s.connect((TCP_IP, TCP_PORT))
-                s.send(handshake.encode())
-            time.sleep(0.25)
-            for packet in packets:
-                print("This is: ", packet)
-                print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
-                sentBytes = s.send(str(packet).encode())
-                print("Number of bytes sent: ", sentBytes)
-                print("Server respo: ", s.recv(1024))
-                time.sleep(0.1)
-            s.close()
+            sendPacket(params)
         except:
-            print("Couldn't connect to GSC")
+            print("Trying to reconnect to base")
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((TCP_IP, TCP_PORT))
+            s.send(handshake.encode())
+            sendPacket(params)
 
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
