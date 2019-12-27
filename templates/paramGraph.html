@@ -3,13 +3,17 @@
 
 <head>
     <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
-    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
     <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css" media="screen,projection" />
-    <meta name="jinBeacon" content="{{ beacon }}" />
-    <meta name="jinUnits" content="{{ units }}" />
-    <meta name="jinOptions" content="{{ options }}" />
-    <meta name="jinDispOrder" content="{{ dispOrder }}">
-    <meta name="jinParamNames" content="{{ readableNames }}">
+    <meta id="paramData" name="data" data-values="{{ paramData }}">
+    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script src="/static/js/param_graph.js"></script>
+    <script src="/static/js/side_bar.js"></script>
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <style>
         header,
         main,
@@ -31,8 +35,6 @@
             color: #fff;
         }
     </style>
-    <script src="/static/js/side_bar.js"></script>
-    <title>Beacons</title>
 </head>
 
 <body class="indigo darken-1">
@@ -50,23 +52,25 @@
             </div>
         </li>
         <li onclick="navChange(this)"><a href="/commands">Commands</a></li>
-        <li onclick="navChange(this)" class="active"><a href="/beacon">Beacons</a></li>
+        <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
         <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
         <li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
     </ul>
     <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
             class="material-icons">menu</i></a>
 
-    <h2 class="center-align white-text">Beacons</h2>
-    <main id="main"></main>
+    <main id="main">
+        <div id="inputs-field-div"></div>
+        <div id="chart_div" style="margin-left: 10px;"></div>
+    </main>
+
     <script type="text/javascript" src="/static/js/materialize.min.js"></script>
-    <script src="/static/js/beaocn.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <script>
         $(document).ready(function () {
             $('.sidenav').sidenav();
         });
     </script>
-</body>
+</body class="indigo darken-1">
 
 </html>

@@ -5,11 +5,9 @@
     <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
     <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
     <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css" media="screen,projection" />
-    <meta name="jinBeacon" content="{{ beacon }}" />
-    <meta name="jinUnits" content="{{ units }}" />
-    <meta name="jinOptions" content="{{ options }}" />
-    <meta name="jinDispOrder" content="{{ dispOrder }}">
-    <meta name="jinParamNames" content="{{ readableNames }}">
+    <script src="/static/js/side_bar.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/static/js/graphForm.js"></script>
     <style>
         header,
         main,
@@ -31,42 +29,48 @@
             color: #fff;
         }
     </style>
-    <script src="/static/js/side_bar.js"></script>
-    <title>Beacons</title>
 </head>
 
 <body class="indigo darken-1">
-
     <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
         <li style="margin-top: 20px;" class="logo center-align">
             <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
         </li>
         <li>
             <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
-                <input id="dump-seacrh" placeholder="Telemetry Name" class="autocomplete">
+                <input id="dump-seacrh" name="dump-search" placeholder="Telemetry Name" class="autocomplete">
                 <label for="dump-seacrh" class="active">Dump</label>
                 <a class="waves-effect waves-light btn-small" onclick="searchDump('dump-seacrh')"><i
                         class="material-icons left">search</i> Search Dump</a>
             </div>
         </li>
         <li onclick="navChange(this)"><a href="/commands">Commands</a></li>
-        <li onclick="navChange(this)" class="active"><a href="/beacon">Beacons</a></li>
+        <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
         <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
-        <li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
+        <li onclick="navChange(this)" class="active"><a href="/graphForm">Graphs</a></li>
     </ul>
     <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
             class="material-icons">menu</i></a>
 
-    <h2 class="center-align white-text">Beacons</h2>
-    <main id="main"></main>
+    <main>
+        <h1 class="white-text center-align">Parameter Graph</h1>
+        <div class="row">
+            <div class="input-field col s6">
+                <div class="card">
+                    <div class="card-content black-text">
+                        <label for="telemName">Telemetry Name</label>
+                        <input type="text" id="telemName" class="autocomplete">
+                        <label for="paramName">Parameter Name</label>
+                        <input type="text" id="paramName" placeholder="Parameter Name">
+                        <button class="btn" onclick="searchDumpGraph('telemName', 'paramName')">Go!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
     <script type="text/javascript" src="/static/js/materialize.min.js"></script>
-    <script src="/static/js/beaocn.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script>
-        $(document).ready(function () {
-            $('.sidenav').sidenav();
-        });
-    </script>
+
+
 </body>
 
 </html>

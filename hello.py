@@ -73,6 +73,8 @@ logsWeb = "logs.html"
 playground = "playground.html"
 beaconWeb = "beacon.html"
 dumpWeb = "dump.html"
+graphPage = "paramGraph.html"
+graphForm = "graphForm.html"
 
 
 def is_number(s):
@@ -142,9 +144,10 @@ def parseCSVfile(fileName, paramNames):
 
     params = {}
     f = open(fileName, "r")
-    j = 0
     for line in f:
-        if j == 2:
+        if line.startswith("Packet Ground Date Time"):
+            params["ground_time"] = line.split(",")[-1].replace("\n", "")
+        elif line.startswith("Packet Sat Date Time"):
             params["sat_time"] = line.split(",")[-1].replace("\n", "")
 
         for i in range(len(paramNames)):
@@ -153,7 +156,6 @@ def parseCSVfile(fileName, paramNames):
                 if is_number(paramVal):
                     paramVal = float(paramVal)
                 params[paramNames[i]] = paramVal
-        j += 1
     return params
 
 
@@ -193,13 +195,14 @@ def parseCSVfileForGraph(fileName, parameterName):
     for line in f:
         if j == 2 and parameterName == "Packet Sat Date Time":
             return line.split(",")[-1].replace("\n", "")
-            
+
         if line.startswith(parameterName):
             return getParamForGraph(line)
-        
+
         j += 1
 
     return None
+
 
 def getParamForGraph(line):
     '''Take last number from line'''
@@ -209,16 +212,19 @@ def getParamForGraph(line):
     param = param.replace(" ", "")
     return param
 
-def getParameterFromDieractory (directoryName, parameterName):
+
+def getParameterFromDieractory(directoryName, parameterName):
     paramFromDirectory = {}
     names = os.listdir(directoryName)
 
     for name in names:
-        fileName = directoryName + "/"+ name
+        fileName = directoryName + "/" + name
         satTime = parseCSVfileForGraph(fileName, "Packet Sat Date Time")
-        paramFromDirectory[satTime] = parseCSVfileForGraph(fileName, parameterName)
-    
+        paramFromDirectory[satTime] = parseCSVfileForGraph(
+            fileName, parameterName)
+
     return paramFromDirectory
+
 
 def getUnitsFromCSV(fileName, paramNames):
     if fileName == None:
@@ -276,7 +282,7 @@ def findTelemetryInMIB(serviceType, serviceSubType):
 def getParameterSubSystems(serviceType, serviceSubType):
     telemetry = findTelemetryInMIB(serviceType, serviceSubType)
     paramSubSystem = {}
-    paramSubSystem["Info"] = ["sat_time"]
+    paramSubSystem["Date"] = ["sat_time", "ground_time"]
 
     for param in telemetry.find_all("parameter"):
         try:
@@ -345,7 +351,7 @@ def parseDumpDirNames(dirs, path):
         }
 
     return dumpNames
-    
+
 
 def sendPacket(params):
     packets = ast.literal_eval(params)
@@ -357,6 +363,7 @@ def sendPacket(params):
         print("Number of bytes sent: ", sentBytes)
         print("Server respo: ", s.recv(1024))
         time.sleep(0.1)
+
 
 @app.route('/commands')
 def commands():
@@ -412,8 +419,10 @@ def beacon():
     dispOrder = getParameterSubSystems('3', '25')
     readableNames = getParameterReadableNames('3', '25')
     readableNames["sat_time"] = "Satellite Time"
+    readableNames["ground_time"] = "Ground Time"
     beaconUnits = getUnitsFromCSV(latestFile, params)
     beaconUnits["sat_time"] = "date"
+    beaconUnits["ground_time"] = "date"
 
     return render_template(beaconWeb, beacon=data, units=beaconUnits, options=paramOptions, dispOrder=dispOrder, readableNames=readableNames)
 
@@ -438,18 +447,24 @@ def dump():
 
     options = getTelemetryOptions(str(st), str(sst))
     units = getUnitsFromCSV(f, params)
+    units["sat_time"] = "date"
+    units["ground_time"] = "date"
 
     return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType={"st": st, "sst": sst})
 
-@app.route('/parameterGraph', methods=['GET', 'POST'])
+
+@app.route('/paramGraph', methods=['GET', 'POST'])
 def parameterGraph():
-    st = request.args.get('st')
-    sst = request.args.get('sst')
+    dumpNames = getDumpNames()
+    st = request.args.get("st")
+    sst = request.args.get("sst")
     parameterName = request.args.get('paramName')
     key = str(st) + "-" + str(sst)
 
-    paramValues = getParameterFromDieractory(dumpDirNames[key]["path"], parameterName)
+    paramValues = getParameterFromDieractory(
+        dumpDirNames[key]["path"], parameterName)
     return render_template(graphPage, paramData=paramValues)
+
 
 @app.route('/getDumpNames')
 def getDumpNames():
@@ -461,6 +476,11 @@ def getDumpNames():
             "sst": split[1]
         }
     return dumpTypes
+
+
+@app.route('/graphForm')
+def graph():
+    return render_template(graphForm)
 
 # I'm Alon Grossman and I have scribbled on the GSC-GUI code
 

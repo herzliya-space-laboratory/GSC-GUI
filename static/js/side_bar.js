@@ -40,7 +40,7 @@ function autoDumpSearch() {
     }).done(function (params) {
         dumpDict = params;
         $(document).ready(function () {
-            $('input.autocomplete').autocomplete({
+            $("input.autocomplete"/*"#dump-search"*/).autocomplete({
                 data: createDumpNameDict(params)
             });
         });

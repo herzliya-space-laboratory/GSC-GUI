@@ -1,6 +1,3 @@
-google.charts.load("current", { packages: ["gauge"] });
-google.charts.setOnLoadCallback(createCharts);
-
 function createCharts() {
     let options = $("meta[name=jinOptions]").attr("content");
     let data = $("meta[name=jinBeacon]").attr("content");
@@ -18,20 +15,18 @@ function createCharts() {
     row.className = "row";
     let categoryCards = createCards(dispOrder, row);
 
-    let dispType = {};
-
-    let charts = initCardElements(dispOrder, dispType, categoryCards);
+    let charts = initCardElements(dispOrder, categoryCards);
 
     $("#main").append(row);
 
-    drawCharts(charts, options, data, dispType, units, paramNames);
+    drawCharts(charts, options, data, units, paramNames);
 
     setInterval(function () {
-        updateCharts(charts, options, dispType, units, paramNames);
+        updateCharts(charts, options, units, paramNames);
     }, 1000);
 }
 
-function initCardElements(dispOrder, dispType, cards) {
+function initCardElements(dispOrder, cards) {
     let charts = {};
     for (let category in dispOrder) {
         let heading = document.createElement("span");
@@ -40,15 +35,9 @@ function initCardElements(dispOrder, dispType, cards) {
         cards[category].appendChild(heading);
         for (let i in dispOrder[category]) {
             let param = dispOrder[category][i]
-            if (dispType[param] === "gauge") {
-                let gauge = document.createElement("div");
-                cards[category].appendChild(gauge);
-                charts[param] = new google.visualization.Gauge(gauge);
-            } else /*if (dispType[param] === "textbox")*/ {
-                let textbox = document.createElement("h6");
-                cards[category].appendChild(textbox);
-                charts[param] = textbox;
-            }
+            let textbox = document.createElement("h6");
+            cards[category].appendChild(textbox);
+            charts[param] = textbox;
         }
     }
 
@@ -79,27 +68,17 @@ function createCards(dispOrder, div) {
 }
 
 
-function drawCharts(charts, options, data, dispType, units, paramNames) {
+function drawCharts(charts, options, data, units, paramNames) {
     for (let i in data) {
-        const option = options[i];
         paramName = paramNames[i] != null ? paramNames[i] : i;
-        if (dispType[i] === "gauge") {
-            const gaugeData = google.visualization.arrayToDataTable([
-                ["Label", "Value"],
-                [paramName + " [" + units[i] + "]", data[i]]
-            ]);
-            charts[i].draw(gaugeData, option);
-        } else /*if (dispType[i] === "textbox")*/ {
-            charts[i].innerHTML = `${paramName + " [" + units[i] + "]"}: ${data[i]}`;
-            console.log(options);
-            if (!options[i]) {
-                charts[i].className = "black-text";
-            }
-            else if (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"]) {
-                charts[i].className = "red-text";
-            } else {
-                charts[i].className = "green-text";
-            }
+        charts[i].innerHTML = `${paramName + " [" + units[i] + "]"}: ${data[i]}`;
+        if (!options[i]) {
+            charts[i].className = "black-text";
+        }
+        else if (data[i] > options[i]["rangeEnd"] || data[i] < options[i]["rangeStart"]) {
+            charts[i].className = "red-text";
+        } else {
+            charts[i].className = "green-text";
         }
     }
 }
@@ -114,3 +93,4 @@ function updateCharts(charts, options, dispType, units, paramNames) {
     });
 }
 
+createCharts();

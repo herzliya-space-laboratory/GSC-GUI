@@ -4,10 +4,9 @@
 <head>
     <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
     <title>GSC-GUI</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css" media="screen,projection" />
     <script src="/static/js/side_bar.js"></script>
 
     <style>
@@ -44,13 +43,17 @@
         <li onclick="navChange(this)"><a href="/commands">Commands</a></li>
         <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
         <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+        <li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
     </ul>
 
     <main>
         <h1 class="center-align">Welcome To GSC-GUI!</h1>
     </main>
 
-    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
+            class="material-icons">menu</i></a>
+
+    <script type="text/javascript" src="/static/js/materialize.min.js"></script>
 </body>
 
 </html>

@@ -5,15 +5,15 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='GUI.css') }}">
 <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
 <!--Import datetime-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/flatly/bootstrap.min.css">
+
 
 
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/flatly/bootstrap.min.css">
     <title>Commands</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.rawgit.com/RubaXa/Sortable/master/Sortable.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="/static/js/side_bar.js"></script>
     <style>
         header,
@@ -56,6 +56,7 @@
         <li onclick="navChange(this)" class="active"><a href="/commands">Commands</a></li>
         <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
         <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+        <li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
     </ul>
 
     <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
@@ -142,6 +143,8 @@
 <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
+<script type="text/javascript" src="/static/js/materialize.min.js"></script>
+
 
 <script>
     var playlistsNames = [];
