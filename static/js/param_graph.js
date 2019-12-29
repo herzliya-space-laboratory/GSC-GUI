@@ -14,7 +14,7 @@ google.charts.setOnLoadCallback(drawGraph);
 
 function drawGraph(){
     var data = new google.visualization.DataTable();
-    data.addColumn("datetime", "date of dump")
+    data.addColumn("datetime", "Time of dump")
     data.addColumn("number", "param Values")
 
     data.addRows(sortedArr);
@@ -22,23 +22,18 @@ function drawGraph(){
     var options = {
       width: 1600,
       height: 500,
-      chartArea: {
-        height: '100%',
-        width: '100%',
-        top: 24,
-        left: 160,
-        bottom: 100
-      },
       hAxis: {
         title: 'Time'
       },
+      theme: 'material',
+      curveType: 'function',
       vAxis: {
         title: 'Param Value'
       }
     };
 
     var container = document.getElementById('chart_div');
-    var materialChart = new google.charts.Line(document.getElementById('chart_div'));
+    var materialChart = new google.visualization.LineChart(document.getElementById('chart_div'));
     google.visualization.events.addListener(materialChart, 'ready', function () {
       var labels = container.getElementsByTagName('text');
       Array.prototype.forEach.call(labels, function(label) {

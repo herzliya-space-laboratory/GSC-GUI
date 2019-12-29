@@ -8,8 +8,8 @@ function searchDumpGraph(inputId, paramInputId) {
     }
     let st = dumpDict[searchInputValue]["st"];
     let sst = dumpDict[searchInputValue]["sst"];
-    let queryValue = "st=" + st + "&sst=" + sst + "&paramName=" + param;
-    window.location.pathname = "paramGraph?" + queryValue;
+    let queryValue = "?st=" + st + "&sst=" + sst + "&paramName=" + param;
+    window.location = "paramGraph" + queryValue;
 }
 
 $(document).ready(function () {
