@@ -23,13 +23,13 @@ function searchDump(inputId) {
     window.location = "dump" + queryValue;
 }
 
-function createDumpNameDict(dumpDict) {
-    let dumpNames = {};
+function createAutoCompleteDict(dumpDict) {
+    let autocompleteNames = {};
     for (let name in dumpDict) {
-        dumpNames[name] = null;
+        autocompleteNames[name] = null;
     }
 
-    return dumpNames;
+    return autocompleteNames;
 }
 
 function autoDumpSearch() {
@@ -41,7 +41,7 @@ function autoDumpSearch() {
         dumpDict = params;
         $(document).ready(function () {
             $("input.autocomplete"/*"#dump-search"*/).autocomplete({
-                data: createDumpNameDict(params)
+                data: createAutoCompleteDict(params)
             });
         });
     });

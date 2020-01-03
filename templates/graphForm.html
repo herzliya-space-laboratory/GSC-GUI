@@ -29,6 +29,7 @@
             color: #fff;
         }
     </style>
+    <title>Parameter Graph</title>
 </head>
 
 <body class="indigo darken-1">
@@ -55,20 +56,37 @@
     <main>
         <h1 class="white-text center-align">Parameter Graph</h1>
         <div class="row">
-            <div class="input-field col s6">
+            <div class="col s6">
                 <div class="card">
                     <div class="card-content black-text">
-                        <label for="telemName">Telemetry Name</label>
-                        <input type="text" id="telemName" class="autocomplete">
-                        <label for="paramName">Parameter Name</label>
-                        <input type="text" id="paramName" placeholder="Parameter Name">
-                        <button class="btn" onclick="searchDumpGraph('telemName', 'paramName')">Go!</button>
+                        <form>
+                            <div class="input-field">
+                                <label for="telemName">Telemetry Name</label>
+                                <input type="text" id="telemName" class="autocomplete">
+                            </div>
+                            <div class="input-field">
+                                <p>Parameter Name</p>
+                                <select id="paramName" class="browser-default">
+                                </select>
+                            </div>
+                            <div class="input-field">
+                                <button class="btn" onclick="searchDumpGraph('telemName', 'paramName')">Go!</button>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
+
         </div>
     </main>
     <script type="text/javascript" src="/static/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+            //$('select').formSelect();
+        });
+    </script>
 
 
 </body>

@@ -213,7 +213,7 @@ def getParamForGraph(line):
     return param
 
 
-def getParameterFromDieractory(directoryName, parameterName):
+def getParameterFromDirectory(directoryName, parameterName):
     paramFromDirectory = {}
     names = os.listdir(directoryName)
 
@@ -393,7 +393,6 @@ def commands():
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
 
-@app.route('/')
 def home():
     return render_template(index)
 
@@ -407,6 +406,7 @@ def logs():
     return render_template(logsWeb, logParams=logsDict)
 
 
+@app.route('/')
 @app.route('/beacon', methods=['GET', 'POST'])
 def beacon():
     latestFile = getNewestFileInDir(config["beaconFolderPath"])
@@ -453,7 +453,7 @@ def dump():
     return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType={"st": st, "sst": sst})
 
 
-@app.route('/paramGraph', methods=['GET', 'POST'])
+@app.route('/paramGraph')
 def parameterGraph():
     dumpNames = getDumpNames()
     st = request.args.get("st")
@@ -461,7 +461,7 @@ def parameterGraph():
     parameterName = request.args.get('paramName')
     key = str(st) + "-" + str(sst)
 
-    paramValues = getParameterFromDieractory(
+    paramValues = getParameterFromDirectory(
         dumpDirNames[key]["path"], parameterName)
     return render_template(graphPage, paramData=paramValues)
 
@@ -481,6 +481,18 @@ def getDumpNames():
 @app.route('/graphForm')
 def graph():
     return render_template(graphForm)
+
+
+@app.route('/getTelemParams')
+def getTelemParams():
+    st = request.args.get("st")
+    sst = request.args.get("sst")
+
+    key = str(st) + "-" + str(sst)
+    f = getNewestFileInDir(dumpDirNames[key]["path"])
+    params = getParamsFromCSV(f)
+    return {"params": params}
+
 
 # I'm Alon Grossman and I have scribbled on the GSC-GUI code
 
