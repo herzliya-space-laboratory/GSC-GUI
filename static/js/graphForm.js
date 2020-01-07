@@ -12,7 +12,6 @@ function searchDumpGraph(inputId, paramInputId) {
     let st = dumpDict[searchInputValue]["st"];
     let sst = dumpDict[searchInputValue]["sst"];
     let queryValue = "?st=" + st + "&sst=" + sst + "&paramName=" + param;
-    console.log(queryValue);
     window.location = "paramGraph" + queryValue;
 }
 
