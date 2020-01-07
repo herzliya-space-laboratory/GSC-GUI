@@ -1,8 +1,12 @@
 let paramValues = $("#paramData").data("values");
 let paramOptions = $("#paramOptions").data("values");
+let paramName = $("#paramName").data("values");
 
 paramValues = JSON.parse(paramValues.replace(/'/g, '"'));
 paramOptions = JSON.parse(paramOptions.replace(/'/g, '"'));
+
+let title = document.createElement("title");
+title.innerHTML = paramName;
 
 if(paramOptions["rangeStart"] == "" && paramOptions["rangeEnd"] == ""){
   paramOptions["rangeStart"] = null;
@@ -23,7 +27,7 @@ google.charts.setOnLoadCallback(drawGraph);
 function drawGraph(){
     var data = new google.visualization.DataTable();
     data.addColumn("datetime", "Time of dump")
-    data.addColumn("number", "param Values")
+    data.addColumn("number", paramName)
     data.addColumn("number", "rangeStart")
     data.addColumn("number", "rangeEnd")
 
@@ -38,7 +42,7 @@ function drawGraph(){
       theme: 'material',
       curveType: 'function',
       vAxis: {
-        title: 'Param Value'
+        title: paramName
       },
       explorer: { 
         actions: ['dragToZoom', 'rightClickToReset'],

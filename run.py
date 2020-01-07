@@ -461,9 +461,15 @@ def parameterGraph():
     parameterName = request.args.get('paramName')
     key = str(st) + "-" + str(sst)
 
+    try:
+        options = getTelemetryOptions(str(st), str(sst))[parameterName]
+    
+    except:
+        options = {"rangeStart": "", "rangeEnd": ""}
+    
     paramValues = getParameterFromDirectory(
         dumpDirNames[key]["path"], parameterName)
-    return render_template(graphPage, paramData=paramValues)
+    return render_template(graphPage, paramData=paramValues, paramOptions=options, paramName=parameterName)
 
 
 @app.route('/getDumpNames')
