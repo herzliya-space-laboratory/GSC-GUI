@@ -1,7 +1,6 @@
 let paramSelectOptions = [];
 
 function searchDumpGraph(inputId, paramInputId) {
-    debugger
     let searchInputValue = $("#" + inputId).val();
     let param = $("#" + paramInputId).val();
     console.log(param);
@@ -13,6 +12,7 @@ function searchDumpGraph(inputId, paramInputId) {
     let st = dumpDict[searchInputValue]["st"];
     let sst = dumpDict[searchInputValue]["sst"];
     let queryValue = "?st=" + st + "&sst=" + sst + "&paramName=" + param;
+    console.log(queryValue);
     window.location = "paramGraph" + queryValue;
 }
 
