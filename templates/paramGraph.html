@@ -8,6 +8,7 @@
     <meta id="paramData" name="data" data-values="{{ paramData }}">
     <meta id="paramOptions" name="options" data-values="{{ paramOptions }}">
     <meta id="paramName" name="name" data-values="{{ paramName }}">
+    <meta id="paramUnit" name="unit" data-values="{{ paramUnit }}">
 
     <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -39,6 +40,8 @@
             color: #fff;
         }
     </style>
+
+    <title>{{ paramName }}</title>
 </head>
 
 <body class="indigo darken-1">
@@ -62,7 +65,7 @@
     </ul>
     <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
             class="material-icons">menu</i></a>
-    
+
     <h2 id="title" class="center-align white-text">{{ paramName }}</h2>
     <main id="main">
         <div id="chart_div" style="margin-left: 10px;"></div>

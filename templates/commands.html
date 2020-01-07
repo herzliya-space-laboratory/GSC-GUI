@@ -445,7 +445,8 @@
         datetimeInput.setAttribute("class", "paramsInput datetime");
 
         let dumpType = document.createElement("select");
-        dumpType.className = "browser-default paramsInput"
+        dumpType.className = "paramsInput browser-default"
+        dumpType.style = "color: Black"
         dumpType.innerHTML = `
             <option value=0>ACK</option>
             <option value=1>log file events</option>

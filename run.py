@@ -472,24 +472,30 @@ def parameterGraph():
 
     try:
         options = getTelemetryOptions(str(st), str(sst))[parameterName]
-    
+
     except:
         options = {"rangeStart": "", "rangeEnd": ""}
-    
+
     paramValues = getParameterFromDirectory(
         dumpDirNames[key]["path"], parameterName)
-    return render_template(graphPage, paramData=paramValues, paramOptions=options, paramName=parameterName)
+    f = getNewestFileInDir(dumpDirNames[key]["path"])
+    params = getParamsFromCSV(f)
+    units = getUnitsFromCSV(f, params)
+    unit = units[parameterName]
+
+    return render_template(graphPage, paramData=paramValues, paramOptions=options, paramName=parameterName, paramUnit=unit)
 
 
 @app.route('/getDumpNames')
 def getDumpNames():
     dumpTypes = {}
     for key in dumpDirNames:
-        split = key.split("-")
-        dumpTypes[dumpDirNames[key]["name"]] = {
-            "st": split[0],
-            "sst": split[1]
-        }
+        if len(os.listdir(dumpDirNames[key]["path"])) != 0:
+            split = key.split("-")
+            dumpTypes[dumpDirNames[key]["name"]] = {
+                "st": split[0],
+                "sst": split[1]
+            }
     return dumpTypes
 
 
