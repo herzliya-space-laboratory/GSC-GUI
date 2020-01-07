@@ -120,7 +120,7 @@
         <Parameter Name="AltitudeAngelsRoll" description="ADCS,Attitude Angles Roll" Type="int16" Unit="deg" IsLittleEndian="false" />
         <Parameter Name="AltitudeAngelsPich" description="ADCS,Attitude Angles Pitch" Type="int16" Unit="deg" IsLittleEndian="false" />
         <Parameter Name="AltitudeAngelsYaw" description="ADCS,Attitude Angles Yaw" Type="int16" Unit="deg" IsLittleEndian="false" />
-        <Parameter Name="FileSystem last error" description="OBC,File System Last Error" Type="byte" IsLittleEndian="false" />
+        <Parameter Name="FileSystem last error" description="OBC,File System Last Error" Type="byte" IsLittleEndian="false" RangeStart="0" RangeEnd="0" />
         <Parameter Name="EPS battery state" description="EPS,Logic State Number" Type="byte" IsLittleEndian="false" />
         <Parameter Name="NumberDelayd_comms" description="OBC,Number of Stored Delayed Commands" Type="byte" IsLittleEndian="false" />
         <Parameter Name="Number_Resets" description="OBC,Number of Resets" Type="uint32" IsLittleEndian="false" />
@@ -1571,7 +1571,7 @@
 			</ServiceSubtype>
 
 			<ServiceSubtype Value="2" Name="ADCS_SET_CURR_UNIX_TIME_ST">
-				<Parameter Name="unix_time_sec" Type="datetime" Unit="[sec]" IsLittleEndian="true" />
+				<Parameter Name="unix_time_sec" Type="dateTime" Unit="[sec]" IsLittleEndian="true" />
 				<Parameter Name="unix_time_milli_sec" Type="uint16" Unit="[milli-sec]" IsLittleEndian="true" />
 			</ServiceSubtype>
 
