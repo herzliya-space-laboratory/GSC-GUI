@@ -380,27 +380,26 @@ def commands():
 
     params = ""
 
-    if request.args.get("packet") == None:
-        print("Got NoneType")
-    else:
-        if not is_tcp_connected:
-            s.connect((TCP_IP, TCP_PORT))
-            is_tcp_connected = True
-            s.send(handshake.encode())
-            print("Connected")
-        params = html.unescape(request.args.get("packet"))
-        try:
-            sendPacket(params)
-        except:
-            print("Trying to reconnect to base")
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((TCP_IP, TCP_PORT))
-            s.send(handshake.encode())
-            sendPacket(params)
+    if(IPAddrValidate()):
+        if request.args.get("packet") == None:
+            print("Got NoneType")
+        else:
+            if not is_tcp_connected:
+                s.connect((TCP_IP, TCP_PORT))
+                is_tcp_connected = True
+                s.send(handshake.encode())
+                print("Connected")
+            params = html.unescape(request.args.get("packet"))
+            try:
+                sendPacket(params)
+            except:
+                print("Trying to reconnect to base")
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect((TCP_IP, TCP_PORT))
+                s.send(handshake.encode())
+                sendPacket(params)
 
-            if(IPAddrValidate()):
-                return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
-    return "<h1>Can't acsess on your device<h1>"
+    return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
 
 def home():
