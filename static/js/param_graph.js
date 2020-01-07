@@ -2,13 +2,20 @@ let paramValues = $("#paramData").data("values");
 let paramOptions = $("#paramOptions").data("values");
 let paramName = $("#paramName").data("values");
 
+if(paramOptions == undefined || paramOptions == ""){
+  paramOptions = '{"rangeStart": "", "rangeEnd": ""}'
+}
+
 paramValues = JSON.parse(paramValues.replace(/'/g, '"'));
 paramOptions = JSON.parse(paramOptions.replace(/'/g, '"'));
 
 let title = document.createElement("title");
 title.innerHTML = paramName;
 
-if(paramOptions["rangeStart"] == "" && paramOptions["rangeEnd"] == ""){
+
+rangesValidateBool = paramOptions["rangeStart"] == "" && paramOptions["rangeEnd"] == "";
+
+if(rangesValidateBool){
   paramOptions["rangeStart"] = null;
   paramOptions["rangeEnd"] = null;
 }
