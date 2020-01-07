@@ -180,7 +180,6 @@
             document.getElementById("playlistButton").setAttribute("style", "display:none");
         }
     }
-    console.log(results);
 
     function showParams(show) {
         if (show) {
@@ -236,12 +235,14 @@
             var param = [];
             param.push(inputParams[i].parentElement.getAttribute("paramName"));
             let value = inputParams[i].value;
-            if (inputParams[i].type === "datetime-local") {
+            if (inputParams[i].parentElement.getAttribute("paramName") === "Execution Time") {
                 if (inputParams[i].parentElement.getElementsByClassName("checkbox")[0].checked)
                     value = '01/01/1970 01:01:01';
                 else
                     value = decodeDateTime(value);
             }
+            else if (inputParams[i].type === "datetime-local")
+                value = decodeDateTime(value);
             param.push(value);
             params.push(param);
         }
@@ -258,12 +259,14 @@
             var param = [];
             param.push(inputParams[i].parentElement.getAttribute("paramName"));
             let value = inputParams[i].value;
-            if (inputParams[i].type === "datetime-local") {
+            if (inputParams[i].parentElement.getAttribute("paramName") === "Execution Time") {
                 if (inputParams[i].parentElement.getElementsByClassName("checkbox")[0].checked)
                     value = '01/01/1970 01:01:01';
                 else
                     value = decodeDateTime(value);
             }
+            else if (inputParams[i].type === "datetime-local")
+                value = decodeDateTime(value);
 
             param.push(value);
             params.push(param);
@@ -521,9 +524,9 @@
                     charInput.setAttribute("value", placeholder);
                     inputContainer.appendChild(charInput);
                     break;
-                
+
                 case ("bitmap"):
-			        charInput.setAttribute("value", placeholder);
+                    charInput.setAttribute("value", placeholder);
                     inputContainer.appendChild(charInput);
                     break;
 
@@ -542,10 +545,13 @@
 
                     inputContainer.appendChild(datetimeInput);
 
-                    inputContainer.innerHTML += `<label>
+                    if (paramName === "Execution Time") {
+                        inputContainer.innerHTML += `<label>
                                                     <input class="checkbox" type="checkbox" ${checked} onclick="disableEnableDatetime(this)"/>
                                                     <span>Immidiate</span>
                                                 </label>`;
+                    }
+
                     break;
                 default:
                     console.log("Error!! Unknown type in MIB.xml parameter type '" + type.toString() + "'");
@@ -598,7 +604,6 @@
         sst = subtype;
         clearInputs();
         let params = packet != null ? JSON.parse(packet).Content.Params : {};
-        console.log(packet);
         let nameIndex = commandNames.indexOf(dic["(" + type + "," + subtype + ")"]);
         for (var i = 0; i < paramTypes[nameIndex].length; i++) {
             generateInput(paramTypes[nameIndex][i], paramNames[nameIndex][i], paramUnits[nameIndex][i], params[paramNames[nameIndex][i]]);
@@ -693,7 +698,6 @@
             var option = document.createElement("option");
             option.innerHTML = child.key;
             options.appendChild(option);
-            console.log(child.key);
         })
     });
 
