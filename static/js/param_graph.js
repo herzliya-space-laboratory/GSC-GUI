@@ -1,12 +1,20 @@
 let paramValues = $("#paramData").data("values");
-console.log(paramValues);
+let paramOptions = $("#paramOptions").data("values");
+
 paramValues = JSON.parse(paramValues.replace(/'/g, '"'));
+paramOptions = JSON.parse(paramOptions.replace(/'/g, '"'));
+
+if(paramOptions["rangeStart"] == "" && paramOptions["rangeEnd"] == ""){
+  paramOptions["rangeStart"] = null;
+  paramOptions["rangeEnd"] = null;
+}
 
 let paramArray = Object.keys(paramValues).map(function(key) {
     return [key, paramValues[key]];
   });
 
 let sortedArr = sortByNewestTime(paramArray);
+sortedArr = addRagensToArray(paramOptions, sortedArr)
 
 // google.charts.load('current', {packages: ['corechart']});
 google.charts.load('current', {'packages':['line', 'corechart']});
@@ -16,6 +24,8 @@ function drawGraph(){
     var data = new google.visualization.DataTable();
     data.addColumn("datetime", "Time of dump")
     data.addColumn("number", "param Values")
+    data.addColumn("number", "rangeStart")
+    data.addColumn("number", "rangeEnd")
 
     data.addRows(sortedArr);
 
@@ -29,6 +39,12 @@ function drawGraph(){
       curveType: 'function',
       vAxis: {
         title: 'Param Value'
+      },
+      explorer: { 
+        actions: ['dragToZoom', 'rightClickToReset'],
+        axis: 'vertical',
+        keepInBounds: true,
+        maxZoomIn: 1000000.0
       }
     };
 
@@ -60,4 +76,12 @@ function sortByNewestTime(param_Dict) {
   }); 
 
   return param_Dict.sort((a, b) => a[0] - b[0]); 
+}
+
+function addRagensToArray(options, arr){
+  arr.forEach(paramVal => {
+    paramVal.push(options["rangeStart"])
+    paramVal.push(options["rangeEnd"])
+  });
+  return arr;
 }
