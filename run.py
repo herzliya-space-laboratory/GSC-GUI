@@ -77,6 +77,14 @@ graphPage = "paramGraph.html"
 graphForm = "graphForm.html"
 
 
+def IPAddrValidate():
+    hostname = socket.gethostname()    
+    IPAddr = socket.gethostbyname(hostname)
+    if(IPAddr == '172.16.2.6'):
+        return True
+    return False 
+
+
 def is_number(s):
     '''Finds out if string is a number'''
     try:
@@ -390,7 +398,9 @@ def commands():
             s.send(handshake.encode())
             sendPacket(params)
 
-    return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
+            if(IPAddrValidate()):
+                return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
+    return "<h1>Can't acsess on your device<h1>"
 
 
 def home():
