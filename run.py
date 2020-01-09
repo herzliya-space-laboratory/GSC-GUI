@@ -539,8 +539,4 @@ dumpDirNames = parseDumpDirNames(getSubDirs(
     config["telemetryFolderPath"]), config["telemetryFolderPath"])
 
 # webbrowser.open('http://127.0.0.1:5000/')
-<<<<<<< Updated upstream
-app.run(host="0.0.0.0")
-=======
 app.run(debug=True, host="0.0.0.0")
->>>>>>> Stashed changes
