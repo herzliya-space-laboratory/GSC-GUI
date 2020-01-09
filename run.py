@@ -392,18 +392,18 @@ def sendPacket(params):
         time.sleep(0.1)
 
 
-@app.route('/commands')
+@app.route('/commands', methods=['GET', 'POST'])
 def commands():
     global is_tcp_connected
     global s
 
     params = ""
 
-    if(IPAddrValidate()):
-        print("Sending to GSC")
+    if IPAddrValidate():
         if request.args.get("packet") == None:
             print("Got NoneType")
         else:
+            print("Sending to GSC")
             if not is_tcp_connected:
                 s.connect((TCP_IP, TCP_PORT))
                 is_tcp_connected = True
@@ -542,4 +542,4 @@ dumpDirNames = parseDumpDirNames(getSubDirs(
     config["telemetryFolderPath"]), config["telemetryFolderPath"])
 
 # webbrowser.open('http://127.0.0.1:5000/')
-app.run(debug=True, host="0.0.0.0")
+app.run(debug=True)
