@@ -78,12 +78,12 @@ graphForm = "graphForm.html"
 
 
 def IPAddrValidate():
-    hostname = socket.gethostname()    
-    IPAddr = socket.gethostbyname(hostname)
-    if(IPAddr == '172.16.2.6'):
+    Connections = {"ip": request.remote_addr}
+    if(Connections["ip"] == "172.16.2.6" or Connections["ip"] == "127.0.0.1"):
+        print(Connections["ip"] + " is Allowed to connect")
         return True
-    return False 
-
+    print(Connections["ip"] + " is not allowed to connect")
+    return False
 
 def is_number(s):
     '''Finds out if string is a number'''
@@ -401,7 +401,6 @@ def commands():
 
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
-
 def home():
     return render_template(index)
 
@@ -522,4 +521,4 @@ dumpDirNames = parseDumpDirNames(getSubDirs(
     config["telemetryFolderPath"]), config["telemetryFolderPath"])
 
 # webbrowser.open('http://127.0.0.1:5000/')
-app.run(debug=True)
+app.run(host="0.0.0.0")

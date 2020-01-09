@@ -35,7 +35,7 @@ google.charts.setOnLoadCallback(drawGraph);
 function drawGraph() {
   var data = new google.visualization.DataTable();
   data.addColumn("datetime", "Time of dump")
-  data.addColumn("number", paramName)
+  data.addColumn("number", `${paramName} [${paramUnit}]`)
   data.addColumn("number", "rangeStart")
   data.addColumn("number", "rangeEnd")
 
