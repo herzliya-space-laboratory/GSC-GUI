@@ -78,21 +78,12 @@ graphForm = "graphForm.html"
 
 
 def IPAddrValidate():
-<<<<<<< Updated upstream
     Connections = {"ip": request.remote_addr}
     if(Connections["ip"][0:3] == "172" or Connections["ip"] == "127.0.0.1"):
         print(Connections["ip"] + " is Allowed to connect")
         return True
     print(Connections["ip"] + " is not allowed to connect")
     return False
-=======
-    hostname = socket.gethostname()
-    IPAddr = socket.gethostbyname(hostname)
-    if(IPAddr == '172.16.2.6'):
-        return True
-    return False
-
->>>>>>> Stashed changes
 
 def is_number(s):
     '''Finds out if string is a number'''
