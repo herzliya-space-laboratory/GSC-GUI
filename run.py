@@ -400,6 +400,7 @@ def commands():
     params = ""
 
     if(IPAddrValidate()):
+        print("Sending to GSC")
         if request.args.get("packet") == None:
             print("Got NoneType")
         else:
