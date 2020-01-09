@@ -85,6 +85,7 @@ def IPAddrValidate():
     print(Connections["ip"] + " is not allowed to connect")
     return False
 
+
 def is_number(s):
     '''Finds out if string is a number'''
     try:
@@ -418,6 +419,7 @@ def commands():
                 sendPacket(params)
 
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
+
 
 def home():
     return render_template(index)

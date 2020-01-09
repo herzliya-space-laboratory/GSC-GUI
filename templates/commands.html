@@ -120,7 +120,9 @@
                     <div class="card indigo darken-1">
                         <div class="card-content white-text">
                             <span class="card-title">Control panel</span>
-                            <button class="btn" id="dummyFunc" onclick="">Send dummy func</button>
+                            <button class="btn" id="dummyFunc" onclick="">Send dummy funcs</button>
+                            <p>How many Dummy Funcs?</p>
+                            <input type="number" id="dummyFuncNum" min="0" max="255" value="1" class="white-text">
                         </div>
                     </div>
                 </div>
@@ -440,16 +442,22 @@
             key = key.replace('(', '').replace(')', '');
             var st = key.split(',')[0];
             var sst = key.split(',')[1];
-            btn.setAttribute("onclick", `sendDummyFunc(${st},${sst})`);
+            btn.setAttribute("onclick", `sendDummyFuncs(${st},${sst})`);
         }
     });
 
-    function sendDummyFunc(st, sst) {
-        $.ajax({
-            type: "POST",
-            url: `/commands?packet=[" + '{"Type":"Telecommand", "Content":{"ST":"'${st}'","SST":"'${sst}'","ExecutionTime":"01/01/1970 01:01:01","Params":{}}}]`,
-            data: {}
-        }).done(() => alert("Dummy Func was sent!"));
+    function sendDummyFuncs(st, sst) {
+        const howMany = document.getElementById("dummyFuncNum").value;
+
+        for (let i = 0; i < howMany; i++) {
+            $.ajax({
+                type: "POST",
+                url: `/commands?packet=[" + '{"Type":"Telecommand", "Content":{"ST":"'${st}'","SST":"'${sst}'","ExecutionTime":"01/01/1970 01:01:01","Params":{}}}]`,
+                data: {}
+            });
+        }
+        alert("Dummy Funcs were sent!")
+
     }
 
     function generateInput(type, paramName, paramUnit, placeholder) {
