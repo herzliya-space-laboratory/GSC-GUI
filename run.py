@@ -79,7 +79,7 @@ graphForm = "graphForm.html"
 
 def IPAddrValidate():
     Connections = {"ip": request.remote_addr}
-    if(Connections["ip"] == "172.16.2.6" or Connections["ip"] == "127.0.0.1"):
+    if(Connections["ip"][0:3] == "172" or Connections["ip"] == "127.0.0.1"):
         print(Connections["ip"] + " is Allowed to connect")
         return True
     print(Connections["ip"] + " is not allowed to connect")
