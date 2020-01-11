@@ -778,9 +778,16 @@
                 newCommand.setAttribute("value", child["value"]);
                 var newCommandName = document.createElement("div");
                 newCommandName.setAttribute("class", "column unselectable");
-                params = objToString(JSON.parse(child["value"]).Content.Params);
-                params += `Execution time: ${JSON.parse(child["value"]).Content.ExecutionTime}`;
-                newCommandName.innerHTML = `<abbr title="${params}">${dic[child["id"]]}</abbr>`;
+				if (child["value"])
+				{
+					params = objToString(JSON.parse(child["value"]).Content.Params);
+					params += `Execution time: ${JSON.parse(child["value"]).Content.ExecutionTime}`;
+					newCommandName.innerHTML = `<abbr title="${params}">${dic[child["id"]]}</abbr>`;
+				}
+				else
+				{
+					newCommandName.innerHTML = dic[child["id"]];
+				}
                 var newCommandNumber = document.createElement("div");
                 newCommandNumber.setAttribute("class", "column unselectable");
                 newCommandNumber.innerHTML = child["id"];
