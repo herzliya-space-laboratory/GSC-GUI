@@ -39,10 +39,10 @@ function genarateRowCelles(telem_param, row, param_order){
     }
 }
 
-function generateAllTable(table, data) {
+function generateAllTable(table, data, startDateidx, endDateidx) {
     let time_sorted_data = $.extend(true, [], sortByNewestTime(data));
     let tbody = table.appendChild(document.createElement("tbody"));
-    time_sorted_data.forEach(telem_param => {
+    time_sorted_data.slice(endDateidx - 1, startDateidx + 1).forEach(telem_param => {
         let row = tbody.insertRow();
         $(row).addClass(telem_param["Color"])
         let headCell = createHeadCell(row, telem_param[_param_order[0]]);
@@ -57,7 +57,7 @@ function sortByNewestTime(param_Dict) {
     return param_Dict.sort((a, b) => dateParser(b["Sat Time"]) - dateParser(a["Sat Time"]));
 }
 
-function refresh_table(table_params, param_order, table_div_id) {
+function refresh_table(table_params, param_order, table_div_id, startIdx, endIdx) {
     let table_div = document.getElementById(table_div_id);
     table_div.innerHTML = "";
 
@@ -66,7 +66,7 @@ function refresh_table(table_params, param_order, table_div_id) {
 
     let head = generateTableHead(table, table_params, param_order);
 
-    table_div.appendChild(generateAllTable(head, table_params));
+    table_div.appendChild(generateAllTable(head, table_params, startIdx, endIdx));
 }
 
 function exportBtnGenerator(){
@@ -74,4 +74,31 @@ function exportBtnGenerator(){
     exportBtn.innerText = "Export table to csv file";
     exportBtn.className = "btn pink accent-3 white-text waves-effect"   
     return exportBtn
+}
+
+function findDate(dateStr, data){
+    let dateIndex;
+    data.forEach(logAck => {
+        if(logAck["Sat Time"] == dateStr){
+            dateIndex = data.indexOf(logAck)
+        }
+    });
+    return dateIndex
+}
+
+function getTimes(data){
+    let timeArr = [];
+    data.forEach(logAck => {
+        timeArr.push(logAck["Sat Time"])
+    });
+
+    return timeArr
+}
+
+function createOptionArr(selectID, timesArray){
+    timesArray.forEach(time => {
+        let option = document.createElement('option');
+        $(option).val(time).html(time)
+        $('#' + selectID).append(option)
+    });
 }
