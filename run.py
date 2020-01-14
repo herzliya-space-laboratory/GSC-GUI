@@ -424,11 +424,17 @@ def commands():
 
 @app.route('/logs', methods=['GET', 'POST'])
 def logs():
+    logCount = request.args.get('sliceNum')
+    
     logsDict = createLogsDict(
         config["eventLogsFolderPath"], config["errorLogsFolderPath"])
+    
     if request.method == "POST":
-        return json.dumps(createLogsDict(config["eventLogsFolderPath"], config["errorLogsFolderPath"]))
-    return render_template(logsWeb, logParams=logsDict)
+        if(logCount == "" or logCount == None):
+            logCount = '1'
+        return json.dumps(logsDict[len(logsDict) - int(logCount):])
+
+    return render_template(logsWeb, logParams=logsDict[len(logsDict) - 1:])
 
 
 @app.route('/')

@@ -21,9 +21,6 @@ function createHeadCell(row, text) {
 }
 
 function generateTableHead(table, param_Dict, param_order) {
-    if (Object.keys(param_Dict) < 1) {
-        return;
-    }
     let thead = table.createTHead();
     let row = thead.insertRow();
     param_order.forEach(key => {
@@ -39,10 +36,10 @@ function genarateRowCelles(telem_param, row, param_order){
     }
 }
 
-function generateAllTable(table, data, startDateidx, endDateidx) {
+function generateAllTable(table, data) {
     let time_sorted_data = $.extend(true, [], sortByNewestTime(data));
     let tbody = table.appendChild(document.createElement("tbody"));
-    time_sorted_data.slice(endDateidx - 1, startDateidx + 1).forEach(telem_param => {
+    time_sorted_data.forEach(telem_param => {
         let row = tbody.insertRow();
         $(row).addClass(telem_param["Color"])
         let headCell = createHeadCell(row, telem_param[_param_order[0]]);
@@ -57,7 +54,7 @@ function sortByNewestTime(param_Dict) {
     return param_Dict.sort((a, b) => dateParser(b["Sat Time"]) - dateParser(a["Sat Time"]));
 }
 
-function refresh_table(table_params, param_order, table_div_id, startIdx, endIdx) {
+function refresh_table(table_params, param_order, table_div_id) {
     let table_div = document.getElementById(table_div_id);
     table_div.innerHTML = "";
 
@@ -66,7 +63,7 @@ function refresh_table(table_params, param_order, table_div_id, startIdx, endIdx
 
     let head = generateTableHead(table, table_params, param_order);
 
-    table_div.appendChild(generateAllTable(head, table_params, startIdx, endIdx));
+    table_div.appendChild(generateAllTable(head, table_params));
 }
 
 function exportBtnGenerator(){
