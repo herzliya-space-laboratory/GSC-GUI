@@ -108,6 +108,7 @@
                 title="Type in a name">
             <button class="btn"
                 onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
+            <button class="btn" onclick="sendPlaylistSteps()">Send Step By Step</button>
             <select style="margin-bottom: 16px;" class="select-css" id="playlistNameOptions">
             </select>
             <button class="btn"
@@ -789,6 +790,41 @@
     function emptyPlaylist() {
         let commandList = document.getElementById("playlistContainer");
         commandList.innerHTML = "<div class=\"row commandsTitle\" value=\"HEADER\"><div class=\"column unselectable\">Command</div><div class=\"column unselectable\">Command number</div></div>";
+    }
+
+    function sendPlaylistSteps() {
+        const playlistContainer = document.getElementById("playlistContainer");
+        let isAnEmptyComm = false;
+        let emptyCommName;
+        const elements = playlistContainer.children;
+        let playlist = [];
+
+        for (const elem of elements) {
+            const val = elem.getAttribute("value");
+            if (val == null) {
+                isAnEmptyComm = true;
+                emptyCommName = elem.firstElementChild.innerText;
+            }
+            else if (val !== "HEADER")
+                playlist.push({
+                    name: elem.firstElementChild.innerText,
+                    value: val
+                });
+        }
+
+        if (isAnEmptyComm) {
+            alert(`Command: ${emptyCommName} is null`);
+            return;
+        }
+
+        for (let i = 0; i < playlist.length; i++) {
+            const comm = playlist[i];
+            ajaxSendPacket("?packet=[" + comm.value + "]");
+            if (!confirm(`Command: ${comm.name}\nPacket: ${comm.value}\nContinue or resend?`)) {
+                i--;
+            }
+        }
+
     }
 </script>
 
