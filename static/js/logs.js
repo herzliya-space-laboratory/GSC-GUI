@@ -20,7 +20,7 @@ let head = generateTableHead(table, logsDict, _param_order);
 
 let logsExportBtn = exportBtnGenerator();
 
-$("#firstDate").val(logsDict[logsDict.length - 1]["Sat Time"])
+$("#firstDate").val(logsDict[0]["Sat Time"])
 $("#secondDate").val(logsDict[0]["Sat Time"])
 
 let startRangeIndex = findDate($("#firstDate").val(), logsDict);
