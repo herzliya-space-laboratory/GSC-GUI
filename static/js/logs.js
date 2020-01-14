@@ -1,5 +1,9 @@
 let _param_order = ["Sat Time", "Ground Time", "Data", "Log Type", "System"];
 
+$(document).ready(function(){
+    $('select').formSelect();
+  });
+
 let logsDict = $("#logs-dict").data("logs");
 logsDict = JSON.parse(logsDict.replace(/'/g, '"'));
 logsDict = sortByNewestTime(logsDict);
@@ -41,11 +45,19 @@ let interval = setInterval(function () {
         logsDict = JSON.parse(params.replace(/'/g, '"'));
         logsDict = sortByNewestTime(logsDict);
 
+        timesArray = getTimes(logsDict);
+
         startRangeIndex = findDate($("#firstDate").val(), logsDict);
         endRangeIndex = findDate($("#secondDate").val(), logsDict);
 
-        $('#firstDate option[value="' + startRangeIndex + '"]').addClass("active")
-        $('#secondDate option[value="' + endRangeIndex + '"]').addClass("active")
+        $("#firstDate").find('option').remove().end()
+        $("#secondDate").find('option').remove().end()
+
+        createOptionArr("firstDate", timesArray)
+        createOptionArr("secondDate", timesArray)
+
+        $("#firstDate").val(timesArray[startRangeIndex])
+        $("#secondDate").val(timesArray[endRangeIndex])
 
         refresh_table(logsDict, _param_order, "table-container", startRangeIndex, endRangeIndex);
     });
