@@ -103,6 +103,7 @@
                 </div>
             </div>
             <button class="btn" onclick="sendPlaylist()">Send!</button>
+            <button class="btn" onclick="emptyPlaylist()">Empty!</button>
             <input style="margin: 10px;" type="" id="playlistName" class="nameInput" placeholder="Playlist's name"
                 title="Type in a name">
             <button class="btn"
@@ -782,8 +783,12 @@
         }
         alert("All commands:" + allCommands);
         // window.location.assign("?packet=[" + allCommands + "]")
-        ajaxSendPacket("?packet=[" + allCommands + "]")
+        ajaxSendPacket("?packet=[" + allCommands + "]");
+    }
 
+    function emptyPlaylist() {
+        let commandList = document.getElementById("playlistContainer");
+        commandList.innerHTML = "<div class=\"row commandsTitle\" value=\"HEADER\"><div class=\"column unselectable\">Command</div><div class=\"column unselectable\">Command number</div></div>";
     }
 </script>
 
