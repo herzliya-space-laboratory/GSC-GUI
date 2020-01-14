@@ -430,8 +430,12 @@ def logs():
         config["eventLogsFolderPath"], config["errorLogsFolderPath"])
     
     if request.method == "POST":
-        if(logCount == "" or logCount == None):
+        if logCount == "" or logCount == None:
             logCount = '1'
+
+        elif int(logCount) > len(logsDict):
+            logCount = len(logsDict)
+ 
         return json.dumps(logsDict[len(logsDict) - int(logCount):])
 
     return render_template(logsWeb, logParams=logsDict[len(logsDict) - 1:])
