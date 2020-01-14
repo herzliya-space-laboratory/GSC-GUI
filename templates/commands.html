@@ -65,83 +65,75 @@
 
     <!--Command list body(command table)-->
     <main>
-        <div bgcolor="#07224f" id="listBody">
+        <div class="white-text" bgcolor="#07224f" id="listBody">
             <!--Search inputs-->
             <input type="" id="nameInput" class="nameInput " onkeyup="searchNames()" placeholder="Search for names.."
                 title="Type in a name">
             <input type="" id="numberInput" class="nameInput " onkeyup="searchNumbers()"
                 placeholder="Search for ordered pair.." title="Type in an ordered pair">
             <br />
-            <font face="Trebuchet MS" color="white">
-                <!--Command table-->
-                <div id="commandsContainer" class="commandsContainer">
+            <!--Command table-->
+            <div id="commandsContainer" class="commandsContainer">
 
-                    <!--Headers, names-->
-                    <div class="row commandsTitle">
-                        <div class="column unselectable">Command</div>
-                        <div class="column unselectable">Command number</div>
-                    </div>
-
-
-                    <!--Push command info to table, each cell contains command with type, subtype and name.-->
-                    <!--Onclick add query variable to the end-->
-                    {% for commandName in commandNames %}
-                    <div class="row"
-                        onclick="showParams(true); let type = parseJinja('{{commandNumbers[commandNames.index(commandName)]}}');generateInputs(type[0],type[1],this.getAttribute('value'));thisCommand=this;"
-                        id="{{commandNumbers[commandNames.index(commandName)]}}">
-                        <!--onclick="location.href = '?{{commandNumbers[commandNames.index(commandName)]}}'">-->
-                        <div class="column unselectable">{{commandName}}</div>
-                        <div class="column unselectable">{{commandNumbers[commandNames.index(commandName)]}}</div>
-                    </div>
-                    {% endfor %}
+                <!--Headers, names-->
+                <div class="row commandsTitle">
+                    <div class="column unselectable">Command</div>
+                    <div class="column unselectable">Command number</div>
                 </div>
 
 
-                <div id="playlistContainer" class="playlistContainer">
-                    <div class="row commandsTitle" value="HEADER">
-                        <div class="column unselectable">Command</div>
-                        <div class="column unselectable">Command number</div>
-                    </div>
+                <!--Push command info to table, each cell contains command with type, subtype and name.-->
+                <!--Onclick add query variable to the end-->
+                {% for commandName in commandNames %}
+                <div class="row"
+                    onclick="showParams(true); let type = parseJinja('{{commandNumbers[commandNames.index(commandName)]}}');generateInputs(type[0],type[1],this.getAttribute('value'));thisCommand=this;"
+                    id="{{commandNumbers[commandNames.index(commandName)]}}">
+                    <!--onclick="location.href = '?{{commandNumbers[commandNames.index(commandName)]}}'">-->
+                    <div class="column unselectable">{{commandName}}</div>
+                    <div class="column unselectable">{{commandNumbers[commandNames.index(commandName)]}}</div>
                 </div>
-                <button class="btn" onclick="sendPlaylist()">Send!</button>
-                <input style="margin: 10px;" type="" id="playlistName" class="nameInput" placeholder="Playlist's name"
-                    title="Type in a name">
-                <button class="btn"
-                    onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
-                <select style="margin-bottom: 16px;" class="select-css" id="playlistNameOptions">
-                </select>
-                <button class="btn"
-                    onclick="getPlaylist(options.options[options.selectedIndex].innerHTML,playlist)">Get!</button>
-
-                <button class="btn"
-                    onclick="deletePlaylist(options.options[options.selectedIndex].innerHTML)">Delete!</button>
-
-                <div class="col s12 m6">
-                    <div class="card indigo darken-1">
-                        <div class="card-content white-text">
-                            <span class="card-title">Control panel</span>
-                            <button class="btn" id="dummyFunc" onclick="">Send dummy funcs</button>
-                            <p>How many Dummy Funcs?</p>
-                            <input type="number" id="dummyFuncNum" min="0" max="255" value="1" class="white-text">
-                        </div>
-                    </div>
-                </div>
-        </div>
-        </font>
-
-
-
-        </div>
-        <font face="Trebuchet MS" color="white">
-            <div id="commandBody" style="display:none">
-
-
-                <a href="#" class="sendButton" onclick="sendCommand()">Send Packet</a>
-                <a href="#" class="addToPlaylistButton" onclick="addToPlaylist()" id="playlistButton">Add To
-                    Playlist</a>
-
+                {% endfor %}
             </div>
-        </font>
+
+
+            <div id="playlistContainer" class="playlistContainer">
+                <div class="row commandsTitle" value="HEADER">
+                    <div class="column unselectable">Command</div>
+                    <div class="column unselectable">Command number</div>
+                </div>
+            </div>
+            <button class="btn" onclick="sendPlaylist()">Send!</button>
+            <input style="margin: 10px;" type="" id="playlistName" class="nameInput" placeholder="Playlist's name"
+                title="Type in a name">
+            <button class="btn"
+                onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
+            <select style="margin-bottom: 16px;" class="select-css" id="playlistNameOptions">
+            </select>
+            <button class="btn"
+                onclick="getPlaylist(options.options[options.selectedIndex].innerHTML,playlist)">Get!</button>
+
+            <button class="btn"
+                onclick="deletePlaylist(options.options[options.selectedIndex].innerHTML)">Delete!</button>
+
+            <div class="card indigo darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">Control Panel</span>
+                    <button class="btn" id="dummyFunc" onclick="">Send dummy funcs</button>
+                    <p>How many Dummy Funcs?</p>
+                    <input type="number" id="dummyFuncNum" min="0" max="255" value="1" class="white-text">
+                </div>
+            </div>
+        </div>
+
+
+
+        </div class="white-text">
+        <div id="commandBody" style="display:none">
+            <a href="#" class="sendButton" onclick="sendCommand()">Send Packet</a>
+            <a href="#" class="addToPlaylistButton" onclick="addToPlaylist()" id="playlistButton">Add To
+                Playlist</a>
+
+        </div>
     </main>
 </body>
 
@@ -295,7 +287,7 @@
     function sendPacket(packets, isNow, div) {
         showParams(false);
         if (isNow) {
-            // window.location.assign("?packet=[" + packets.toString() + "]");
+            //window.location.assign("?packet=[" + packets.toString() + "]");
             lastPacket = packets.toString();
             ajaxSendPacket("?packet=[" + packets.toString() + "]")
             // Change URL to add query variable of (writePacket()).
@@ -357,7 +349,7 @@
     function validate(evt, type) {
         var theEvent = evt || window.event;
         switch (type) {
-            case ("int"):
+            case ("uint"):
                 // Handle paste
                 if (theEvent.type === 'paste') {
                     key = event.clipboardData.getData('text/plain');
@@ -373,6 +365,46 @@
                 }
 
                 if (parseInt(theEvent.target.value) >= Number.MAX_SAFE_INTEGER) {
+                    theEvent.returnValue = false;
+                    theEvent.preventDefault();
+                }
+                break;
+            case ("int"):
+                // Handle paste
+                if (theEvent.type === 'paste') {
+                    key = event.clipboardData.getData('text/plain');
+                } else {
+                    // Handle key press
+                    var key = theEvent.keyCode || theEvent.which;
+                    key = String.fromCharCode(key);
+                }
+                var regex = /[0-9\-]/;
+                if (!regex.test(key)) {
+                    theEvent.returnValue = false;
+                    if (theEvent.preventDefault) theEvent.preventDefault();
+                }
+
+                if (parseInt(theEvent.target.value) >= Number.MAX_SAFE_INTEGER) {
+                    theEvent.returnValue = false;
+                    theEvent.preventDefault();
+                }
+                break;
+            case ("float"):
+                // Handle paste
+                if (theEvent.type === 'paste') {
+                    key = event.clipboardData.getData('text/plain');
+                } else {
+                    // Handle key press
+                    var key = theEvent.keyCode || theEvent.which;
+                    key = String.fromCharCode(key);
+                }
+                var regex = /[0-9\.]/;
+                if (!regex.test(key)) {
+                    theEvent.returnValue = false;
+                    if (theEvent.preventDefault) theEvent.preventDefault();
+                }
+
+                if (parseFloat(theEvent.target.value) >= Number.MAX_SAFE_INTEGER) {
                     theEvent.returnValue = false;
                     theEvent.preventDefault();
                 }
@@ -452,7 +484,7 @@
         for (let i = 0; i < howMany; i++) {
             $.ajax({
                 type: "POST",
-                url: `/commands?packet=[" + '{"Type":"Telecommand", "Content":{"ST":"'${st}'","SST":"'${sst}'","ExecutionTime":"01/01/1970 01:01:01","Params":{}}}]`,
+                url: `/commands?packet=[{"Type":"Telecommand", "Content":{"ST":"20","SST":"122","ExecutionTime":"01/01/1970 01:01:01","Params":{}}}]`,
                 data: {}
             });
         }
@@ -467,7 +499,7 @@
         inputContainer.setAttribute("style", "position:relative");
         inputContainer.setAttribute("name", "paramInput");
         inputContainer.setAttribute("paramName", paramName);
-
+        inputContainer.setAttribute("class", "white-text");
 
         var inputInfo = document.createElement("div");
         inputInfo.innerHTML = paramName + ((paramUnit == "None") ? " " : " In " + paramUnit) + ":";
@@ -475,10 +507,20 @@
 
         var body = document.getElementById("commandBody");
 
+        var uintInput = document.createElement("input");
+        //intInput.setAttribute("type", "numbers");
+        uintInput.setAttribute("onkeypress", "validate(event, \"uint\")");
+        uintInput.setAttribute("class", "paramsInput");
+
         var intInput = document.createElement("input");
         //intInput.setAttribute("type", "numbers");
         intInput.setAttribute("onkeypress", "validate(event, \"int\")");
         intInput.setAttribute("class", "paramsInput");
+
+        var floatInput = document.createElement("input");
+        //intInput.setAttribute("type", "numbers");
+        floatInput.setAttribute("onkeypress", "validate(event, \"float\")");
+        floatInput.setAttribute("class", "paramsInput");
 
         var charInput = document.createElement("input");
         charInput.setAttribute("onkeypress", "validate(event, \"char\")");
@@ -556,13 +598,28 @@
         else {
             switch (type) {
                 case ("uint16"):
+                    uintInput.setAttribute("value", placeholder);
+                    inputContainer.appendChild(uintInput);
+                    break;
+
+                case ("int16"):
                     intInput.setAttribute("value", placeholder);
                     inputContainer.appendChild(intInput);
                     break;
 
                 case ("uint32"):
-                    intInput.setAttribute("value", placeholder);
-                    inputContainer.appendChild(intInput);
+                    uintInput.setAttribute("value", placeholder);
+                    inputContainer.appendChild(uintInput);
+                    break;
+
+                case ("float"):
+                    floatInput.setAttribute("value", placeholder);
+                    inputContainer.appendChild(floatInput);
+                    break;
+
+                case ("double"):
+                    floatInput.setAttribute("value", placeholder);
+                    inputContainer.appendChild(floatInput);
                     break;
 
                 case ("string"):
@@ -589,7 +646,7 @@
                     if (placeholder == "") placeholder = encodeDateTime(getCurrentDate());
                     else placeholder = encodeDateTime(placeholder);
 
-                    inputInfo.innerHTML += " <em><strong>MM/DD/YYYY hh:mm:ss</strong></em>"
+                    //inputInfo.innerHTML += " <em><strong>MM/DD/YYYY hh:mm:ss</strong></em>"
 
                     datetimeInput.setAttribute("value", placeholder);
 
@@ -724,7 +781,8 @@
             allCommands += value;
         }
         alert("All commands:" + allCommands);
-        window.location.assign("?packet=[" + allCommands + "]")
+        // window.location.assign("?packet=[" + allCommands + "]")
+        ajaxSendPacket("?packet=[" + allCommands + "]")
 
     }
 </script>
@@ -778,16 +836,14 @@
                 newCommand.setAttribute("value", child["value"]);
                 var newCommandName = document.createElement("div");
                 newCommandName.setAttribute("class", "column unselectable");
-				if (child["value"])
-				{
-					params = objToString(JSON.parse(child["value"]).Content.Params);
-					params += `Execution time: ${JSON.parse(child["value"]).Content.ExecutionTime}`;
-					newCommandName.innerHTML = `<abbr title="${params}">${dic[child["id"]]}</abbr>`;
-				}
-				else
-				{
-					newCommandName.innerHTML = dic[child["id"]];
-				}
+                if (child["value"]) {
+                    params = objToString(JSON.parse(child["value"]).Content.Params);
+                    params += `Execution time: ${JSON.parse(child["value"]).Content.ExecutionTime}`;
+                    newCommandName.innerHTML = `<abbr title="${params}">${dic[child["id"]]}</abbr>`;
+                }
+                else {
+                    newCommandName.innerHTML = dic[child["id"]];
+                }
                 var newCommandNumber = document.createElement("div");
                 newCommandNumber.setAttribute("class", "column unselectable");
                 newCommandNumber.innerHTML = child["id"];

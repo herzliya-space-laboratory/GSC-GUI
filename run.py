@@ -422,10 +422,6 @@ def commands():
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
 
-def home():
-    return render_template(index)
-
-
 @app.route('/logs', methods=['GET', 'POST'])
 def logs():
     logsDict = createLogsDict(
