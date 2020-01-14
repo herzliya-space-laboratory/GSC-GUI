@@ -10,6 +10,7 @@ import glob
 import log_parser
 import re
 import webbrowser
+from datetime import datetime
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -131,6 +132,13 @@ def getUnit(line):
     line = line.replace("\n", "")
     line = line.split(",")
     return line[-1]
+
+def sortByTime(data):
+    sortedArray = sorted(
+    data,
+    key=lambda x: datetime.strptime(x['Sat Time'], '%d/%m/%Y %H:%M:%S'), reverse=False)
+
+    return sortedArray
 
 
 def praseCSV(directory, paramNames, params={}):
@@ -274,9 +282,8 @@ def getCSVPacketId(path):
     f = open(path, "r")
     return f.readline().split(",")[1]
 
-
 def findTelemetryInMIB(serviceType, serviceSubType):
-    f = open(config["mibPath"], "r")
+    f= open(config["mibPath"], "r")
 
     soup = BeautifulSoup(f.read(), "html.parser")
 
@@ -426,8 +433,8 @@ def commands():
 def logs():
     logCount = request.args.get('sliceNum')
     
-    logsDict = createLogsDict(
-        config["eventLogsFolderPath"], config["errorLogsFolderPath"])
+    logsDict = sortByTime(createLogsDict(
+        config["eventLogsFolderPath"], config["errorLogsFolderPath"]))
     
     if request.method == "POST":
         if logCount == "" or logCount == None:

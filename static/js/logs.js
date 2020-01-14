@@ -6,7 +6,6 @@ $(document).ready(function(){
 
 let logsDict = $("#logs-dict").data("logs");
 logsDict = JSON.parse(logsDict.replace(/'/g, '"'));
-logsDict = sortByNewestTime(logsDict);
 
 $("#showCount").val(0);
 
@@ -35,7 +34,6 @@ let interval = setInterval(function () {
         data: {}
     }).done(function (params) {
         logsDict = JSON.parse(params.replace(/'/g, '"'));
-        logsDict = sortByNewestTime(logsDict);
 
         refresh_table(logsDict, _param_order, "table-container");
     });
