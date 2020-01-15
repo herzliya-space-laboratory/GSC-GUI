@@ -820,7 +820,7 @@
         for (let i = 0; i < playlist.length; i++) {
             const comm = playlist[i];
             ajaxSendPacket("?packet=[" + comm.value + "]");
-            if (!confirm(`Command: ${comm.name}\nPacket: ${comm.value}\nContinue or resend?`)) {
+            if (!confirm(`Command: ${comm.name}\nPacket: ${comm.value}\nPress Enter to continue or Cancel to resend`)) {
                 i--;
             }
         }
