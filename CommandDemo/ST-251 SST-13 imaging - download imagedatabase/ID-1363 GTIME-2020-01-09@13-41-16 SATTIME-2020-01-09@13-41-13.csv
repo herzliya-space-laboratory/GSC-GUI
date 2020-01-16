@@ -1,0 +1,8 @@
+Packet ID,1363
+Packet Ground Date Time,09/01/2020 13:41:16
+Packet Sat Date Time,09/01/2020 13:41:13
+Packet Total Raw Data,6D-4C-0B-00-ED-24-E7-70
+
+Parameter Name,Raw Data,Value,Unit
+starttime,6D-4C-0B-00,09/01/1970 13:41:01,seconds
+endtime,ED-24-E7-70,09/01/2030 13:41:01,seconds

@@ -1,0 +1,8 @@
+Packet ID,1084
+Packet Ground Date Time,05/01/2020 18:37:22
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,AD-DF-AB-5E-00-00
+
+Parameter Name,Raw Data,Value,Unit
+unix_time_sec,AD-DF-AB-5E,01/05/2020 08:37:01,[sec]
+unix_time_milli_sec,00-00,0,[milli-sec]

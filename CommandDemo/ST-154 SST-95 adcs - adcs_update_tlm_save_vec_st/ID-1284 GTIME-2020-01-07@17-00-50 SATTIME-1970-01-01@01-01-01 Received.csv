@@ -1,0 +1,7 @@
+Packet ID,1284
+Packet Ground Date Time,07/01/2020 17:00:50
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,FF-00-FF-00-FF-00-00-FF-00-00-00-00-00-00-00-00-00-00
+
+Parameter Name,Raw Data,Value,Unit
+tlm save flag array,FF-00-FF-00-FF-00-00-FF-00-00-00-00-00-00-00-00-00-00,FF-00-FF-00-FF-00-00-FF-00-00-00-00-00-00-00-00-00-00,none

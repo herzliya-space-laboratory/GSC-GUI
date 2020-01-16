@@ -1,0 +1,9 @@
+Packet ID,1048
+Packet Ground Date Time,13/01/2020 13:40:42
+Packet Sat Date Time,13/01/2020 11:47:00
+Packet Total Raw Data,01-00-58-02
+
+Parameter Name,Raw Data,Value,Unit
+ctrl mode,01,1,none
+override flag,00,0,none
+timeout,58-02,600,[sec]

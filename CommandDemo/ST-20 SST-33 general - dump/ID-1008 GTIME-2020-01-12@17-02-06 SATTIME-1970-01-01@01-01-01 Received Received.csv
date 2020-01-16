@@ -1,0 +1,17 @@
+Packet ID,1008
+Packet Ground Date Time,12/01/2020 17:02:06
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,00-93-97-9B-BE-C3-12-12-0A-5E-1B-34-71-5E-1B-52-EA
+
+Parameter Name,Raw Data,Value,Unit
+send type,00,0,none
+file type [0],93,147,none
+file type [1],97,151,none
+file type [2],9B,155,none
+file type [3],BE,190,none
+file type [4],C3,195,none
+file type [5],12,18,none
+file type [6],12,18,none
+resolution,0A,10,sec
+unix start time,5E-1B-34-71,12/01/2020 15:00:01,seconds
+unix end time,5E-1B-52-EA,12/01/2020 17:10:02,seconds

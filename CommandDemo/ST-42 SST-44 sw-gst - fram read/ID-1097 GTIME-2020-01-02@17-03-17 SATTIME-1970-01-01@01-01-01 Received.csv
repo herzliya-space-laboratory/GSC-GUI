@@ -1,0 +1,8 @@
+Packet ID,1097
+Packet Ground Date Time,02/01/2020 17:03:17
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,18-00-D0-00-00
+
+Parameter Name,Raw Data,Value,Unit
+size,18,24,none
+address,00-D0-00-00,53248,none

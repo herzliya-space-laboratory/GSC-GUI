@@ -1,0 +1,17 @@
+Packet ID,1050
+Packet Ground Date Time,24/12/2019 17:51:26
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,00-00-01-12-12-12-12-12-01-5D-FC-2B-20-5E-02-A6-7F
+
+Parameter Name,Raw Data,Value,Unit
+send type,00,0,none
+file type [0],00,0,none
+file type [1],01,1,none
+file type [2],12,18,none
+file type [3],12,18,none
+file type [4],12,18,none
+file type [5],12,18,none
+file type [6],12,18,none
+resolution,01,1,sec
+unix start time,5D-FC-2B-20,20/12/2019 02:00:00,seconds
+unix end time,5E-02-A6-7F,24/12/2019 23:59:59,seconds

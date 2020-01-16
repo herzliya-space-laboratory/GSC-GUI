@@ -1,0 +1,9 @@
+Packet ID,1003
+Packet Ground Date Time,17/12/2019 07:19:18
+Packet Sat Date Time,01/01/1970 00:00:00
+Packet Total Raw Data,05-40-00
+
+Parameter Name,Raw Data,Value,Unit
+power,05,5,none
+power 2,40,64,none
+power gps lna,00,0,none

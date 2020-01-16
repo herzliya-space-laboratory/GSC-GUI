@@ -1,0 +1,8 @@
+Packet ID,1005
+Packet Ground Date Time,17/12/2019 07:19:28
+Packet Sat Date Time,01/01/1970 00:00:00
+Packet Total Raw Data,00-E8-03-00-00
+
+Parameter Name,Raw Data,Value,Unit
+adcs parameter index,00,0,none
+parameter data,E8-03-00-00,1000,none

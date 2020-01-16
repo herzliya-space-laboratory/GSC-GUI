@@ -1,0 +1,17 @@
+Packet ID,1293
+Packet Ground Date Time,07/01/2020 17:06:18
+Packet Sat Date Time,07/01/2020 17:05:09
+Packet Total Raw Data,00-01-02-12-12-12-12-12-01-5E-10-C5-C5-00-00-0E-4D
+
+Parameter Name,Raw Data,Value,Unit
+send type,00,0,none
+file type [0],01,1,none
+file type [1],02,2,none
+file type [2],12,18,none
+file type [3],12,18,none
+file type [4],12,18,none
+file type [5],12,18,none
+file type [6],12,18,none
+resolution,01,1,sec
+unix start time,5E-10-C5-C5,04/01/2020 17:05:09,seconds
+unix end time,00-00-0E-4D,01/01/1970 01:01:01,seconds

@@ -1,0 +1,7 @@
+Packet ID,1110
+Packet Ground Date Time,02/01/2020 18:37:03
+Packet Sat Date Time,01/01/2020 01:01:01
+Packet Total Raw Data,FF
+
+Parameter Name,Raw Data,Value,Unit
+testpattern,FF,255,none

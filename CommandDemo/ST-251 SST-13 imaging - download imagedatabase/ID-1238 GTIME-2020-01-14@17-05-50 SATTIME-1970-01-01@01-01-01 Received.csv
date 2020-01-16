@@ -1,0 +1,8 @@
+Packet ID,1238
+Packet Ground Date Time,14/01/2020 17:05:50
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,62-A3-1C-5E-62-46-1F-5E
+
+Parameter Name,Raw Data,Value,Unit
+starttime,62-A3-1C-5E,13/01/2020 17:05:38,seconds
+endtime,62-46-1F-5E,15/01/2020 17:05:38,seconds

@@ -1,0 +1,9 @@
+Packet ID,1212
+Packet Ground Date Time,07/01/2020 15:23:49
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,05-40-00
+
+Parameter Name,Raw Data,Value,Unit
+power,05,5,none
+power 2,40,64,none
+power gps lna,00,0,none

@@ -1,0 +1,8 @@
+Packet ID,1367
+Packet Ground Date Time,09/01/2020 13:43:42
+Packet Sat Date Time,09/01/2020 13:43:23
+Packet Total Raw Data,00-00-00-00-80-D8-DB-70
+
+Parameter Name,Raw Data,Value,Unit
+starttime,00-00-00-00,01/01/1970 00:00:00,seconds
+endtime,80-D8-DB-70,01/01/2030 00:00:00,seconds

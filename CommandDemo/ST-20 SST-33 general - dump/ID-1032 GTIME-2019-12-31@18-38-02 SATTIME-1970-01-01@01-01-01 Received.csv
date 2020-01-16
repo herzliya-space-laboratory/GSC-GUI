@@ -1,0 +1,17 @@
+Packet ID,1032
+Packet Ground Date Time,31/12/2019 18:38:02
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,00-12-12-12-12-12-12-12-01-5E-0A-9D-CD-5E-0A-9E-09
+
+Parameter Name,Raw Data,Value,Unit
+send type,00,0,none
+file type [0],12,18,none
+file type [1],12,18,none
+file type [2],12,18,none
+file type [3],12,18,none
+file type [4],12,18,none
+file type [5],12,18,none
+file type [6],12,18,none
+resolution,01,1,sec
+unix start time,5E-0A-9D-CD,31/12/2019 01:01:01,seconds
+unix end time,5E-0A-9E-09,31/12/2019 01:02:01,seconds

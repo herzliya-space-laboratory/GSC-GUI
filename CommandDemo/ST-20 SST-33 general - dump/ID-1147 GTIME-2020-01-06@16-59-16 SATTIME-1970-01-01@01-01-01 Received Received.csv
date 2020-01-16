@@ -1,0 +1,17 @@
+Packet ID,1147
+Packet Ground Date Time,06/01/2020 16:59:16
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,00-8C-93-97-9B-12-12-12-01-5E-AC-6D-00-5E-FC-EB-B9
+
+Parameter Name,Raw Data,Value,Unit
+send type,00,0,none
+file type [0],8C,140,none
+file type [1],93,147,none
+file type [2],97,151,none
+file type [3],9B,155,none
+file type [4],12,18,none
+file type [5],12,18,none
+file type [6],12,18,none
+resolution,01,1,sec
+unix start time,5E-AC-6D-00,01/05/2020 18:40:00,seconds
+unix end time,5E-FC-EB-B9,01/07/2020 20:02:01,seconds

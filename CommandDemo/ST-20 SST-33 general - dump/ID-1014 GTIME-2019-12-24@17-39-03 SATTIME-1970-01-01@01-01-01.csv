@@ -1,0 +1,17 @@
+Packet ID,1014
+Packet Ground Date Time,24/12/2019 17:39:03
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,00-8C-93-97-9B-BE-12-12-14-5D-F8-8D-1E-5D-F9-DE-9E
+
+Parameter Name,Raw Data,Value,Unit
+send type,00,0,none
+file type [0],8C,140,none
+file type [1],93,147,none
+file type [2],97,151,none
+file type [3],9B,155,none
+file type [4],BE,190,none
+file type [5],12,18,none
+file type [6],12,18,none
+resolution,14,20,sec
+unix start time,5D-F8-8D-1E,17/12/2019 08:09:02,seconds
+unix end time,5D-F9-DE-9E,18/12/2019 08:09:02,seconds

@@ -1,0 +1,8 @@
+Packet ID,1251
+Packet Ground Date Time,14/01/2020 18:40:42
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,51-0B-1E-5E-00-00
+
+Parameter Name,Raw Data,Value,Unit
+unix_time_sec,51-0B-1E-5E,14/01/2020 18:41:21,[sec]
+unix_time_milli_sec,00-00,0,[milli-sec]

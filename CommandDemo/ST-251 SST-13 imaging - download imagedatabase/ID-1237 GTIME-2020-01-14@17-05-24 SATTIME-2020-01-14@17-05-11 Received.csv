@@ -1,0 +1,8 @@
+Packet ID,1237
+Packet Ground Date Time,14/01/2020 17:05:24
+Packet Sat Date Time,14/01/2020 17:05:11
+Packet Total Raw Data,47-57-7F-38-C7-F4-1D-5E
+
+Parameter Name,Raw Data,Value,Unit
+starttime,47-57-7F-38,14/01/2000 17:05:11,seconds
+endtime,C7-F4-1D-5E,14/01/2020 17:05:11,seconds

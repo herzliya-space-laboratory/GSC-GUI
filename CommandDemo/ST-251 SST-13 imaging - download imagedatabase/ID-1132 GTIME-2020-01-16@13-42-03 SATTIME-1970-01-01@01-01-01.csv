@@ -1,0 +1,8 @@
+Packet ID,1132
+Packet Ground Date Time,16/01/2020 13:42:03
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,1F-87-14-00-9F-5F-F0-70
+
+Parameter Name,Raw Data,Value,Unit
+starttime,1F-87-14-00,16/01/1970 13:41:51,seconds
+endtime,9F-5F-F0-70,16/01/2030 13:41:51,seconds

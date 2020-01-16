@@ -1,0 +1,14 @@
+Packet ID,1189
+Packet Ground Date Time,29/12/2019 10:46:07
+Packet Sat Date Time,15/01/1970 01:01:01
+Packet Total Raw Data,00-01-00-01-00-01-00-01-00-01-00-01-00-01-00-01
+
+Parameter Name,Raw Data,Value,Unit
+critical decreasing,00-01,1,mv
+safe decreasing,00-01,1,mv
+cruise decreasing,00-01,1,mv
+full increasing,00-01,1,mv
+cruise increasing,00-01,1,mv
+safe increasing,00-01,1,mv
+beacon high delay volt,00-01,1,none
+aprs shut volt,00-01,1,mv

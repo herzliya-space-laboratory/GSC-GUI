@@ -1,0 +1,17 @@
+Packet ID,1006
+Packet Ground Date Time,18/12/2019 07:51:42
+Packet Sat Date Time,01/01/1970 00:00:00
+Packet Total Raw Data,00-32-33-35-43-12-12-12-05-5D-F9-9F-90-5D-F9-A7-C4
+
+Parameter Name,Raw Data,Value,Unit
+send type,00,0,none
+file type [0],32,50,none
+file type [1],33,51,none
+file type [2],35,53,none
+file type [3],43,67,none
+file type [4],12,18,none
+file type [5],12,18,none
+file type [6],12,18,none
+resolution,05,5,sec
+unix start time,5D-F9-9F-90,18/12/2019 03:40:00,seconds
+unix end time,5D-F9-A7-C4,18/12/2019 04:15:00,seconds

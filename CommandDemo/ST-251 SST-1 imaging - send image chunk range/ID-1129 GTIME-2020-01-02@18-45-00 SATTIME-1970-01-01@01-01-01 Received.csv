@@ -1,0 +1,10 @@
+Packet ID,1129
+Packet Ground Date Time,02/01/2020 18:45:00
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,01-00-04-00-00-2A-00
+
+Parameter Name,Raw Data,Value,Unit
+id,01-00,1,none
+groundfiletype,04,4,none
+start chunk,00-00,0,none
+end chunk,2A-00,42,none

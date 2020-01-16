@@ -1,0 +1,8 @@
+Packet ID,1266
+Packet Ground Date Time,15/01/2020 11:41:50
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,03-00-50
+
+Parameter Name,Raw Data,Value,Unit
+id,03-00,3,none
+quality,50,80,none

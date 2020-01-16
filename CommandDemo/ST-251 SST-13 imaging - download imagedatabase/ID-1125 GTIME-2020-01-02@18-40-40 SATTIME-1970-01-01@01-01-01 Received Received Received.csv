@@ -1,0 +1,8 @@
+Packet ID,1125
+Packet Ground Date Time,02/01/2020 18:40:40
+Packet Sat Date Time,01/01/1970 01:01:01
+Packet Total Raw Data,CD-9D-0A-5E-CD-E6-DB-70
+
+Parameter Name,Raw Data,Value,Unit
+starttime,CD-9D-0A-5E,31/12/2019 01:01:01,seconds
+endtime,CD-E6-DB-70,01/01/2030 01:01:01,seconds

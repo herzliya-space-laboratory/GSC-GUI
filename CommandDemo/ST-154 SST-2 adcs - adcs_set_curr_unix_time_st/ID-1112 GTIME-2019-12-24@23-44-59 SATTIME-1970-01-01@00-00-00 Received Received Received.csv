@@ -1,0 +1,8 @@
+Packet ID,1112
+Packet Ground Date Time,24/12/2019 23:44:59
+Packet Sat Date Time,01/01/1970 00:00:00
+Packet Total Raw Data,FC-A2-02-5E-00-00
+
+Parameter Name,Raw Data,Value,Unit
+unix_time_sec,FC-A2-02-5E,24/12/2019 23:45:00,[sec]
+unix_time_milli_sec,00-00,0,[milli-sec]
