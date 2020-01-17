@@ -792,12 +792,16 @@
         commandList.innerHTML = "<div class=\"row commandsTitle\" value=\"HEADER\"><div class=\"column unselectable\">Command</div><div class=\"column unselectable\">Command number</div></div>";
     }
 
+    let playlistIndex = 0;
+    let playlistSend = [];
+
     function sendPlaylistSteps() {
         const playlistContainer = document.getElementById("playlistContainer");
         let isAnEmptyComm = false;
         let emptyCommName;
         const elements = playlistContainer.children;
-        let playlist = [];
+        playlistSend = [];
+        playlistIndex = 0;
 
         for (const elem of elements) {
             const val = elem.getAttribute("value");
@@ -806,7 +810,7 @@
                 emptyCommName = elem.firstElementChild.innerText;
             }
             else if (val !== "HEADER")
-                playlist.push({
+                playlistSend.push({
                     name: elem.firstElementChild.innerText,
                     value: val
                 });
@@ -817,15 +821,90 @@
             return;
         }
 
-        for (let i = 0; i < playlist.length; i++) {
-            const comm = playlist[i];
-            ajaxSendPacket("?packet=[" + comm.value + "]");
-            if (!confirm(`Command: ${comm.name}\nPacket: ${comm.value}\nPress Enter to continue or Cancel to resend`)) {
-                i--;
-            }
+        if (playlistSend.length !== 0) {
+            const head = document.getElementById("modalCommName");
+            const info = document.getElementById("modalPacket");
+
+            head.innerHTML = `Command: ${playlistSend[0].name}`;
+            info.innerHTML = `Packet:\n${playlistSend[0].value}`;
+
+            const nextButton = document.getElementById("sendNext");
+            nextButton.className = "waves-effect waves-green btn-flat";
+
+            const modal = document.getElementById("sendStepsModal");
+            M.Modal.getInstance(modal).open();
+
+            ajaxSendPacket("?packet=[" + playlistSend[0].value + "]");
         }
 
+
+
+        // for (let i = 0; i < playlist.length; i++) {
+        //     const comm = playlist[i];
+        //     ajaxSendPacket("?packet=[" + comm.value + "]");
+        //     if (!confirm(`Command: ${comm.name}\nPacket: ${comm.value}\nPress Enter to continue or Cancel to resend`)) {
+        //         i--;
+        //     }
+        // }
+
     }
+
+    function nextSendStep() {
+        playlistIndex++;
+        const head = document.getElementById("modalCommName");
+        const info = document.getElementById("modalPacket");
+
+        head.innerHTML = `Command: ${playlistSend[playlistIndex].name}`;
+        info.innerHTML = `Packet:\n${playlistSend[playlistIndex].value}`;
+
+        ajaxSendPacket("?packet=[" + playlistSend[playlistIndex].value + "]");
+
+        if (playlistIndex === playlistSend.length - 1) {
+            const nextButton = document.getElementById("sendNext");
+            nextButton.className += " disabled";
+        }
+    }
+
+    function resendStep() {
+        ajaxSendPacket("?packet=[" + playlistSend[playlistIndex].value + "]");
+    }
+
+    function checkForAck() {
+        $.ajax({
+            type: "GET",
+            url: "/getAcks",
+            data: {}
+        }).done(function (params) {
+            const ack = JSON.parse(params);
+            if (ack != null) {
+                console.log(ack);
+                M.toast({
+                    html: `Ack received!
+                    Command ID: ${ack["commandid"]}
+                    Error Type: ${ack["errortype"]}`
+                })
+            }
+        });
+    }
+
+    setInterval(() => checkForAck(), 1000);
+</script>
+
+<div id="sendStepsModal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4 id="modalCommName"></h4>
+        <p id="modalPacket"></p>
+    </div>
+    <div class="modal-footer">
+        <button id="sendNext" onclick="nextSendStep()" class="waves-effect waves-green btn-flat">Send Next</button>
+        <button id="resend" onclick="resendStep()" class="waves-effect waves-yellow btn-flat">Resend</button>
+        <button class="modal-close waves-effect waves-red btn-flat">Exit</button>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.modal').modal();
+    });
 </script>
 
 <script>

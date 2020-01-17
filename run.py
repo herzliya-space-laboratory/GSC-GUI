@@ -76,6 +76,7 @@ beaconWeb = "beacon.html"
 dumpWeb = "dump.html"
 graphPage = "paramGraph.html"
 graphForm = "graphForm.html"
+commandAcksWeb = "commandAcks.html"
 
 
 def IPAddrValidate():
@@ -133,10 +134,11 @@ def getUnit(line):
     line = line.split(",")
     return line[-1]
 
+
 def sortByTime(data):
     sortedArray = sorted(
-    data,
-    key=lambda x: datetime.strptime(x['Sat Time'], '%d/%m/%Y %H:%M:%S'), reverse=False)
+        data,
+        key=lambda x: datetime.strptime(x['Sat Time'], '%d/%m/%Y %H:%M:%S'), reverse=False)
 
     return sortedArray
 
@@ -282,8 +284,9 @@ def getCSVPacketId(path):
     f = open(path, "r")
     return f.readline().split(",")[1]
 
+
 def findTelemetryInMIB(serviceType, serviceSubType):
-    f= open(config["mibPath"], "r")
+    f = open(config["mibPath"], "r")
 
     soup = BeautifulSoup(f.read(), "html.parser")
 
@@ -432,17 +435,17 @@ def commands():
 @app.route('/logs', methods=['GET', 'POST'])
 def logs():
     logCount = request.args.get('sliceNum')
-    
+
     logsDict = sortByTime(createLogsDict(
         config["eventLogsFolderPath"], config["errorLogsFolderPath"]))
-    
+
     if request.method == "POST":
         if logCount == "" or logCount == None:
             logCount = '1'
 
         elif int(logCount) > len(logsDict):
             logCount = len(logsDict)
- 
+
         return json.dumps(logsDict[len(logsDict) - int(logCount):])
 
     return render_template(logsWeb, logParams=logsDict[len(logsDict) - 1:])
@@ -548,11 +551,28 @@ def getTelemParams():
     return {"params": params}
 
 
-# I'm Alon Grossman and I have scribbled on the GSC-GUI code
+@app.route('/getAcks')
+def getAcks():
+    global numOfAcks
+    newNumOfAcks = len(os.listdir(dumpDirNames["13-90"]["path"]))
+    if newNumOfAcks > numOfAcks:
+        f = getNewestFileInDir(dumpDirNames["13-90"]["path"])
+        params = getParamsFromCSV(f)
+        data = parseCSVfile(f, params)
+        numOfAcks = newNumOfAcks
+        return json.dumps(data)
+    return "null"
+
+# @app.route('/commandacks')
+# def commandAcks():
+#     return render_template(commandAcksWeb)
 
 
 dumpDirNames = parseDumpDirNames(getSubDirs(
     config["telemetryFolderPath"]), config["telemetryFolderPath"])
+numOfAcks = len(os.listdir(dumpDirNames["13-90"]["path"]))
+# I'm Alon Grossman and I have scribbled on the GSC-GUI code
+
 
 # webbrowser.open('http://127.0.0.1:5000/')
 app.run(debug=True)
