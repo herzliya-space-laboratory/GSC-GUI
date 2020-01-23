@@ -7,13 +7,13 @@ $(document).ready(function(){
 let logsDict = $("#logs-dict").data("logs");
 logsDict = JSON.parse(logsDict.replace(/'/g, '"'));
 
-$("#showCount").val(0);
+$("#showCount").val(1);
 
-let table = document.createElement("table")
+let table = document.createElement("table");
 table.className = "highlight white black-text";
 
-let head = generateTableHead(table, logsDict, _param_order);
-
+let head = generateTableHead(table, _param_order);
+let tableBody = document.createElement("table");
 let logsExportBtn = exportBtnGenerator();
 
 $(logsExportBtn).click(function () {
@@ -21,9 +21,9 @@ $(logsExportBtn).click(function () {
     exportTableToCSV(filename);
 })
 
-
+$("#table-head-container").append(head);
 $("#table-container").addClass("scrollable-div");
-$("#table-container").append(generateAllTable(head, logsDict));
+$("#table-container").append(generateAllTable(tableBody, logsDict));
 
 $("#btn-div").append(logsExportBtn);
 
@@ -35,7 +35,7 @@ let interval = setInterval(function () {
     }).done(function (params) {
         logsDict = JSON.parse(params.replace(/'/g, '"'));
 
-        refresh_table(logsDict, _param_order, "table-container");
+        refresh_table(logsDict, "table-container");
     });
-}, 1000);
+}, 5000);
 

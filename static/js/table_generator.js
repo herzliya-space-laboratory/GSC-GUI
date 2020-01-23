@@ -20,7 +20,7 @@ function createHeadCell(row, text) {
     return head_cell
 }
 
-function generateTableHead(table, param_Dict, param_order) {
+function generateTableHead(table, param_order) {
     let thead = table.createTHead();
     let row = thead.insertRow();
     param_order.forEach(key => {
@@ -54,16 +54,14 @@ function sortByNewestTime(param_Dict) {
     return param_Dict.sort((a, b) => dateParser(b["Sat Time"]) - dateParser(a["Sat Time"]));
 }
 
-function refresh_table(table_params, param_order, table_div_id) {
+function refresh_table(table_params, table_div_id) {
     let table_div = document.getElementById(table_div_id);
     table_div.innerHTML = "";
 
     let table = document.createElement("table");
     table.className = "highlight white black-text";
 
-    let head = generateTableHead(table, table_params, param_order);
-
-    table_div.appendChild(generateAllTable(head, table_params));
+    table_div.appendChild(generateAllTable(table, table_params));
 }
 
 function exportBtnGenerator(){
