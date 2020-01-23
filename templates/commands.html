@@ -308,8 +308,11 @@
         $.ajax({
             type: "POST",
             url: `/commands${url}`,
-            data: {}
-        })
+            data: {},
+            error: (xhr, ajaxOptions, thrownError) => {
+                M.toast({ html: 'Couldn\'t send packet', classes: 'red' });
+            }
+        });
     }
 
     function searchNames() {
@@ -877,12 +880,11 @@
         }).done(function (params) {
             const ack = JSON.parse(params);
             if (ack != null) {
-                console.log(ack);
                 M.toast({
                     html: `Ack received!
                     Command ID: ${ack["commandid"]}
                     Error Type: ${ack["errortype"]}`
-                })
+                });
             }
         });
     }
