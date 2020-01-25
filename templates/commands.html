@@ -490,10 +490,15 @@
             $.ajax({
                 type: "POST",
                 url: `/commands?packet=[{"Type":"Telecommand", "Content":{"ST":"20","SST":"122","ExecutionTime":"01/01/1970 01:01:01","Params":{}}}]`,
-                data: {}
+                data: {},
+                error: (xhr, ajaxOptions, thrownError) => {
+                    M.toast({ html: 'Couldn\'t send packet', classes: 'red' });
+                }
             });
         }
-        alert("Dummy Funcs were sent!")
+
+        M.toast({ html: 'Dummy Funcs were sent', classes: 'blue' });
+
 
     }
 

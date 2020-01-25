@@ -409,10 +409,10 @@ def commands():
 
     params = ""
 
-    if IPAddrValidate():
-        if request.args.get("packet") == None:
-            print("Got NoneType")
-        else:
+    if request.args.get("packet") == None:
+        print("Got NoneType")
+    else:
+        if IPAddrValidate():
             print("Sending to GSC")
             if not is_tcp_connected:
                 s.connect((TCP_IP, TCP_PORT))
@@ -428,6 +428,8 @@ def commands():
                 s.connect((TCP_IP, TCP_PORT))
                 s.send(handshake.encode())
                 sendPacket(params)
+            else:
+                abort(401)
 
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
@@ -573,6 +575,5 @@ dumpDirNames = parseDumpDirNames(getSubDirs(
 numOfAcks = len(os.listdir(dumpDirNames["13-90"]["path"]))
 # I'm Alon Grossman and I have scribbled on the GSC-GUI code
 
-
 # webbrowser.open('http://127.0.0.1:5000/')
-app.run(debug=True)
+app.run(debug=config["debugMode"])

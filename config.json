@@ -6,5 +6,6 @@
     "mibPath": "./MIB.xml",
     "baseIP": "127.0.0.1",
     "basePort": 61015,
-    "bufferSize": 1024
+    "bufferSize": 1024,
+    "debugMode": true
 }
