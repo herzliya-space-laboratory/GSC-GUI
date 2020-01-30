@@ -236,7 +236,7 @@
         return n !== Infinity && String(n) === str && n >= 0;
     }
 
-    function sendCommand() {
+    function constructPacket() {
         alert("Send command");
         var inputParams = document.getElementsByClassName("paramsInput");
         var params = [];
@@ -244,44 +244,32 @@
             var param = [];
             param.push(inputParams[i].parentElement.getAttribute("paramName"));
             let value = inputParams[i].value;
-            if (inputParams[i].parentElement.getAttribute("paramName") === "Execution Time") {
-                if (inputParams[i].parentElement.getElementsByClassName("checkbox")[0].checked)
-                    value = '01/01/1970 01:01:01';
+            if (inputParams[i].type === "datetime-local") {
+                if (inputParams[i].parentElement.getElementsByClassName("checkbox")[0].checked) {
+                    const timestamp = inputParams[i].parentElement.getElementsByClassName("row")[0];
+                    const hours = parseInt(timestamp.children[0].firstElementChild.value);
+                    const mins = parseInt(timestamp.children[1].firstElementChild.value);
+                    const secs = parseInt(timestamp.children[2].firstElementChild.value);
+                    value = `TS${hours}:${mins}:${secs}`;
+                }
                 else
                     value = decodeDateTime(value);
             }
-            else if (inputParams[i].type === "datetime-local")
-                value = decodeDateTime(value);
             param.push(value);
             params.push(param);
         }
         let execTime = params.pop();
-        var packet = writePacket(st, sst, params, execTime);
+        let packet = writePacket(st, sst, params, execTime);
+        return packet;
+    }
+
+    function sendCommand() {
+        const packet = constructPacket();
         sendPacket(packet, true, null);
     }
 
     function addToPlaylist() {
-        alert("Command added");
-        var inputParams = document.getElementsByClassName("paramsInput");
-        var params = [];
-        for (var i = 0; i < inputParams.length; i++) {
-            var param = [];
-            param.push(inputParams[i].parentElement.getAttribute("paramName"));
-            let value = inputParams[i].value;
-            if (inputParams[i].parentElement.getAttribute("paramName") === "Execution Time") {
-                if (inputParams[i].parentElement.getElementsByClassName("checkbox")[0].checked)
-                    value = '01/01/1970 01:01:01';
-                else
-                    value = decodeDateTime(value);
-            }
-            else if (inputParams[i].type === "datetime-local")
-                value = decodeDateTime(value);
-
-            param.push(value);
-            params.push(param);
-        }
-        let execTime = params.pop();
-        var packet = writePacket(st, sst, params, execTime);
+        const packet = constructPacket();
         sendPacket(packet, false, thisCommand);
     }
 
@@ -289,8 +277,10 @@
     function sendPacket(packets, isNow, div) {
         showParams(false);
         if (isNow) {
+            packets = packets;
             //window.location.assign("?packet=[" + packets.toString() + "]");
             lastPacket = packets.toString();
+            packets = parseTimestampPacket(packets);
             ajaxSendPacket("?packet=[" + packets.toString() + "]")
             // Change URL to add query variable of (writePacket()).
         }
@@ -597,7 +587,7 @@
             <option value=195>195 ADCS Power Temperatures</option>
             <option value=198>198 ADCS Miscellaneous Currents</option>
         `
-        if (paramName.search("file type") !== -1) {
+        if (paramName.search("file type") === 0) {
             for (const option of dumpType) {
                 if (option.value == placeholder) {
                     option.setAttribute("selected", "selected");
@@ -649,14 +639,21 @@
 
                 case ("dateTime"):
                     let checked = ''
-                    if (placeholder === '01/01/1970 01:01:01') {
+                    let hours = 0;
+                    let mins = 0;
+                    let secs = 0;
+                    console.log(placeholder);
+                    if (placeholder.search(/TS\d+:\d+:\d+/) !== -1) {
+                        const timestamp = placeholder.slice(2).split(":");
+                        hours = parseInt(timestamp[0]);
+                        mins = parseInt(timestamp[1]);
+                        secs = parseInt(timestamp[2]);
                         checked = 'checked';
                         datetimeInput.setAttribute("disabled", "disabled");
+                        placeholder = encodeDateTime(getCurrentDate());
                     }
-                    if (placeholder == "") placeholder = encodeDateTime(getCurrentDate());
+                    else if (placeholder == "") placeholder = encodeDateTime(getCurrentDate());
                     else placeholder = encodeDateTime(placeholder);
-
-                    //inputInfo.innerHTML += " <em><strong>MM/DD/YYYY hh:mm:ss</strong></em>"
 
                     datetimeInput.setAttribute("value", placeholder);
 
@@ -665,8 +662,22 @@
                     if (paramName === "Execution Time") {
                         inputContainer.innerHTML += `<label>
                                                     <input class="checkbox" type="checkbox" ${checked} onclick="disableEnableDatetime(this)"/>
-                                                    <span>Immidiate</span>
-                                                </label>`;
+                                                    <span>Timestamp</span>
+                                                </label>
+                                                <div ${checked == '' ? "hidden" : ""} class="row" id="timestamp">
+                                                    <div class="input-field col s2">
+                                                        <input id="hours" type="number" class="validate" min="0" value="${hours}">
+                                                        <label for="hours">Hours</label>
+                                                    </div>
+                                                    <div class="input-field col s2">
+                                                        <input id="minutes" type="number" class="validate" min="0" max="59" value="${mins}">
+                                                        <label for="minutes">Minutes</label>
+                                                    </div>
+                                                    <div class="input-field col s2">
+                                                        <input id="seceonds" type="number" class="validate" min="0" max="59" value="${secs}">
+                                                        <label for="seceonds">Seceonds</label>
+                                                    </div>
+                                                </div>`;
                     }
 
                     break;
@@ -690,6 +701,8 @@
 
     function disableEnableDatetime(checkbox) {
         let datetime = checkbox.parentElement.parentElement.getElementsByClassName("paramsInput")[0];
+        const timestamp = checkbox.parentElement.parentElement.getElementsByClassName("row")[0];
+        timestamp.hidden = !checkbox.checked;
         $(datetime).prop("disabled", checkbox.checked);
         if (!checkbox.checked)
             datetime.setAttribute("value", encodeDateTime(getCurrentDate()));
@@ -726,9 +739,6 @@
             generateInput(paramTypes[nameIndex][i], paramNames[nameIndex][i], paramUnits[nameIndex][i], params[paramNames[nameIndex][i]]);
         }
         generateInput("dateTime", "Execution Time", "sec", packet != null ? JSON.parse(packet).Content.ExecutionTime : "");
-    }
-    if (results.length == 2 || results.length == 3) {
-
     }
     var e = 0;
     // Setup draggable columns
@@ -777,6 +787,7 @@
                 alert("Command " + playlist.children[i].innerText + " is null");
             }
             else {
+                value = parseTimestampPacket(value);
                 allCommands += value + ",";
             }
         }
@@ -788,6 +799,7 @@
 
         }
         else {
+            value = parseTimestampPacket(value);
             allCommands += value;
         }
         alert("All commands:" + allCommands);
@@ -798,6 +810,67 @@
     function emptyPlaylist() {
         let commandList = document.getElementById("playlistContainer");
         commandList.innerHTML = "<div class=\"row commandsTitle\" value=\"HEADER\"><div class=\"column unselectable\">Command</div><div class=\"column unselectable\">Command number</div></div>";
+    }
+
+    Date.prototype.addHours = function (h) {
+        this.setTime(this.getTime() + (h * 60 * 60 * 1000));
+        return this;
+    }
+    Date.prototype.addMinutes = function (m) {
+        this.setTime(this.getTime() + (m * 60 * 1000));
+        return this;
+    }
+    Date.prototype.addSeceonds = function (s) {
+        this.setTime(this.getTime() + (s * 1000));
+        return this;
+    }
+
+    function dateToString(dt) {
+        return `${dt.getDate().toString().padStart(2, '0')}/${(dt.getMonth() + 1).toString().padStart(2, '0')}/${
+            dt.getFullYear().toString().padStart(4, '0')} ${
+            dt.getHours().toString().padStart(2, '0')}:${
+            dt.getMinutes().toString().padStart(2, '0')}:${
+            dt.getSeconds().toString().padStart(2, '0')}`;
+    }
+
+    function parseTimestampPacket(packet) {
+        //Timestamp format: TShh:mm:ss
+        packet = JSON.parse(packet).Content;
+        const execTime = packet["ExecutionTime"];
+        if (execTime.startsWith("TS")) {
+            const timestamp = execTime.slice(2).split(":");
+            const hours = parseInt(timestamp[0]);
+            const mins = parseInt(timestamp[1]);
+            const secs = parseInt(timestamp[2]);
+            if (hours == 0 && mins == 0 && secs == 0)
+                packet["ExecutionTime"] = '01/01/1970 01:01:01';
+            else {
+                let date = new Date();
+                date.addHours(hours);
+                date.addMinutes(mins);
+                date.addSeceonds(secs);
+                packet["ExecutionTime"] = dateToString(date);
+            }
+        }
+        for (const key in packet["Params"]) {
+            const val = packet["Params"][key];
+            if (val.search(/TS\d+:\d+:\d+/) !== -1) {
+                const timestamp = val.slice(2).split(":");
+                const hours = parseInt(timestamp[0]);
+                const mins = parseInt(timestamp[1]);
+                const secs = parseInt(timestamp[2]);
+                if (hours == 0 && mins == 0 && secs == 0)
+                    packet["Params"][key] = '01/01/1970 01:01:01';
+                else {
+                    let date = new Date();
+                    date.addHours(hours);
+                    date.addMinutes(mins);
+                    date.addSeceonds(secs);
+                    packet["Params"][key] = dateToString(date);
+                }
+            }
+        }
+        return JSON.stringify(packet);
     }
 
     let playlistIndex = 0;
@@ -820,7 +893,7 @@
             else if (val !== "HEADER")
                 playlistSend.push({
                     name: elem.firstElementChild.innerText,
-                    value: val
+                    value: parseTimestampPacket(val)
                 });
         }
 
