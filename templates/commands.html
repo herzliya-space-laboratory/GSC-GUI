@@ -659,8 +659,7 @@
 
                     inputContainer.appendChild(datetimeInput);
 
-                    if (paramName === "Execution Time") {
-                        inputContainer.innerHTML += `<label>
+                    inputContainer.innerHTML += `<label>
                                                     <input class="checkbox" type="checkbox" ${checked} onclick="disableEnableDatetime(this)"/>
                                                     <span>Timestamp</span>
                                                 </label>
@@ -678,7 +677,7 @@
                                                         <label for="seceonds">Seceonds</label>
                                                     </div>
                                                 </div>`;
-                    }
+
 
                     break;
                 default:
