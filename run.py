@@ -428,8 +428,8 @@ def commands():
                 s.connect((TCP_IP, TCP_PORT))
                 s.send(handshake.encode())
                 sendPacket(params)
-            else:
-                return "{}", 401
+        else:
+            return "{}", 401
 
     return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
@@ -576,4 +576,4 @@ numOfAcks = len(os.listdir(dumpDirNames["13-90"]["path"]))
 # I'm Alon Grossman and I have scribbled on the GSC-GUI code
 
 # webbrowser.open('http://127.0.0.1:5000/')
-app.run(debug=config["debugMode"], host="0.0.0.0")
+app.run(debug=config["debugMode"], host='0.0.0.0')
