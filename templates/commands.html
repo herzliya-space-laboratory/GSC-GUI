@@ -892,7 +892,7 @@
             else if (val !== "HEADER")
                 playlistSend.push({
                     name: elem.firstElementChild.innerText,
-                    value: parseTimestampPacket(val)
+                    value: val
                 });
         }
 
@@ -914,18 +914,13 @@
             const modal = document.getElementById("sendStepsModal");
             M.Modal.getInstance(modal).open();
 
-            ajaxSendPacket("?packet=[" + playlistSend[0].value + "]");
+            ajaxSendPacket("?packet=[" + parseTimestampPacket(playlistSend[0].value) + "]");
         }
 
-
-
-        // for (let i = 0; i < playlist.length; i++) {
-        //     const comm = playlist[i];
-        //     ajaxSendPacket("?packet=[" + comm.value + "]");
-        //     if (!confirm(`Command: ${comm.name}\nPacket: ${comm.value}\nPress Enter to continue or Cancel to resend`)) {
-        //         i--;
-        //     }
-        // }
+        if (playlistIndex === playlistSend.length - 1) {
+            const nextButton = document.getElementById("sendNext");
+            nextButton.className += " disabled";
+        }
 
     }
 
@@ -946,7 +941,7 @@
     }
 
     function resendStep() {
-        ajaxSendPacket("?packet=[" + playlistSend[playlistIndex].value + "]");
+        ajaxSendPacket("?packet=[" + parseTimestampPacket(playlistSend[playlistIndex].value) + "]");
     }
 
     function checkForAck() {
