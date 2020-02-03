@@ -1,0 +1,11 @@
+{
+    "telemetryFolderPath": "D:\\GSC-Base-AlternativeStorage\\Telemetry\\",
+    "beaconFolderPath": "D:\\GSC-Base-AlternativeStorage\\Telemetry\\ST-3 SST-25 global param - beacon\\",
+    "eventLogsFolderPath": "D:\\GSC-Base-AlternativeStorage\\Telemetry\\ST-13 SST-49 general - log events\\",
+    "errorLogsFolderPath": "D:\\GSC-Base-AlternativeStorage\\Telemetry\\ST-13 SST-50 general - log errors\\",
+    "mibPath": "D:\\GSC-Base\\HSL.GSC.Base\\bin\\Debug\\MissionInformation\\MIB.xml",
+    "baseIP": "127.0.0.1",
+    "basePort": 61015,
+    "bufferSize": 1024,
+    "debugMode": false
+}
