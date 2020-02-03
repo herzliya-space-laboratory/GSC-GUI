@@ -834,38 +834,38 @@
 
     function parseTimestampPacket(packet) {
         //Timestamp format: TShh:mm:ss
-        packet = JSON.parse(packet).Content;
-        const execTime = packet["ExecutionTime"];
+        packet = JSON.parse(packet);
+        const execTime = packet.Content["ExecutionTime"];
         if (execTime.startsWith("TS")) {
             const timestamp = execTime.slice(2).split(":");
             const hours = parseInt(timestamp[0]);
             const mins = parseInt(timestamp[1]);
             const secs = parseInt(timestamp[2]);
             if (hours == 0 && mins == 0 && secs == 0)
-                packet["ExecutionTime"] = '01/01/1970 01:01:01';
+                packet.Content["ExecutionTime"] = '01/01/1970 01:01:01';
             else {
                 let date = new Date();
                 date.addHours(hours);
                 date.addMinutes(mins);
                 date.addSeceonds(secs);
-                packet["ExecutionTime"] = dateToString(date);
+                packet.Content["ExecutionTime"] = dateToString(date);
             }
         }
-        for (const key in packet["Params"]) {
-            const val = packet["Params"][key];
+        for (const key in packet.Content["Params"]) {
+            const val = packet.Content["Params"][key];
             if (val.search(/TS\d+:\d+:\d+/) !== -1) {
                 const timestamp = val.slice(2).split(":");
                 const hours = parseInt(timestamp[0]);
                 const mins = parseInt(timestamp[1]);
                 const secs = parseInt(timestamp[2]);
                 if (hours == 0 && mins == 0 && secs == 0)
-                    packet["Params"][key] = '01/01/1970 01:01:01';
+                    packet.Content["Params"] = '01/01/1970 01:01:01';
                 else {
                     let date = new Date();
                     date.addHours(hours);
                     date.addMinutes(mins);
                     date.addSeceonds(secs);
-                    packet["Params"][key] = dateToString(date);
+                    packet.Content["Params"] = dateToString(date);
                 }
             }
         }
