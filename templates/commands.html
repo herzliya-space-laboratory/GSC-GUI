@@ -6,8 +6,6 @@
 <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
 <!--Import datetime-->
 
-
-
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/flatly/bootstrap.min.css">
     <title>Commands</title>
@@ -123,6 +121,8 @@
                     <button class="btn" id="dummyFunc" onclick="">Send dummy funcs</button>
                     <p>How many Dummy Funcs?</p>
                     <input type="number" id="dummyFuncNum" min="1" max="255" value="1" class="white-text">
+                    <p>Select EndNode</p>
+                    <select id="endnode" class="browser-default"></select>
                 </div>
             </div>
         </div>
@@ -202,9 +202,9 @@
     }
 
     function writePacket(st, sst, params, execTime) {
-        var packet = "{\"Type\":\"Telecommand\", \"Content\":";
+        var packet = '{"Type":"Telecommand", "Content":';
 
-        packet += "{\"ST\":\"" + st + "\",\"SST\":\"" + sst + "\"" + ",\"ExecutionTime\":\"" + execTime[1] + "\",\"Params\":{";
+        packet += `{"ST":"${st}","SST":"${sst}","EndNode":-1, "ExecutionTime":"${execTime[1]}","Params":{`;
         for (var i = 0; i < params.length - 1; i++) {
             var arr = params[i];
             packet += "\"" + arr[0] + "\":\"" + arr[1] + "\",";
@@ -479,7 +479,7 @@
         for (let i = 0; i < howMany; i++) {
             $.ajax({
                 type: "POST",
-                url: `/commands?packet=[{"Type":"Telecommand", "Content":{"ST":"20","SST":"122","ExecutionTime":"01/01/1970 01:01:01","Params":{}}}]`,
+                url: `/commands?packet=[{"Type":"Telecommand", "Content":{"ST":"20","SST":"122","ExecutionTime":"01/01/1970 01:01:01","Params":{}, "EndNode":${document.getElementById("endnode").value}}}]`,
                 data: {},
                 error: (xhr, ajaxOptions, thrownError) => {
                     M.toast({ html: 'Couldn\'t send packet', classes: 'red' });
@@ -834,7 +834,9 @@
 
     function parseTimestampPacket(packet) {
         //Timestamp format: TShh:mm:ss
+        debugger
         packet = JSON.parse(packet);
+        packet.Content.EndNode = document.getElementById("endnode").value;
         const execTime = packet.Content["ExecutionTime"];
         if (execTime.startsWith("TS")) {
             const timestamp = execTime.slice(2).split(":");
@@ -859,13 +861,13 @@
                 const mins = parseInt(timestamp[1]);
                 const secs = parseInt(timestamp[2]);
                 if (hours == 0 && mins == 0 && secs == 0)
-                    packet.Content["Params"] = '01/01/1970 01:01:01';
+                    packet.Content["Params"][key] = '01/01/1970 01:01:01';
                 else {
                     let date = new Date();
                     date.addHours(hours);
                     date.addMinutes(mins);
                     date.addSeceonds(secs);
-                    packet.Content["Params"] = dateToString(date);
+                    packet.Content["Params"][key] = dateToString(date);
                 }
             }
         }
@@ -932,7 +934,7 @@
         head.innerHTML = `Command: ${playlistSend[playlistIndex].name}`;
         info.innerHTML = `Packet:\n${playlistSend[playlistIndex].value}`;
 
-        ajaxSendPacket("?packet=[" + playlistSend[playlistIndex].value + "]");
+        ajaxSendPacket("?packet=[" + parseTimestampPacket(playlistSend[playlistIndex].value) + "]");
 
         if (playlistIndex === playlistSend.length - 1) {
             const nextButton = document.getElementById("sendNext");
@@ -960,8 +962,74 @@
             }
         });
     }
+    let endNodes = [];
+    function getEndNodes() {
+        $.ajax({
+            type: "GET",
+            url: `/getEndNodes`,
+            data: {},
+        }).done((params) => {
+            addEndNodes(params.endNodes);
+        });
+    }
 
-    setInterval(() => checkForAck(), 1000);
+    function addEndNodes(endnodesArr) {
+        if (!objectArraysEqual(endnodesArr, endNodes)) {
+            const endnodeSelect = document.getElementById("endnode");
+            endnodeSelect.innerHTML = ""
+            for (let i = 0; i < endnodesArr.length; i++) {
+                const e = endnodesArr[i];
+                const option = document.createElement("option");
+                option.innerHTML = e.Name;
+                option.value = e.Id;
+                endnodeSelect.appendChild(option);
+            }
+            endNodes = endnodesArr;
+        }
+
+    }
+
+    function objectArraysEqual(a, b) {
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length != b.length) return false;
+
+        for (let i = 0; i < a.length; ++i) {
+            if (!isEquivalentObject(a[i], b[i])) return false;
+        }
+        return true;
+    }
+
+    function isEquivalentObject(a, b) {
+        // Create arrays of property names
+        var aProps = Object.getOwnPropertyNames(a);
+        var bProps = Object.getOwnPropertyNames(b);
+
+        // If number of properties is different,
+        // objects are not equivalent
+        if (aProps.length != bProps.length) {
+            return false;
+        }
+
+        for (var i = 0; i < aProps.length; i++) {
+            var propName = aProps[i];
+
+            // If values of same property are not equal,
+            // objects are not equivalent
+            if (a[propName] !== b[propName]) {
+                return false;
+            }
+        }
+
+        // If we made it this far, objects
+        // are considered equivalent
+        return true;
+    }
+
+    setInterval(() => {
+        checkForAck();
+        getEndNodes();
+    }, 1000);
 </script>
 
 <div id="sendStepsModal" class="modal modal-fixed-footer">

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import os
 from bs4 import BeautifulSoup
 import json
@@ -11,6 +11,8 @@ import log_parser
 import re
 import webbrowser
 from datetime import datetime
+import threading
+from os.path import isfile, join
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -26,12 +28,32 @@ TCP_IP = config["baseIP"]
 TCP_PORT = config["basePort"]
 BUFFER_SIZE = config["bufferSize"]
 
-is_tcp_connected = False
 
 handshake = "{'Type': 'GUI'}"
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = None
 
+endNodes = []
+commandIds = []
+isGSCconnected = False
+
+
+def connectToGSC():
+    # TODO: When this fails
+    global s
+    global isGSCconnected
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(200)
+    s.connect((TCP_IP, TCP_PORT))
+    s.send(handshake.encode())
+    print("Connected")
+    isGSCconnected = True
+
+
+try:
+    connectToGSC()
+except:
+    print("GSC not connected")
 
 f = open(config["mibPath"], "r")
 
@@ -80,11 +102,11 @@ commandAcksWeb = "commandAcks.html"
 
 
 def IPAddrValidate():
-    Connections = {"ip": request.remote_addr}
-    if(Connections["ip"][0:3] == "172" or Connections["ip"] == "127.0.0.1"):
-        print(Connections["ip"] + " is Allowed to connect")
+    ip = request.remote_addr
+    if(ip[0:3] == "172" or ip == "127.0.0.1"):
+        print(ip + " is Allowed to connect")
         return True
-    print(Connections["ip"] + " is not allowed to connect")
+    print(ip + " is not allowed to connect")
     return False
 
 
@@ -398,13 +420,12 @@ def sendPacket(params):
         print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
         sentBytes = s.send(str(packet).encode())
         print("Number of bytes sent: ", sentBytes)
-        print("Server respo: ", s.recv(1024))
+        # print("Server respond: ", s.recv(1024))
         time.sleep(0.1)
 
 
 @app.route('/commands', methods=['GET', 'POST'])
 def commands():
-    global is_tcp_connected
     global s
 
     params = ""
@@ -414,19 +435,12 @@ def commands():
     else:
         if IPAddrValidate():
             print("Sending to GSC")
-            if not is_tcp_connected:
-                s.connect((TCP_IP, TCP_PORT))
-                is_tcp_connected = True
-                s.send(handshake.encode())
-                print("Connected")
             params = html.unescape(request.args.get("packet"))
             try:
                 sendPacket(params)
             except:
                 print("Trying to reconnect to base")
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                s.connect((TCP_IP, TCP_PORT))
-                s.send(handshake.encode())
+                connectToGSC()
                 sendPacket(params)
         else:
             return "{}", 401
@@ -565,9 +579,57 @@ def getAcks():
         return json.dumps(data)
     return "null"
 
-# @app.route('/commandacks')
-# def commandAcks():
-#     return render_template(commandAcksWeb)
+
+@app.route("/v2")
+def GUIv2():
+    return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
+
+@app.route("/getEndNodes")
+def getEndNode():
+    global endNodes
+    return {"endNodes": endNodes}
+    # return {
+    # "endNodes": [{"Id": "1", "Name": "HSL"}, {"Id": "2", "Name": "Shaar HAnegev"}, {"Id": "3", "Name": "sdfsf"}]}
+
+
+@app.route('/commandacks', methods=['GET', 'POST'])
+def commandAcks():
+    global commandIds
+    ackDirPath = dumpDirNames["13-90"]["path"]
+    ackFilesPaths = [f for f in os.listdir(
+        ackDirPath) if isfile(join(ackDirPath, f))]
+    params = getParamsFromCSV(ackDirPath[0])
+    acks = []
+
+    for comm in commandIds:
+        acks.append(comm)
+        acks[-1]["Sat Time"] = "-"
+        acks[-1]["GroundTime"] = "-"
+        acks[-1]["AckType"] = "-"
+        acks[-1]["ErrorType"] = "-"
+        acks[-1]["Color"] = "grey white-text"
+
+    for path in ackFilesPaths:
+        parsedAck = parseCSVfile(path, params)
+        index = -1
+        for i in len(acks):
+            if acks[i]["Id"] == parsedAck["commandid"]:
+                index = i
+                break
+
+        if index != -1:
+            acks[index]["Sat Time"] = parsedAck["sat_time"]
+            acks[index]["GroundTime"] = parsedAck["ground_time"]
+            acks[index]["AckType"] = parsedAck["acktype"]
+            acks[index]["ErrorType"] = parsedAck["errortype"]
+            if parsedAck["errortype"] != "0":
+                acks[index]["Color"] = "red white-text"
+            else:
+                acks[index]["Color"] = "blue white-text"
+    if request.method == "POST":
+        return acks
+    return render_template(commandAcksWeb, acks=acks)
 
 
 dumpDirNames = parseDumpDirNames(getSubDirs(
@@ -576,4 +638,64 @@ numOfAcks = len(os.listdir(dumpDirNames["13-90"]["path"]))
 # I'm Alon Grossman and I have scribbled on the GSC-GUI code
 
 # webbrowser.open('http://127.0.0.1:5000/')
+
+
+def socketInputLoop():
+    gscBuffer = ""
+    global s
+    global isGSCconnected
+    while True:
+        if not isGSCconnected:
+            try:
+                connectToGSC()
+            except:
+                pass
+            time.sleep(1.0)
+        else:
+            try:
+                res = s.recv(1024)
+            except:
+                isGSCconnected = False
+            gscBuffer += res.decode("ascii")
+            if gscBuffer != "":
+                packets = splitJSON(gscBuffer)
+                dealWithGSCres(packets)
+                gscBuffer = ""
+
+
+def dealWithGSCres(res):
+    global endNodes
+    global commandIds
+    global isGSCconnected
+
+    for packet in res:
+        packet = json.loads(packet)
+        if packet["Type"] == "SystemAck":
+            print("Got ack")
+            commandIds.append({
+                "Id": packet["Content"],
+                "TimeSent": datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+            })
+        elif packet["Type"] == "EndNodes":
+            print("New endnode was connected")
+            endNodes = packet["Content"]
+        elif packet["Type"] == "Disconnection":
+            print("GSC disconnected")
+            isGSCconnected = False
+
+
+def splitJSON(msg):
+    msg = msg.split("}{")
+    if len(msg) > 1:
+        msg[0] += "}"
+        for i in range(1, len(msg) - 1):
+            msg[i] = "{" + msg[i] + "}"
+        msg[-1] = "{" + msg[-1]
+    return msg
+
+
+socketLoopThread = threading.Thread(target=socketInputLoop)
+socketLoopThread.daemon = True
+socketLoopThread.start()
+
 app.run(debug=config["debugMode"], host='0.0.0.0')
