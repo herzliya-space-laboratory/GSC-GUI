@@ -207,13 +207,13 @@
         packet += `{"ST":"${st}","SST":"${sst}","EndNode":-1, "ExecutionTime":"${execTime[1]}","Params":{`;
         for (var i = 0; i < params.length - 1; i++) {
             var arr = params[i];
-            packet += "\"" + arr[0] + "\":\"" + arr[1] + "\",";
+            packet += `"${arr[0]}":"${arr[1]}",`;
 
         }
 
         if (params.length > 0) {
             var arr = params[params.length - 1];
-            packet += "\"" + arr[0] + "\":\"" + arr[1] + "\"";
+            packet += `"${arr[0]}":"${arr[1]}"`;
         }
 
 

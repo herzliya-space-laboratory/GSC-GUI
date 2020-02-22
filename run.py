@@ -1,3 +1,5 @@
+import sys
+import signal
 from flask import Flask, render_template, request, redirect
 import os
 from bs4 import BeautifulSoup
@@ -656,6 +658,7 @@ def socketInputLoop():
                 res = s.recv(1024)
             except:
                 isGSCconnected = False
+                continue
             gscBuffer += res.decode("ascii")
             if gscBuffer != "":
                 packets = splitJSON(gscBuffer)
@@ -676,6 +679,7 @@ def dealWithGSCres(res):
                 "Id": packet["Content"],
                 "TimeSent": datetime.today().strftime('%d/%m/%Y %H:%M:%S')
             })
+            print(commandIds)
         elif packet["Type"] == "EndNodes":
             print("New endnode was connected")
             endNodes = packet["Content"]
@@ -697,5 +701,16 @@ def splitJSON(msg):
 socketLoopThread = threading.Thread(target=socketInputLoop)
 socketLoopThread.daemon = True
 socketLoopThread.start()
+
+
+def signal_handler(sig, frame):
+    global s
+    s.send('{"Type": "Disconnection"}'.encode())
+    s.close()
+    print("Bye!")
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
 
 app.run(debug=config["debugMode"], host='0.0.0.0')
