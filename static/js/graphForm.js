@@ -1,9 +1,9 @@
 let paramSelectOptions = [];
 
-function searchDumpGraph(inputId, paramInputId) {
+function searchDumpGraph(inputId, paramInputId, isLineGraphId) {
+    let isLineGraph = $("#" + isLineGraphId).prop("checked");
     let searchInputValue = $("#" + inputId).val();
     let param = $("#" + paramInputId).val();
-    console.log(param);
     if (dumpDict[searchInputValue] == undefined) {
 
         alert(`Dump \"${searchInputValue}\" not found`)
@@ -11,7 +11,7 @@ function searchDumpGraph(inputId, paramInputId) {
     }
     let st = dumpDict[searchInputValue]["st"];
     let sst = dumpDict[searchInputValue]["sst"];
-    let queryValue = "?st=" + st + "&sst=" + sst + "&paramName=" + param;
+    let queryValue = `?st=${st}&sst=${sst}&paramName=${param}&isLineGraph=${isLineGraph}`;
     window.location = "paramGraph" + queryValue;
 }
 

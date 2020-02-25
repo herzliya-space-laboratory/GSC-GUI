@@ -652,7 +652,10 @@
                         datetimeInput.setAttribute("disabled", "disabled");
                         placeholder = encodeDateTime(getCurrentDate());
                     }
-                    else if (placeholder == "") placeholder = encodeDateTime(getCurrentDate());
+                    else if (placeholder == "") {
+                        placeholder = encodeDateTime(getCurrentDate());
+                        checked = 'checked';
+                    }
                     else placeholder = encodeDateTime(placeholder);
 
                     datetimeInput.setAttribute("value", placeholder);

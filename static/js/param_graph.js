@@ -2,6 +2,7 @@ let paramValues = $("#paramData").data("values");
 let paramOptions = $("#paramOptions").data("values");
 let paramName = $("#paramName").data("values");
 let paramUnit = $("#paramUnit").data("values");
+let isLineGraph = $("#isLineGraph").data("values");
 
 if (paramOptions == undefined || paramOptions == "") {
   paramOptions = '{"rangeStart": "", "rangeEnd": ""}'
@@ -61,7 +62,11 @@ function drawGraph() {
   };
 
   var container = document.getElementById('chart_div');
-  var materialChart = new google.visualization.LineChart(document.getElementById('chart_div'));
+  let materialChart;
+  if (isLineGraph)
+    materialChart = new google.visualization.LineChart(document.getElementById('chart_div'));
+  else
+    materialChart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
   google.visualization.events.addListener(materialChart, 'ready', function () {
     var labels = container.getElementsByTagName('text');
     Array.prototype.forEach.call(labels, function (label) {

@@ -523,6 +523,7 @@ def parameterGraph():
     sst = request.args.get("sst")
     parameterName = request.args.get('paramName')
     key = str(st) + "-" + str(sst)
+    isLineGraph = request.args.get("isLineGraph")
 
     try:
         options = getTelemetryOptions(str(st), str(sst))[parameterName]
@@ -537,7 +538,7 @@ def parameterGraph():
     units = getUnitsFromCSV(f, params)
     unit = units[parameterName]
 
-    return render_template(graphPage, paramData=paramValues, paramOptions=options, paramName=parameterName, paramUnit=unit)
+    return render_template(graphPage, paramData=paramValues, paramOptions=options, paramName=parameterName, paramUnit=unit, isLineGraph=isLineGraph)
 
 
 @app.route('/getDumpNames')
@@ -591,8 +592,7 @@ def GUIv2():
 def getEndNode():
     global endNodes
     return {"endNodes": endNodes}
-    # return {
-    # "endNodes": [{"Id": "1", "Name": "HSL"}, {"Id": "2", "Name": "Shaar HAnegev"}, {"Id": "3", "Name": "sdfsf"}]}
+    # return {"endNodes": [{"Name": "bla", "Id": "2"}, {"Name": "bla", "Id": "3"}]}
 
 
 @app.route('/commandacks', methods=['GET', 'POST'])

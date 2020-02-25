@@ -68,9 +68,17 @@
                             <select id="paramName" class="browser-default">
                             </select>
                         </div>
+
+                        <label>
+                            <input id="isLineGraph" type="checkbox" checked="checked" />
+                            <span>Graph with lines</span>
+                        </label>
+
                         <div class="input-field">
-                            <button class="btn" onclick="searchDumpGraph('telemName', 'paramName')">Go!</button>
+                            <button class="btn"
+                                onclick="searchDumpGraph('telemName', 'paramName', 'isLineGraph')">Go!</button>
                         </div>
+
                     </div>
                 </div>
             </div>
