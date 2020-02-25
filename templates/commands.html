@@ -975,6 +975,7 @@
 
     function addEndNodes(endnodesArr) {
         if (!objectArraysEqual(endnodesArr, endNodes)) {
+            endnodesArr = clearEndNodesDuplicates(endnodesArr);
             const endnodeSelect = document.getElementById("endnode");
             endnodeSelect.innerHTML = ""
             for (let i = 0; i < endnodesArr.length; i++) {
@@ -987,6 +988,22 @@
             endNodes = endnodesArr;
         }
 
+    }
+
+    function clearEndNodesDuplicates(endnodes) {
+        for (let i = endnodes.length - 1; i > 0; --i) {
+            const en = endnodes[i];
+            for (let j = i - 1; j >= 0; --j) {
+                const element = endnodes[j];
+                if (element.Name === en.Name) {
+                    endnodes.splice(j, 1);
+                    --i;
+                    --j;
+                }
+            }
+        }
+
+        return endnodes;
     }
 
     function objectArraysEqual(a, b) {
