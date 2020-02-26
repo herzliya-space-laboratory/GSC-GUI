@@ -642,7 +642,6 @@
                     let hours = 0;
                     let mins = 0;
                     let secs = 0;
-                    console.log(placeholder);
                     if (placeholder.search(/TS\d+:\d+:\d+/) !== -1) {
                         const timestamp = placeholder.slice(2).split(":");
                         hours = parseInt(timestamp[0]);
@@ -655,6 +654,7 @@
                     else if (placeholder == "") {
                         placeholder = encodeDateTime(getCurrentDate());
                         checked = 'checked';
+                        $(datetimeInput).prop("disabled", true);
                     }
                     else placeholder = encodeDateTime(placeholder);
 

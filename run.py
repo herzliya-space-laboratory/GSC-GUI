@@ -21,6 +21,10 @@ Error 10: Unable to parse integer fro telemetry
 '''
 
 import socket
+import logging
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 with open('config.json', 'r') as file:
     config = file.read().replace('\n', '')
@@ -418,7 +422,7 @@ def sendPacket(params):
     packets = ast.literal_eval(params)
     time.sleep(0.25)
     for packet in packets:
-        print("This is: ", packet)
+        print("Sending to GSC: ", packet)
         print("Sending this packet to ", TCP_IP, " Port: ", TCP_PORT)
         sentBytes = s.send(str(packet).encode())
         print("Number of bytes sent: ", sentBytes)
@@ -673,6 +677,7 @@ def dealWithGSCres(res):
 
     for packet in res:
         packet = json.loads(packet)
+        print("Got from GSC: " + str(packet))
         if packet["Type"] == "SystemAck":
             print("Got ack")
             commandIds.append({
@@ -681,7 +686,7 @@ def dealWithGSCres(res):
             })
             print(commandIds)
         elif packet["Type"] == "EndNodes":
-            print("New endnode was connected")
+            print("Endnode change")
             endNodes = packet["Content"]
         elif packet["Type"] == "Disconnection":
             print("GSC disconnected")
