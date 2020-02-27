@@ -37,9 +37,8 @@ function genarateRowCelles(telem_param, row, param_order){
 }
 
 function generateAllTable(table, data) {
-    let time_sorted_data = $.extend(true, [], sortByNewestTime(data));
     let tbody = table.appendChild(document.createElement("tbody"));
-    time_sorted_data.forEach(telem_param => {
+    data.forEach(telem_param => {
         let row = tbody.insertRow();
         $(row).addClass(telem_param["Color"])
         let headCell = createHeadCell(row, telem_param[_param_order[0]]);
@@ -54,14 +53,16 @@ function sortByNewestTime(param_Dict) {
     return param_Dict.sort((a, b) => dateParser(b["Sat Time"]) - dateParser(a["Sat Time"]));
 }
 
-function refresh_table(table_params, table_div_id) {
+function refresh_table(table_params, table_div_id, Color) {
     let table_div = document.getElementById(table_div_id);
     table_div.innerHTML = "";
 
     let table = document.createElement("table");
-    table.className = "highlight white black-text";
+    table.className = `highlight ${Color} black-text`;
 
-    table_div.appendChild(generateAllTable(table, table_params));
+    let head = generateTableHead(table, _param_order);
+
+    table_div.appendChild(generateAllTable(head, table_params));
 }
 
 function exportBtnGenerator(){
