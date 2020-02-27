@@ -11,7 +11,7 @@ import time
 import glob
 import log_parser
 import re
-import webbrowser
+#import webbrowser
 from datetime import datetime
 import threading
 from os.path import isfile, join
@@ -163,10 +163,10 @@ def getUnit(line):
     return line[-1]
 
 
-def sortByTime(data):
+def sortByTime(data, paramName, isReverse):
     sortedArray = sorted(
         data,
-        key=lambda x: datetime.strptime(x['Sat Time'], '%d/%m/%Y %H:%M:%S'), reverse=False)
+        key=lambda x: datetime.strptime(x[paramName], '%d/%m/%Y %H:%M:%S'), reverse=isReverse)
 
     return sortedArray
 
@@ -459,7 +459,7 @@ def logs():
     logCount = request.args.get('sliceNum')
 
     logsDict = sortByTime(createLogsDict(
-        config["eventLogsFolderPath"], config["errorLogsFolderPath"]))
+        config["eventLogsFolderPath"], config["errorLogsFolderPath"]), "Sat Time", False)
 
     if request.method == "POST":
         if logCount == "" or logCount == None:
@@ -596,16 +596,15 @@ def GUIv2():
 def getEndNode():
     global endNodes
     return {"endNodes": endNodes}
-    # return {"endNodes": [{"Name": "bla", "Id": "2"}, {"Name": "bla", "Id": "3"}]}
+    # return {"endNodes": [{"Name": "System.Object", "Id": "2"}, {"Name": "System.Object", "Id": "3"}, {"Name": "System.Object", "Id": "4"}, {"Name": "System.Object", "Id": "5"}, {"Name": "System.Object", "Id": "6"}]}
 
 
-@app.route('/commandacks', methods=['GET', 'POST'])
+@app.route('/acks', methods=['GET', 'POST'])
 def commandAcks():
     global commandIds
     ackDirPath = dumpDirNames["13-90"]["path"]
-    ackFilesPaths = [f for f in os.listdir(
-        ackDirPath) if isfile(join(ackDirPath, f))]
-    params = getParamsFromCSV(ackDirPath[0])
+    ackFilesPaths = [join(ackDirPath, f) for f in os.listdir(ackDirPath)]
+    params = getParamsFromCSV(ackFilesPaths[0])
     acks = []
 
     for comm in commandIds:
@@ -619,7 +618,7 @@ def commandAcks():
     for path in ackFilesPaths:
         parsedAck = parseCSVfile(path, params)
         index = -1
-        for i in len(acks):
+        for i in range(len(acks)):
             if acks[i]["Id"] == parsedAck["commandid"]:
                 index = i
                 break
@@ -629,13 +628,14 @@ def commandAcks():
             acks[index]["GroundTime"] = parsedAck["ground_time"]
             acks[index]["AckType"] = parsedAck["acktype"]
             acks[index]["ErrorType"] = parsedAck["errortype"]
-            if parsedAck["errortype"] != "0":
+            if parsedAck["errortype"] != 0:
                 acks[index]["Color"] = "red white-text"
             else:
                 acks[index]["Color"] = "blue white-text"
+    acks = sortByTime(acks, "TimeSent", True)
     if request.method == "POST":
-        return acks
-    return render_template(commandAcksWeb, acks=acks)
+        return {"Content": acks}
+    return render_template(commandAcksWeb, acksList={"Content": acks})
 
 
 dumpDirNames = parseDumpDirNames(getSubDirs(
@@ -684,7 +684,6 @@ def dealWithGSCres(res):
                 "Id": packet["Content"],
                 "TimeSent": datetime.today().strftime('%d/%m/%Y %H:%M:%S')
             })
-            print(commandIds)
         elif packet["Type"] == "EndNodes":
             print("Endnode change")
             endNodes = packet["Content"]

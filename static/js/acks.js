@@ -23,10 +23,10 @@ $("#btn-div").append(logsExportBtn);
 let interval = setInterval(function () {
     $.ajax({
         type: "POST",
-        url: `/commandacks`,
+        url: `/acks`,
         data: {}
     }).done(function (params) {
-        acksList = JSON.parse(params.replace(/'/g, '"'));
+        acksList = params.Content;
 
         refresh_table(acksList, "table-container", "white");
     });
