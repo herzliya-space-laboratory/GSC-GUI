@@ -979,8 +979,8 @@
     }
 
     function addEndNodes(endnodesArr) {
+        endnodesArr = clearEndNodesDuplicates(endnodesArr);
         if (!objectArraysEqual(endnodesArr, endNodes)) {
-            endnodesArr = clearEndNodesDuplicates(endnodesArr);
             const endnodeSelect = document.getElementById("endnode");
             endnodeSelect.innerHTML = ""
             for (let i = 0; i < endnodesArr.length; i++) {
