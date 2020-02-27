@@ -1,7 +1,8 @@
-let _param_order = ["Sat Time", "GroundTime", "Id", "CommandName", "AckType", "ErrorType"]
+let _param_order = ["TimeSent", "Sat Time", "GroundTime", "Id", "CommandName", "AckType", "ErrorType"]
 
 let acksList = $("#acks-list").data("acks");
 acksList = JSON.parse(acksList.replace(/'/g, '"'));
+acksList = acksList.Content;
 
 let table = document.createElement("table");
 table.className = "highlight white black-text";
