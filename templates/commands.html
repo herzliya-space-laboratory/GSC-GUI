@@ -839,7 +839,6 @@
 
     function parseTimestampPacket(packet) {
         //Timestamp format: TShh:mm:ss
-        debugger
         packet = JSON.parse(packet);
         packet.Content.EndNode = document.getElementById("endnode").value;
         const execTime = packet.Content["ExecutionTime"];

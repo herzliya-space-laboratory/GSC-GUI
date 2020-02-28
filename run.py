@@ -537,6 +537,24 @@ def parameterGraph():
 
     paramValues = getParameterFromDirectory(
         dumpDirNames[key]["path"], parameterName)
+
+    startDate = request.args.get("startDate")
+    endDate = request.args.get("endDate")
+    startDate = datetime.strptime(startDate, '%d/%m/%Y %H:%M')
+    endDate = None
+    try:
+        endDate = datetime.strptime(endDate, '%d/%m/%Y %H:%M')
+    except:
+        endDate = datetime.today()
+
+    forDeletion = []
+    for keyDate in paramValues:
+        date = datetime.strptime(keyDate, '%d/%m/%Y %H:%M:%S')
+        if not(startDate <= date <= endDate):
+            forDeletion.append(keyDate)
+    for keyDate in forDeletion:
+        del paramValues[keyDate]
+
     f = getNewestFileInDir(dumpDirNames[key]["path"])
     params = getParamsFromCSV(f)
     units = getUnitsFromCSV(f, params)
