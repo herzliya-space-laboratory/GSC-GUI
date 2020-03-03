@@ -45,7 +45,6 @@ isGSCconnected = False
 
 
 def connectToGSC():
-    # TODO: When this fails
     global s
     global isGSCconnected
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -297,22 +296,6 @@ def getNewestFileInDir(directory):
     return None
 
 
-def minMaxFromType(t):
-    return {
-        'uint16': {"min": 0, "max": 65535},
-        'int16': {"min": -32768, "max": 32767},
-        'uint32': {"min": 0, "max": 4294967295},
-        'byte': {"min": -128, "max": 127},
-        'dateTime': {"min": 0, "max": 0},
-        'string': {"min": 0, "max": 0}
-    }[t]
-
-
-def getCSVPacketId(path):
-    f = open(path, "r")
-    return f.readline().split(",")[1]
-
-
 def findTelemetryInMIB(serviceType, serviceSubType):
     f = open(config["mibPath"], "r")
 
@@ -383,20 +366,6 @@ def getTelemetryOptions(serviceType, serviceSubType):
 
 def getSubDirs(dirPath):
     return next(os.walk(dirPath))[1]
-
-
-def formatPacket(packet):
-    if type(packet) != dict:
-        print("Packet is not valid")  # DEBUG
-        return packet
-    if not "Content" in packet.keys():
-        print("Packet has no 'Content'")
-        return packet
-    packet = packet['Content']
-    for item in packet:
-        if len(findAll(packet[item], "$")) >= 2:
-            packet[item].split('$')
-            toParse = a  # CONTINUEEEEE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< $TIMENOW + 5$
 
 
 def parseDumpDirNames(dirs, path):
