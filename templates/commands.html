@@ -1137,12 +1137,15 @@
     }
 
     function deletePlaylist(name, options) {
+        if(!confirm("Are you sure you want to delete '"+name+"' playlist from database?"))
+        {
+            return;
+        }
         // Remove item from database
         var playlistPath = database.ref(name);
         playlistPath.remove();
         // Remove item from options
         options.remove();
-
     }
     function savePlaylist(name, root) {
         console.log("   Name: " + name);
