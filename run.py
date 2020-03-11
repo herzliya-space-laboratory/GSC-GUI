@@ -373,16 +373,19 @@ def parseDumpDirNames(dirs, path):
 
     for d in dirs:
         # Parse service type, subtype and telemetry name from directory name
-        parsedName = re.search("ST-(\d*)\ SST-(\d*)\ (.*)$", d)
+        try:
+            parsedName = re.search("ST-(\d*)\ SST-(\d*)\ (.*)$", d)
 
-        st = parsedName[1]
-        sst = parsedName[2]
-        name = parsedName[3]
+            st = parsedName[1]
+            sst = parsedName[2]
+            name = parsedName[3]
 
-        dumpNames[st + "-" + sst] = {
-            "name": name,
-            "path": path + d
-        }
+            dumpNames[st + "-" + sst] = {
+                "name": name,
+                "path": path + d
+            }
+        except:
+            pass
 
     return dumpNames
 
@@ -583,7 +586,7 @@ def GUIv2():
 def getEndNode():
     global endNodes
     return {"endNodes": endNodes}
-    # return {"endNodes": [{"Name": "System.Object", "Id": "2"}, {"Name": "System.Object", "Id": "3"}, {"Name": "System.Object", "Id": "4"}, {"Name": "System.Object", "Id": "5"}, {"Name": "System.Object", "Id": "6"}]}
+    # return {"endNodes": [{"Name": "blabla", "Id": "3"}, {"Name": "System.Object", "Id": "2"}, {"Name": "Sscdc", "Id": "4"}]}
 
 
 @app.route('/acks', methods=['GET', 'POST'])
