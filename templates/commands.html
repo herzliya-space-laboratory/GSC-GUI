@@ -124,7 +124,7 @@
                     <p>How many Dummy Funcs?</p>
                     <input type="number" id="dummyFuncNum" min="1" max="255" value="1" class="white-text">
                     <p>Select EndNode</p>
-                    <select id="endnode" class="browser-default"></select>
+                    <select id="endnode" class="browser-default" onchange="chnageEndnode()"></select>
                 </div>
             </div>
         </div>
@@ -158,6 +158,7 @@
 
 
 <script>
+    let selectedEndnode;
     var playlistsNames = [];
     var lastPacket = null;
     var st = 0
@@ -191,7 +192,10 @@
             document.getElementById("playlistButton").setAttribute("style", "display:none");
         }
     }
-
+    function chnageEndnode() {
+        const select = document.getElementById("endnode");
+        selectedEndnode = select.value;
+    }
     function showParams(show) {
         if (show) {
             document.getElementById("listBody").setAttribute("style", "display:none");
@@ -981,13 +985,21 @@
         endnodesArr = clearEndNodesDuplicates(endnodesArr);
         if (!objectArraysEqual(endnodesArr, endNodes)) {
             const endnodeSelect = document.getElementById("endnode");
-            endnodeSelect.innerHTML = ""
+            endnodeSelect.innerHTML = "";
+            let isCurrEndnodeFound = false;
             for (let i = 0; i < endnodesArr.length; i++) {
                 const e = endnodesArr[i];
                 const option = document.createElement("option");
                 option.innerHTML = e.Name;
                 option.value = e.Id;
                 endnodeSelect.appendChild(option);
+                if (e.Id == selectedEndnode) {
+                    endnodeSelect.value = e.Id;
+                    isCurrEndnodeFound = true;
+                }
+            }
+            if (!isCurrEndnodeFound) {
+                selectedEndnode = endnodeSelect.value;
             }
             endNodes = endnodesArr;
         }
@@ -1137,8 +1149,7 @@
     }
 
     function deletePlaylist(name, options) {
-        if(!confirm("Are you sure you want to delete '"+name+"' playlist from database?"))
-        {
+        if (!confirm("Are you sure you want to delete '" + name + "' playlist from database?")) {
             return;
         }
         // Remove item from database
