@@ -375,7 +375,6 @@ def parseDumpDirNames(dirs, path):
         # Parse service type, subtype and telemetry name from directory name
         try:
             parsedName = re.search("ST-(\d*)\ SST-(\d*)\ (.*)$", d)
-
             st = parsedName[1]
             sst = parsedName[2]
             name = parsedName[3]
@@ -513,7 +512,7 @@ def parameterGraph():
     startDate = request.args.get("startDate")
     endDate = request.args.get("endDate")
     startDate = datetime.strptime(startDate, '%d/%m/%Y %H:%M')
-    endDate = None
+
     try:
         endDate = datetime.strptime(endDate, '%d/%m/%Y %H:%M')
     except:
