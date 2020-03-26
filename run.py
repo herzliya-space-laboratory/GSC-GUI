@@ -648,11 +648,17 @@ def socketInputLoop():
             time.sleep(1.0)
         else:
             try:
-                res = s.recv(1024)
-            except:
+                s.settimeout(3.0)
+                while True:
+                    try:
+                        res = s.recv(1024)
+                        gscBuffer += res.decode("ascii")
+                    except socket.timeout:
+                        break
+            except socket.error:
                 isGSCconnected = False
                 continue
-            gscBuffer += res.decode("ascii")
+
             if gscBuffer != "":
                 packets = splitJSON(gscBuffer)
                 dealWithGSCres(packets)
