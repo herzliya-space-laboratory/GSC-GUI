@@ -4,7 +4,7 @@
     "eventLogsFolderPath": "./Event logs/",
     "errorLogsFolderPath": "./Error logs/",
     "mibPath": "./MIB.xml",
-    "baseIP": "127.0.0.1",
+    "baseIP": "0.0.0.0",
     "basePort": 61015,
     "bufferSize": 1024,
     "debugMode": true

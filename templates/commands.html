@@ -33,6 +33,11 @@
         ::placeholder {
             color: #fff;
         }
+
+        textarea {
+            width: 700px;
+            height: 400px;
+        }
     </style>
 
 </head>
@@ -109,6 +114,8 @@
             <button class="btn"
                 onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
             <button class="btn" onclick="sendPlaylistSteps()">Send Step By Step</button>
+            <button data-target="playlsitJson" class="btn modal-trigger">Load Playlist From JSON</button>
+
             <select style="margin-bottom: 16px;" class="select-css" id="playlistNameOptions">
             </select>
             <button class="btn"
@@ -129,7 +136,17 @@
             </div>
         </div>
 
-
+        <!-- Modal Structure -->
+        <div id="playlsitJson" class="modal">
+            <div class="modal-content">
+                <h4>Enter Playlist JSON:</h4>
+                <textarea id="playlistJsonInput" cols="30" rows="10"></textarea>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat"
+                    onclick="parsePlaylistJSON()">Enter</a>
+            </div>
+        </div>
 
         </div class="white-text">
         <div id="commandBody" style="display:none">
@@ -1111,6 +1128,42 @@
 
         return str;
     }
+
+    function parsePlaylistJSON() {
+        const json = document.getElementById('playlistJsonInput').value;
+        const playlist = JSON.parse(`[${json}]`);
+        let commandList = document.getElementById("playlistContainer");
+        commandList.innerHTML = "<div class=\"row commandsTitle\" value=\"HEADER\"><div class=\"column unselectable\">Command</div><div class=\"column unselectable\">Command number</div></div>";
+        for (let i = 0; i < playlist.length; i++) {
+            const command = playlist[i];
+            const cmdID = `(${command.Content.ST},${command.Content.SST})`
+            const strValue = JSON.stringify(command);
+            let newCommand = document.createElement("div");
+            newCommand.setAttribute("class", "row");
+            newCommand.setAttribute("onclick", "showParams(true); let type = parseJinja('" + cmdID + "');generateInputs(type[0],type[1],this.getAttribute('value'));thisCommand=this;");
+            newCommand.setAttribute("id", cmdID);
+            newCommand.setAttribute("draggable", "false");
+            newCommand.setAttribute("inlist", "true");
+            newCommand.setAttribute("value", strValue);
+            let newCommandName = document.createElement("div");
+            newCommandName.setAttribute("class", "column unselectable");
+            if (strValue) {
+                params = objToString(command.Content.Params);
+                params += `Execution time: ${command.Content.ExecutionTime}`;
+                newCommandName.innerHTML = `<abbr title="${params}">${dic[cmdID]}</abbr>`;
+            }
+            else {
+                newCommandName.innerHTML = dic[cmdID];
+            }
+            var newCommandNumber = document.createElement("div");
+            newCommandNumber.setAttribute("class", "column unselectable");
+            newCommandNumber.innerHTML = cmdID;
+            newCommand.appendChild(newCommandName);
+            newCommand.appendChild(newCommandNumber);
+            commandList.appendChild(newCommand);
+        }
+    }
+
     function getPlaylist(name, root) {
 
         var playlistPath = database.ref(name);

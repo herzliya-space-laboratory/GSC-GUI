@@ -630,9 +630,6 @@ def commandAcks():
 dumpDirNames = parseDumpDirNames(getSubDirs(
     config["telemetryFolderPath"]), config["telemetryFolderPath"])
 numOfAcks = len(os.listdir(dumpDirNames["13-90"]["path"]))
-# I'm Alon Grossman and I have scribbled on the GSC-GUI code
-
-# webbrowser.open('http://127.0.0.1:5000/')
 
 
 def socketInputLoop():
@@ -713,3 +710,7 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 app.run(debug=config["debugMode"], host='0.0.0.0')
+
+# I'm Alon Grossman and I have scribbled on the GSC-GUI code
+
+# webbrowser.open('http://127.0.0.1:5000/')
