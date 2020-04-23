@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
+    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css" media="screen,projection" />
+    <style>
+        header,
+        main,
+        footer {
+            padding-left: 300px;
+        }
+
+        @media only screen and (max-width : 992px) {
+
+            header,
+            main,
+            footer {
+                padding-left: 0;
+            }
+        }
+
+
+        ::placeholder {
+            color: #fff;
+        }
+		.unselectable {
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+    </style>
+    <script src="/static/js/side_bar.js"></script>
+    <title>Login</title>
+</head>
+
+<body class="indigo darken-1">
+
+    <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
+        <li style="margin-top: 20px;" class="logo center-align">
+            <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+        </li>
+        <li>
+            <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
+                <input id="dump-seacrh" placeholder="Telemetry Name" class="autocomplete">
+                <label for="dump-seacrh" class="active">Dump</label>
+                <a class="waves-effect waves-light btn-small" onclick="searchDump('dump-seacrh')"><i
+                        class="material-icons left">search</i> Search Dump</a>
+            </div>
+        </li>
+        <li onclick="navChange(this)"><a href="/commands">Commands</a></li>
+        <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
+        <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+        <li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
+        <li onclick="navChange(this)"><a href="/acks">Acks</a></li>
+		<li onclick="navChange(this)" class="active"><a href="/login">Login<span class="new badge right yellow darken-3"></span></a></li>
+		    <li><i><a id="userStatus">You are not logged in. </a><i></li>
+
+		<!-- 
+		Login as seen by  other pages
+		<li onclick="navChange(this)" ><a href="/login">Login<span class="new badge right yellow darken-3"></span></a></li>
+		-->
+
+		
+
+    </ul>
+<main>
+
+	  
+  <div class="row center-align">
+    <div class="col s12 m6">
+      <div class="card indigo ">
+        <div class="card-content white-text">
+          <span class="card-title">Login</span>
+      <div class="center-align">
+        <div class="input-field col s12">
+          <input id="emailInput" type="email" class="validate">
+          <label for="email">Email</label>
+        </div>
+        <div class="input-field col s12">
+          <input id="passwordInput" type="password" class="validate">
+          <label for="password">Password</label>
+        </div>
+      </div>
+	  <p class="unselectable">
+		Warning: If you login as anonymous, some of the features may not work.
+	  </p>
+        </div>
+        <div class="card-action unselectable">
+          <a onclick="signIn()">Login</a>
+		  <a onclick="signInAnonymously()">Continue as anonymous</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+
+	<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+	<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
+
+	<!-- Add Firebase products that you want to use -->
+	<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
+
+    <script type="text/javascript" src="/static/js/materialize.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+        });
+		
+
+		
+		var config = {
+        apiKey: "AIzaSyDQWbidUuP-2zwyCsV9w3ylRnBRi2et_Zk",
+        authDomain: "gsc-gui.firebaseapp.com",
+        databaseURL: "https://gsc-gui.firebaseio.com",
+        storageBucket: "bucket.appspot.com"
+		};
+		firebase.initializeApp(config);
+		function initUser()
+		{
+			NOT_LOGGED="You are not loggin in. Please <u><a href=\"/login\">login</a></u>";
+			LOGGED = "Logged as ";
+			LOGOUT = " <u><a onclick=\"logout()\" href=\"/login\">Logout</a><u>";
+		
+			userStatus = document.getElementById("userStatus");
+			firebase.auth().onAuthStateChanged((user)=>{
+				if(user != null)
+				{
+					if (user.displayName == null)
+					{
+						userStatus.innerHTML = LOGGED + "Anonymous.";
+					}
+					else
+					{
+						userStatus.innerHTML = LOGGED + user.displayName;
+					}
+					userStatus.innerHTML += LOGOUT;
+				}
+				else
+				{
+					userStatus.innerHTML = NOT_LOGGED;
+				}
+				console.log(user);
+			});
+		}
+		initUser();
+		function validateEmail(mail) 
+		{
+		 if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+		  {
+			return (true);
+		  }
+			return (false);
+		}
+		
+		function throwError(e)
+		{
+			alert(e);
+		}
+		
+		function signIn()
+		{
+			var email = document.getElementById("emailInput").value;
+			var password = document.getElementById("passwordInput").value;
+			if (validateEmail(email))
+			{
+				firebase.auth().signInWithEmailAndPassword(email,password).catch(e=>{throwError(e)});
+			}
+			else
+			{
+				throwError("email is not valid");
+			}
+		}
+		function signInAnonymously()
+		{
+			firebase.auth().signInAnonymously();
+		}
+		function logout()
+		{
+			firebase.auth().signOut();
+		}
+    </script>
+</body>
+
+</html>
