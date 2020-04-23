@@ -104,7 +104,7 @@ dumpWeb = "dump.html"
 graphPage = "paramGraph.html"
 graphForm = "graphForm.html"
 commandAcksWeb = "commandAcks.html"
-
+loginWeb = "login.html"
 
 def IPAddrValidate():
     ip = request.remote_addr
@@ -546,6 +546,9 @@ def getDumpNames():
             }
     return dumpTypes
 
+@app.route('/login')
+def loginPage():
+    return render_template(loginWeb)
 
 @app.route('/graphForm')
 def graph():
