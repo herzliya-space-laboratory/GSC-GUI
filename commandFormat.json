@@ -1,0 +1,11 @@
+{
+    "Type": "Telecommand",
+    "Content": {
+        "ST": "value",
+        "SST": "value",
+        "ExecutionTime": "dd/MM/yyyy hh:mm:ss",
+        "Params": {
+            "param": "value"
+        }
+    }
+}
