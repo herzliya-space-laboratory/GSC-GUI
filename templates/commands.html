@@ -10,8 +10,8 @@
     <title>Commands</title>
     <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-	<script type="text/javascript" src="/static/js/materialize.min.js"></script>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="/static/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
     <script src="/static/js/side_bar.js"></script>
@@ -63,11 +63,11 @@
         <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
         <li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
         <li onclick="navChange(this)"><a href="/acks">Acks</a></li>
-		<li onclick="navChange(this)"><a href="/login">Login<span class="badge badge-warning">New</span></a></li>
-		    <li><i><a id="userStatus">You are not logged in. </a><i></li>
+        <li onclick="navChange(this)"><a href="/login">Login<span class="badge badge-warning">New</span></a></li>
+        <li><i><a id="userStatus">You are not logged in. </a><i></li>
 
     </ul>
-<!---->
+    <!---->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/flatly/bootstrap.min.css">
     <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
             class="material-icons">menu</i></a>
@@ -188,9 +188,9 @@
     var datetimeCounter = 0;
     var debug = "{{DEBUG}}";
     console.log("DEBUG: " + debug);
-	
-	var user=null;
-	
+
+    var user = null;
+
     var regex = new RegExp();
     var results = regex.exec(location.search);
     if (results.input.search("packet") != -1) {
@@ -617,11 +617,14 @@
             <option value=198>198 ADCS Miscellaneous Currents</option>
         `
         if (paramName.search("file type") === 0) {
+            let found = false;
             for (const option of dumpType) {
                 if (option.value == placeholder) {
                     option.setAttribute("selected", "selected");
+                    found = true;
                 }
             }
+            if (!found) dumpType[3].setAttribute("selected", "selected");
             inputContainer.appendChild(dumpType);
         }
         else {
@@ -1114,26 +1117,26 @@
         storageBucket: "bucket.appspot.com"
     };
     firebase.initializeApp(config);
-	
-	database = firebase.database();
-	
-	var options = document.getElementById("playlistNameOptions");
-	function loadPlaylists(databaseRef)
-	// Database: firebase.database().ref()
-	{
-		// Get a reference to the database service
-		var options = document.getElementById("playlistNameOptions");
-		databaseRef.once("value", function (snapshot) {
-			snapshot.forEach(function (child) {
-				var option = document.createElement("option");
-				option.innerHTML = child.key;
-				options.appendChild(option);
-			})
-		});
 
-	}
-	loadPlaylists(firebase.database().ref('public'));
-	
+    database = firebase.database();
+
+    var options = document.getElementById("playlistNameOptions");
+    function loadPlaylists(databaseRef)
+    // Database: firebase.database().ref()
+    {
+        // Get a reference to the database service
+        var options = document.getElementById("playlistNameOptions");
+        databaseRef.once("value", function (snapshot) {
+            snapshot.forEach(function (child) {
+                var option = document.createElement("option");
+                option.innerHTML = child.key;
+                options.appendChild(option);
+            })
+        });
+
+    }
+    loadPlaylists(firebase.database().ref('public'));
+
     function objToString(obj) {
         let str = "";
         for (key in obj) {
@@ -1180,7 +1183,7 @@
 
     function getPlaylist(name, root) {
 
-        var playlistPath = database.ref('public/'+name);
+        var playlistPath = database.ref('public/' + name);
         var commandList = document.getElementById("playlistContainer");
         commandList.innerHTML = "<div class=\"row commandsTitle\" value=\"HEADER\"><div class=\"column unselectable\">Command</div><div class=\"column unselectable\">Command number</div></div>";
 
@@ -1220,14 +1223,14 @@
             return;
         }
         // Remove item from database
-        var playlistPath = database.ref('public/'+name);
+        var playlistPath = database.ref('public/' + name);
         playlistPath.remove();
         // Remove item from options
         options.remove();
     }
     function savePlaylist(name, root) {
         console.log("   Name: " + name);
-        var playlistPath = database.ref('public/'+name);
+        var playlistPath = database.ref('public/' + name);
         playlistPath.set({});
         var i = 0;
         while (i < root.children.length && root.children[i].getAttribute("value") != "HEADER") {
@@ -1269,70 +1272,57 @@
         });
     }
 
-function initUser()
-{
-	NOT_LOGGED="You are not loggin in. Please <u><a href=\"/login\">login</a></u>";
-	LOGGED = "Logged as ";
-	LOGOUT = " <u><a onclick=\"logout()\" href=\"/login\">Logout</a><u>";
+    function initUser() {
+        NOT_LOGGED = "You are not loggin in. Please <u><a href=\"/login\">login</a></u>";
+        LOGGED = "Logged as ";
+        LOGOUT = " <u><a onclick=\"logout()\" href=\"/login\">Logout</a><u>";
 
-	userStatus = document.getElementById("userStatus");
-	firebase.auth().onAuthStateChanged((user)=>{
-		if(user != null)
-		{
-			if (user.displayName == null)
-			{
-				userStatus.innerHTML = LOGGED + "Anonymous.";
-			}
-			else
-			{
-				userStatus.innerHTML = LOGGED + user.displayName;
-				loadPlaylists(firebase.database().ref(user.uid));
-			}
-			userStatus.innerHTML += LOGOUT;
-		}
-		else
-		{
-			userStatus.innerHTML = NOT_LOGGED;
-		}
-		console.log(user);
-	});
-}
-initUser();
-function validateEmail(mail) 
-{
- if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
-  {
-	return (true);
-  }
-	return (false);
-}
+        userStatus = document.getElementById("userStatus");
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user != null) {
+                if (user.displayName == null) {
+                    userStatus.innerHTML = LOGGED + "Anonymous.";
+                }
+                else {
+                    userStatus.innerHTML = LOGGED + user.displayName;
+                    loadPlaylists(firebase.database().ref(user.uid));
+                }
+                userStatus.innerHTML += LOGOUT;
+            }
+            else {
+                userStatus.innerHTML = NOT_LOGGED;
+            }
+            console.log(user);
+        });
+    }
+    initUser();
+    function validateEmail(mail) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+            return (true);
+        }
+        return (false);
+    }
 
-function throwError(e)
-{
-	alert(e);
-}
+    function throwError(e) {
+        alert(e);
+    }
 
-function signIn()
-{
-	var email = document.getElementById("emailInput").value;
-	var password = document.getElementById("passwordInput").value;
-	if (validateEmail(email))
-	{
-		firebase.auth().signInWithEmailAndPassword(email,password).catch(e=>{throwError(e)});
-	}
-	else
-	{
-		throwError("email is not valid");
-	}
-}
-function signInAnonymously()
-{
-	firebase.auth().signInAnonymously();
-}
-function logout()
-{
-	firebase.auth().signOut();
-}
+    function signIn() {
+        var email = document.getElementById("emailInput").value;
+        var password = document.getElementById("passwordInput").value;
+        if (validateEmail(email)) {
+            firebase.auth().signInWithEmailAndPassword(email, password).catch(e => { throwError(e) });
+        }
+        else {
+            throwError("email is not valid");
+        }
+    }
+    function signInAnonymously() {
+        firebase.auth().signInAnonymously();
+    }
+    function logout() {
+        firebase.auth().signOut();
+    }
 
 
 </script>
