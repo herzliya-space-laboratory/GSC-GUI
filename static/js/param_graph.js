@@ -1,6 +1,6 @@
 let paramValues = $("#paramData").data("values");
 let paramOptions = $("#paramOptions").data("values");
-let paramName = $("#paramName").data("values");
+let paramName = JSON.parse($("#paramName").data("values").replace(/'/g, '"'));
 let paramUnit = $("#paramUnit").data("values");
 let isLineGraph = $("#isLineGraph").data("values");
 
@@ -12,7 +12,7 @@ paramValues = JSON.parse(paramValues.replace(/'/g, '"'));
 paramOptions = JSON.parse(paramOptions.replace(/'/g, '"'));
 
 let title = document.createElement("title");
-title.innerHTML = paramName;
+title.innerHTML = paramName[0];
 
 
 rangesValidateBool = paramOptions["rangeStart"] == "" && paramOptions["rangeEnd"] == "";
@@ -21,10 +21,30 @@ if (rangesValidateBool) {
   paramOptions["rangeStart"] = null;
   paramOptions["rangeEnd"] = null;
 }
-
-let paramArray = Object.keys(paramValues).map(function (key) {
-  return [key, paramValues[key]];
+let allParamValues = combineParamDicts(paramValues)
+let paramArray = Object.keys(allParamValues).map(function (key) {
+  // return [key, paramValues[key]];
+  return [key, ...allParamValues[key]];
 });
+
+function combineParamDicts(paramArr) {
+  let combined = {};
+  for (let i = 0; i < paramArr.length; i++) {
+    const param = paramArr[i];
+    for (const key of Object.keys(param)) {
+      if (!combined[key]) {
+        combined[key] = [];
+        for (let j = 0; j < paramArr.length; j++) {
+          combined[key].push(undefined);
+        }
+      }
+      if (!isNaN(param[key]))
+        combined[key][i] = +param[key];
+      else combined[key][i] = param[key];
+    }
+  }
+  return combined;
+}
 
 let sortedArr = sortByNewestTime(paramArray);
 sortedArr = addRagensToArray(paramOptions, sortedArr)
@@ -36,7 +56,9 @@ google.charts.setOnLoadCallback(drawGraph);
 function drawGraph() {
   var data = new google.visualization.DataTable();
   data.addColumn("datetime", "Time of dump")
-  data.addColumn("number", `${paramName} [${paramUnit}]`)
+  for (const param of paramName) {
+    data.addColumn("number", `${param} [${paramUnit}]`)
+  }
   data.addColumn("number", "rangeStart")
   data.addColumn("number", "rangeEnd")
 
@@ -51,7 +73,7 @@ function drawGraph() {
     theme: 'material',
     curveType: 'function',
     vAxis: {
-      title: `${paramName} [${paramUnit}]`
+      title: `${paramName[0]} [${paramUnit}]`
     },
     explorer: {
       actions: ['dragToZoom', 'rightClickToReset'],

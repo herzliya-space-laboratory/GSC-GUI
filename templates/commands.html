@@ -1244,6 +1244,11 @@
             var child = root.children[i];
             var id = child.getAttribute("id");
             var value = child.getAttribute("value");
+            if (!value) {
+                alert("Can't save an undefined param")
+                playlistPath.remove();
+                return;
+            }
             var json = {};
             json["id"] = id;
             json["value"] = value;
@@ -1252,7 +1257,11 @@
         var child = root.children[i];
         var id = child.getAttribute("id");
         var value = child.getAttribute("value");
-
+        if (!value) {
+            alert("Can't save an undefined param")
+            playlistPath.remove();
+            return;
+        }
         var json = {};
         json["id"] = id;
         json["value"] = value;

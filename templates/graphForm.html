@@ -60,16 +60,22 @@
             <div class="col s6">
                 <div class="card">
                     <div class="card-content black-text">
-                        <div class="input-field">
-                            <label for="telemName">Telemetry Name</label>
-                            <input type="text" id="telemName" class="autocomplete">
+                        <div id="params">
+                            <div id="param0">
+                                <h6>Param 1:</h6>
+                                <div class="input-field">
+                                    <label for="telemName">Telemetry Name</label>
+                                    <input type="text" id="telemName" class="autocomplete telemName">
+                                </div>
+                                <div class="input-field">
+                                    <p>Parameter Name</p>
+                                    <select id="paramName" class="browser-default paramName">
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-field">
-                            <p>Parameter Name</p>
-                            <select id="paramName" class="browser-default">
-                            </select>
-                        </div>
-
+                        <button class="waves-effect waves-light btn" onclick="addParam()">Add Param</button>
+                        <button class="waves-effect waves-light btn red" onclick="deleteParam()">Delete Param</button>
                         <div class="input-field">
                             <span>Start Date</span>
                             <input type="datetime-local" id="startDate" value="1970-01-01T01:01">
@@ -86,8 +92,7 @@
                         </label>
 
                         <div class="input-field">
-                            <button class="btn"
-                                onclick="searchDumpGraph('telemName', 'paramName', 'isLineGraph')">Go!</button>
+                            <button class="btn" onclick="searchGraph()">Go!</button>
                         </div>
 
                     </div>

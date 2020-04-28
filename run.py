@@ -106,6 +106,7 @@ graphForm = "graphForm.html"
 commandAcksWeb = "commandAcks.html"
 loginWeb = "login.html"
 
+
 def IPAddrValidate():
     ip = request.remote_addr
     if(ip[0:3] == "172" or ip == "127.0.0.1"):
@@ -494,20 +495,21 @@ def dump():
 @app.route('/paramGraph')
 def parameterGraph():
     dumpNames = getDumpNames()
-    st = request.args.get("st")
-    sst = request.args.get("sst")
-    parameterName = request.args.get('paramName')
-    key = str(st) + "-" + str(sst)
+    params = json.loads(request.args.get("params"))
     isLineGraph = request.args.get("isLineGraph")
 
     try:
-        options = getTelemetryOptions(str(st), str(sst))[parameterName]
+        options = getTelemetryOptions(
+            str(params[0]["st"]), str(params[0]["sst"]))[params[0]["paramName"]]
 
     except:
         options = {"rangeStart": "", "rangeEnd": ""}
 
-    paramValues = getParameterFromDirectory(
-        dumpDirNames[key]["path"], parameterName)
+    paramValues = []
+    for param in params:
+        key = str(param['st']) + "-" + str(param["sst"])
+        paramValues.append(getParameterFromDirectory(
+            dumpDirNames[key]["path"], param["paramName"]))
 
     startDate = request.args.get("startDate")
     endDate = request.args.get("endDate")
@@ -518,20 +520,26 @@ def parameterGraph():
     except:
         endDate = datetime.today()
 
-    forDeletion = []
-    for keyDate in paramValues:
-        date = datetime.strptime(keyDate, '%d/%m/%Y %H:%M:%S')
-        if not(startDate <= date <= endDate):
-            forDeletion.append(keyDate)
-    for keyDate in forDeletion:
-        del paramValues[keyDate]
+    for param in paramValues:
+        forDeletion = []
+        for keyDate in param:
+            date = datetime.strptime(keyDate, '%d/%m/%Y %H:%M:%S')
+            if not(startDate <= date <= endDate):
+                forDeletion.append(keyDate)
+        for keyDate in forDeletion:
+            del param[keyDate]
 
+    key = str(params[0]['st']) + "-" + str(params[0]["sst"])
     f = getNewestFileInDir(dumpDirNames[key]["path"])
-    params = getParamsFromCSV(f)
-    units = getUnitsFromCSV(f, params)
-    unit = units[parameterName]
+    paramscsv = getParamsFromCSV(f)
+    units = getUnitsFromCSV(f, paramscsv)
+    unit = units[params[0]["paramName"]]
 
-    return render_template(graphPage, paramData=paramValues, paramOptions=options, paramName=parameterName, paramUnit=unit, isLineGraph=isLineGraph)
+    paramNames = []
+    for param in params:
+        paramNames.append(param["paramName"])
+
+    return render_template(graphPage, paramData=paramValues, paramOptions=options, paramName=paramNames, paramUnit=unit, isLineGraph=isLineGraph)
 
 
 @app.route('/getDumpNames')
@@ -546,9 +554,11 @@ def getDumpNames():
             }
     return dumpTypes
 
+
 @app.route('/login')
 def loginPage():
     return render_template(loginWeb)
+
 
 @app.route('/graphForm')
 def graph():
