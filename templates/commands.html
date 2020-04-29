@@ -48,7 +48,7 @@
 
     <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
         <li class="logo center-align">
-            <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+            <img id="logoImage" src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
         </li>
         <li>
             <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
@@ -118,16 +118,18 @@
                 title="Type in a name">
             <button class="btn"
                 onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
+			<button class="btn" id="savePrivatelyBtn" style="display:none;"
+                onclick="savePlaylistPrivately(document.getElementById('playlistName').value, playlist)">Save privately!<span class="badge badge-warning">New</span></button>
             <button class="btn" onclick="sendPlaylistSteps()">Send Step By Step</button>
             <button data-target="playlsitJson" class="btn modal-trigger">Load Playlist From JSON</button>
 
             <select style="margin-bottom: 16px;" class="select-css" id="playlistNameOptions">
             </select>
-            <button class="btn"
-                onclick="getPlaylist(options.options[options.selectedIndex].innerHTML,playlist)">Get!</button>
+            <button class="btn" hello="world"
+                onclick="getPlaylist(options.options[options.selectedIndex],playlist)">Get!</button>
 
             <button class="btn"
-                onclick="deletePlaylist(options.options[options.selectedIndex].innerHTML)">Delete!</button>
+                onclick="deletePlaylist(options.options[options.selectedIndex])">Delete!</button>
 
             <div class="card indigo darken-1">
                 <div class="card-content white-text">
@@ -189,7 +191,7 @@
     var debug = "{{DEBUG}}";
     console.log("DEBUG: " + debug);
 
-    var user = null;
+    var uid = null;
 
     var regex = new RegExp();
     var results = regex.exec(location.search);
@@ -1121,7 +1123,7 @@
     database = firebase.database();
 
     var options = document.getElementById("playlistNameOptions");
-    function loadPlaylists(databaseRef)
+    function loadPlaylists(databaseRef, additionalText="")
     // Database: firebase.database().ref()
     {
         // Get a reference to the database service
@@ -1129,7 +1131,9 @@
         databaseRef.once("value", function (snapshot) {
             snapshot.forEach(function (child) {
                 var option = document.createElement("option");
-                option.innerHTML = child.key;
+                option.innerHTML = child.key + additionalText;
+				option.setAttribute("name", child.key);
+				option.setAttribute("path", child.getRef().path.toString());
                 options.appendChild(option);
             })
         });
@@ -1181,9 +1185,8 @@
         }
     }
 
-    function getPlaylist(name, root) {
-
-        var playlistPath = database.ref('public/' + name);
+    function getPlaylist(optionItem, root) {
+        var playlistPath = database.ref(optionItem.getAttribute('path'));
         var commandList = document.getElementById("playlistContainer");
         commandList.innerHTML = "<div class=\"row commandsTitle\" value=\"HEADER\"><div class=\"column unselectable\">Command</div><div class=\"column unselectable\">Command number</div></div>";
 
@@ -1218,29 +1221,29 @@
         });
     }
 
-    function deletePlaylist(name, options) {
-        if (!confirm("Are you sure you want to delete '" + name + "' playlist from database?")) {
+    function deletePlaylist(optionItem, options) {
+        if (!confirm("Are you sure you want to delete '" + optionItem.getAttribute('path') + "' playlist from database?")) {
             return;
         }
         // Remove item from database
-        var playlistPath = database.ref('public/' + name);
+        var playlistPath = database.ref(optionItem.getAttribute('path'));
         playlistPath.remove();
         // Remove item from options
         options.remove();
     }
     function savePlaylist(name, root) {
         console.log("   Name: " + name);
-        var playlistPath = database.ref('public/' + name);
+        var playlistPath = database.ref('public/'+name);
         playlistPath.set({});
         var i = 0;
-        while (i < root.children.length && root.children[i].getAttribute("value") != "HEADER") {
-            i++;
+        while(i < root.children.length && root.children[i].getAttribute("value") != "HEADER") {
+            i++; // Count>
         }
         i++;
-        if (root.children.length <= i) {
+        if (root.children.length <= i) { // >
             return;
         }
-        for (; i < root.children.length - 1; i++) {
+        for (; i < root.children.length - 1; i++) { // >
             var child = root.children[i];
             var id = child.getAttribute("id");
             var value = child.getAttribute("value");
@@ -1269,6 +1272,48 @@
         alert("playlist: " + name + " is saved");
     }
 
+	function savePlaylistPrivately(name, root) {
+        console.log("   Name: " + name);
+        var playlistPath = database.ref(uid + '/' + name);
+		console.log("The uid:" + uid);
+        playlistPath.set({});
+        var i = 0;
+        while (i < root.children.length && root.children[i].getAttribute("value") != "HEADER") { // >
+            i++;
+        }
+        i++;
+        if (root.children.length <= i) { // >
+            return;
+        }
+        for (; i < root.children.length - 1; i++) { // >
+            var child = root.children[i];
+            var id = child.getAttribute("id");
+            var value = child.getAttribute("value");
+            if (!value) {
+                alert("Can't save an undefined param")
+                playlistPath.remove();
+                return;
+            }
+            var json = {};
+            json["id"] = id;
+            json["value"] = value;
+            playlistPath.push(json);
+        }
+        var child = root.children[i];
+        var id = child.getAttribute("id");
+        var value = child.getAttribute("value");
+        if (!value) {
+            alert("Can't save an undefined param")
+            playlistPath.remove();
+            return;
+        }
+        var json = {};
+        json["id"] = id;
+        json["value"] = value;
+        playlistPath.push(json);
+        alert("playlist: " + name + " is saved privately");
+    }
+	
     function updatePlaylistNames() {
         var playlistPath = database.ref();
         var commandList = document.getElementById("playlistContainer");
@@ -1280,7 +1325,7 @@
             });
         });
     }
-
+	
     function initUser() {
         NOT_LOGGED = "You are not loggin in. Please <u><a href=\"/login\">login</a></u>";
         LOGGED = "Logged as ";
@@ -1289,13 +1334,22 @@
         userStatus = document.getElementById("userStatus");
         firebase.auth().onAuthStateChanged((user) => {
             if (user != null) {
+				uid = user.uid;
                 if (user.displayName == null) {
                     userStatus.innerHTML = LOGGED + "Anonymous.";
+
                 }
                 else {
                     userStatus.innerHTML = LOGGED + user.displayName;
-                    loadPlaylists(firebase.database().ref(user.uid));
+					if(user.photoURL != null){
+						logoImage = document.getElementById("logoImage");
+						logoImage.setAttribute('src', user.photoURL);
+					}
                 }
+				
+				document.getElementById("savePrivatelyBtn").style="";
+				loadPlaylists(firebase.database().ref(user.uid), " (private)");
+				
                 userStatus.innerHTML += LOGOUT;
             }
             else {

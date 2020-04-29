@@ -42,7 +42,7 @@
 
     <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
         <li style="margin-top: 20px;" class="logo center-align">
-            <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+            <img id="logoImage" src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
         </li>
         <li>
             <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
@@ -71,7 +71,7 @@
 <main>
 
 	  
-  <div class="row center-align">
+  <div id="loginPage"class="row center-align">
     <div class="col s12 m6">
       <div class="card indigo ">
         <div class="card-content white-text">
@@ -126,28 +126,30 @@
         storageBucket: "bucket.appspot.com"
 		};
 		firebase.initializeApp(config);
-		function initUser()
-		{
-			NOT_LOGGED="You are not loggin in. Please <u><a href=\"/login\">login</a></u>";
+		function initUser() {
+			NOT_LOGGED = "You are not loggin in. Please <u><a href=\"/login\">login</a></u>";
 			LOGGED = "Logged as ";
 			LOGOUT = " <u><a onclick=\"logout()\" href=\"/login\">Logout</a><u>";
-		
+
 			userStatus = document.getElementById("userStatus");
-			firebase.auth().onAuthStateChanged((user)=>{
-				if(user != null)
-				{
-					if (user.displayName == null)
-					{
+			firebase.auth().onAuthStateChanged((user) => {
+				if (user != null) {
+					uid = user.uid;
+					if (user.displayName == null) {
 						userStatus.innerHTML = LOGGED + "Anonymous.";
 					}
-					else
-					{
+					else {
 						userStatus.innerHTML = LOGGED + user.displayName;
+						if(user.photoURL != null){
+							logoImage = document.getElementById("logoImage");
+							logoImage.setAttribute('src', user.photoURL);
+						}
 					}
+					loginPage = document.getElementById("loginPage");
+					loginPage.style = "display:None";
 					userStatus.innerHTML += LOGOUT;
 				}
-				else
-				{
+				else {
 					userStatus.innerHTML = NOT_LOGGED;
 				}
 				console.log(user);

@@ -44,7 +44,7 @@
 
     <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
         <li class="logo center-align">
-            <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+            <img id="logoImage" src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
         </li>
         <li>
             <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
@@ -59,6 +59,8 @@
         <li onclick="navChange(this)" class="active"><a href="/logs">Logs</a></li>
         <li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
         <li onclick="navChange(this)"><a href="/acks">Acks</a></li>
+		<li onclick="navChange(this)"><a href="/login">Login<span class="new badge right yellow darken-3"></span></a></li>
+        <li><i><a id="userStatus">You are not logged in. </a><i></li>
 
     </ul>
 
@@ -96,10 +98,52 @@
 
     <script type="text/javascript" src="/static/js/materialize.min.js"></script>
 
+	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
     <script>
         $(document).ready(function () {
             $('.sidenav').sidenav();
         });
+		var config = {
+        apiKey: "AIzaSyDQWbidUuP-2zwyCsV9w3ylRnBRi2et_Zk",
+        authDomain: "gsc-gui.firebaseapp.com",
+        databaseURL: "https://gsc-gui.firebaseio.com",
+        storageBucket: "bucket.appspot.com"
+		};
+		firebase.initializeApp(config);
+		function initUser() {
+			NOT_LOGGED = "You are not loggin in. Please <u><a href=\"/login\">login</a></u>";
+			LOGGED = "Logged as ";
+			LOGOUT = " <u><a onclick=\"logout()\" href=\"/login\">Logout</a><u>";
+
+			userStatus = document.getElementById("userStatus");
+			firebase.auth().onAuthStateChanged((user) => {
+				if (user != null) {
+					uid = user.uid;
+					if (user.displayName == null) {
+						userStatus.innerHTML = LOGGED + "Anonymous.";
+					}
+					else {
+						userStatus.innerHTML = LOGGED + user.displayName;
+						if(user.photoURL != null){
+							logoImage = document.getElementById("logoImage");
+							logoImage.setAttribute('src', user.photoURL);
+						}
+					}
+					userStatus.innerHTML += LOGOUT;
+				}
+				else {
+					userStatus.innerHTML = NOT_LOGGED;
+				}
+				console.log(user);
+			});
+		}
+		initUser();
+		function logout()
+		{
+			firebase.auth().signOut();
+		}
     </script>
 </body>
 
