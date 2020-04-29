@@ -192,6 +192,9 @@ def praseCSV(directory, paramNames, params={}):
 def parseCSVfile(fileName, paramNames):
     if fileName == None:
         return {}
+    if not fileName.endswith('.csv'):
+        print("There is a non-CSV file in the telemetry directory, please delete it!!")
+        print("Path:" + fileName)
 
     params = {}
     f = open(fileName, "r")
@@ -221,6 +224,9 @@ def createLogsDict(eventLogDirectory, erroLogDirectory):
 def getParamsFromCSV(fileName):
     if fileName == None:
         return []
+    if not fileName.endswith('.csv'):
+        print("There is a non-CSV file in the telemetry directory, please delete it!!")
+        print("Path:" + fileName)
 
     f = open(fileName, "r")
 
@@ -239,6 +245,10 @@ def getParamsFromCSV(fileName):
 def parseCSVfileForGraph(fileName, parameterName):
     if fileName == None:
         return None
+
+    if not fileName.endswith('.csv'):
+        print("There is a non-CSV file in the telemetry directory, please delete it!!")
+        print("Path:" + fileName)
 
     f = open(fileName, "r")
 
@@ -280,6 +290,9 @@ def getParameterFromDirectory(directoryName, parameterName):
 def getUnitsFromCSV(fileName, paramNames):
     if fileName == None:
         return {}
+    if not fileName.endswith('.csv'):
+        print("There is a non-CSV file in the telemetry directory, please delete it!!")
+        print("Path:" + fileName)
 
     units = {}
     f = open(fileName, "r")
@@ -287,6 +300,7 @@ def getUnitsFromCSV(fileName, paramNames):
         for i in range(len(paramNames)):
             if line.startswith(paramNames[i]):
                 units[paramNames[i]] = getUnit(line)
+    f.close()
     return units
 
 
