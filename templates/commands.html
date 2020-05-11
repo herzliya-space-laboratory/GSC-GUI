@@ -1233,6 +1233,11 @@
     }
     function savePlaylist(name, root) {
         console.log("   Name: " + name);
+	if(name == "")
+	{
+		alert("Error: name must be not empty");
+		return;
+	}
         var playlistPath = database.ref('public/'+name);
         playlistPath.set({});
         var i = 0;
@@ -1274,6 +1279,11 @@
 
 	function savePlaylistPrivately(name, root) {
         console.log("   Name: " + name);
+	if(name == "")
+	{
+		alert("Error: name must be not empty");
+		return;
+	}
         var playlistPath = database.ref(uid + '/' + name);
 		console.log("The uid:" + uid);
         playlistPath.set({});
