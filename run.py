@@ -62,7 +62,7 @@ except:
 
 f = open(config["mibPath"], "r")
 
-soup = BeautifulSoup(f.read(), "html.parser")
+soup = BeautifulSoup(f.read().lower(), "html.parser")
 commandNames = []
 commandNumbers = []
 paramNames = []
@@ -314,7 +314,7 @@ def getNewestFileInDir(directory):
 def findTelemetryInMIB(serviceType, serviceSubType):
     f = open(config["mibPath"], "r")
 
-    soup = BeautifulSoup(f.read(), "html.parser")
+    soup = BeautifulSoup(f.read().lower(), "html.parser")
 
     sts = soup.find("gscmib").find("telemetry").find_all(
         "servicetype")

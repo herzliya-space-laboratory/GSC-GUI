@@ -118,8 +118,9 @@
                 title="Type in a name">
             <button class="btn"
                 onclick="savePlaylist(document.getElementById('playlistName').value, playlist)">Save!</button>
-			<button class="btn" id="savePrivatelyBtn" style="display:none;"
-                onclick="savePlaylistPrivately(document.getElementById('playlistName').value, playlist)">Save privately!<span class="badge badge-warning">New</span></button>
+            <button class="btn" id="savePrivatelyBtn" style="display:none;"
+                onclick="savePlaylistPrivately(document.getElementById('playlistName').value, playlist)">Save
+                privately!<span class="badge badge-warning">New</span></button>
             <button class="btn" onclick="sendPlaylistSteps()">Send Step By Step</button>
             <button data-target="playlsitJson" class="btn modal-trigger">Load Playlist From JSON</button>
 
@@ -128,8 +129,7 @@
             <button class="btn" hello="world"
                 onclick="getPlaylist(options.options[options.selectedIndex],playlist)">Get!</button>
 
-            <button class="btn"
-                onclick="deletePlaylist(options.options[options.selectedIndex])">Delete!</button>
+            <button class="btn" onclick="deletePlaylist(options.options[options.selectedIndex])">Delete!</button>
 
             <div class="card indigo darken-1">
                 <div class="card-content white-text">
@@ -671,7 +671,7 @@
                     inputContainer.appendChild(charInput);
                     break;
 
-                case ("dateTime"):
+                case ("datetime"):
                     let checked = ''
                     let hours = 0;
                     let mins = 0;
@@ -774,7 +774,7 @@
         for (var i = 0; i < paramTypes[nameIndex].length; i++) {
             generateInput(paramTypes[nameIndex][i], paramNames[nameIndex][i], paramUnits[nameIndex][i], params[paramNames[nameIndex][i]]);
         }
-        generateInput("dateTime", "Execution Time", "sec", packet != null ? JSON.parse(packet).Content.ExecutionTime : "");
+        generateInput("datetime", "Execution Time", "sec", packet != null ? JSON.parse(packet).Content.ExecutionTime : "");
     }
     var e = 0;
     // Setup draggable columns
@@ -1123,7 +1123,7 @@
     database = firebase.database();
 
     var options = document.getElementById("playlistNameOptions");
-    function loadPlaylists(databaseRef, additionalText="")
+    function loadPlaylists(databaseRef, additionalText = "")
     // Database: firebase.database().ref()
     {
         // Get a reference to the database service
@@ -1132,8 +1132,8 @@
             snapshot.forEach(function (child) {
                 var option = document.createElement("option");
                 option.innerHTML = child.key + additionalText;
-				option.setAttribute("name", child.key);
-				option.setAttribute("path", child.getRef().path.toString());
+                option.setAttribute("name", child.key);
+                option.setAttribute("path", child.getRef().path.toString());
                 options.appendChild(option);
             })
         });
@@ -1233,15 +1233,14 @@
     }
     function savePlaylist(name, root) {
         console.log("   Name: " + name);
-	if(name == "")
-	{
-		alert("Error: name must be not empty");
-		return;
-	}
-        var playlistPath = database.ref('public/'+name);
+        if (name == "") {
+            alert("Error: name must be not empty");
+            return;
+        }
+        var playlistPath = database.ref('public/' + name);
         playlistPath.set({});
         var i = 0;
-        while(i < root.children.length && root.children[i].getAttribute("value") != "HEADER") {
+        while (i < root.children.length && root.children[i].getAttribute("value") != "HEADER") {
             i++; // Count>
         }
         i++;
@@ -1277,15 +1276,14 @@
         alert("playlist: " + name + " is saved");
     }
 
-	function savePlaylistPrivately(name, root) {
+    function savePlaylistPrivately(name, root) {
         console.log("   Name: " + name);
-	if(name == "")
-	{
-		alert("Error: name must be not empty");
-		return;
-	}
+        if (name == "") {
+            alert("Error: name must be not empty");
+            return;
+        }
         var playlistPath = database.ref(uid + '/' + name);
-		console.log("The uid:" + uid);
+        console.log("The uid:" + uid);
         playlistPath.set({});
         var i = 0;
         while (i < root.children.length && root.children[i].getAttribute("value") != "HEADER") { // >
@@ -1323,7 +1321,7 @@
         playlistPath.push(json);
         alert("playlist: " + name + " is saved privately");
     }
-	
+
     function updatePlaylistNames() {
         var playlistPath = database.ref();
         var commandList = document.getElementById("playlistContainer");
@@ -1335,7 +1333,7 @@
             });
         });
     }
-	
+
     function initUser() {
         NOT_LOGGED = "You are not loggin in. Please <u><a href=\"/login\">login</a></u>";
         LOGGED = "Logged as ";
@@ -1344,22 +1342,22 @@
         userStatus = document.getElementById("userStatus");
         firebase.auth().onAuthStateChanged((user) => {
             if (user != null) {
-				uid = user.uid;
+                uid = user.uid;
                 if (user.displayName == null) {
                     userStatus.innerHTML = LOGGED + "Anonymous.";
 
                 }
                 else {
                     userStatus.innerHTML = LOGGED + user.displayName;
-					if(user.photoURL != null){
-						logoImage = document.getElementById("logoImage");
-						logoImage.setAttribute('src', user.photoURL);
-					}
+                    if (user.photoURL != null) {
+                        logoImage = document.getElementById("logoImage");
+                        logoImage.setAttribute('src', user.photoURL);
+                    }
                 }
-				
-				document.getElementById("savePrivatelyBtn").style="";
-				loadPlaylists(firebase.database().ref(user.uid), " (private)");
-				
+
+                document.getElementById("savePrivatelyBtn").style = "";
+                loadPlaylists(firebase.database().ref(user.uid), " (private)");
+
                 userStatus.innerHTML += LOGOUT;
             }
             else {
