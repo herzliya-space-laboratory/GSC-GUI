@@ -30,7 +30,7 @@ function generateTableHead(table, param_order) {
     return table
 }
 
-function genarateRowCelles(telem_param, row, param_order){
+function genarateRowCelles(telem_param, row, param_order) {
     for (let param_index = 1; param_index < param_order.length; param_index++) {
         createCell(row, telem_param[param_order[param_index]]);
     }
@@ -65,24 +65,24 @@ function refresh_table(table_params, table_div_id, Color) {
     table_div.appendChild(generateAllTable(head, table_params));
 }
 
-function exportBtnGenerator(){
+function exportBtnGenerator() {
     let exportBtn = document.createElement("button");
-    exportBtn.innerText = "Export table to csv file";
-    exportBtn.className = "btn pink accent-3 white-text waves-effect"   
-    return exportBtn
+    exportBtn.innerText = "Export to csv file";
+    exportBtn.className = "btn pink accent-3 white-text waves-effect"
+    return exportBtn;
 }
 
-function findDate(dateStr, data){
+function findDate(dateStr, data) {
     let dateIndex;
     data.forEach(logAck => {
-        if(logAck["Sat Time"] == dateStr){
+        if (logAck["Sat Time"] == dateStr) {
             dateIndex = data.indexOf(logAck)
         }
     });
     return dateIndex
 }
 
-function getTimes(data){
+function getTimes(data) {
     let timeArr = [];
     data.forEach(logAck => {
         timeArr.push(logAck["Sat Time"])
@@ -91,7 +91,7 @@ function getTimes(data){
     return timeArr
 }
 
-function createOptionArr(selectID, timesArray){
+function createOptionArr(selectID, timesArray) {
     timesArray.forEach(time => {
         let option = document.createElement('option');
         $(option).val(time).html(time)

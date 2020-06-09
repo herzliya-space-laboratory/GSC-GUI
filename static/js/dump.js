@@ -19,14 +19,20 @@ function createCharts() {
     options = JSON.parse(options.replace(/'/g, '"'));
     telemType = JSON.parse(telemType.replace(/'/g, '"'));
 
+
     let charts = initCardElements(card, data);
-    document.getElementById("main").appendChild(row);
+    document.getElementById("main").insertBefore(row,
+        document.getElementById("main").firstChild);
 
     drawCharts(charts, options, data, units);
 
     setInterval(function () {
         updateCharts(charts, options, units, telemType);
     }, 1000);
+
+    $("#exportCsv").click(function () {
+        exportDictToCSV(telemName, data);
+    })
 }
 
 function initCardElements(card, data) {

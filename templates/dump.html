@@ -58,15 +58,20 @@
             class="material-icons">menu</i></a>
 
     <h2 id="title" class="center-align white-text"></h2>
-    <main id="main"></main>
+    <main id="main">
+        <button id="exportCsv" class="btn pink accent-3 white-text waves-effect">Export to csv file</button>
+    </main>
+
     <script type="text/javascript" src="/static/js/materialize.min.js"></script>
 
+    <script src="/static/js/export_csv.js"></script>
     <script src="/static/js/dump.js"></script>
     <script>
         $(document).ready(function () {
             $('.sidenav').sidenav();
         });
     </script>
+
 </body>
 
 </html>
