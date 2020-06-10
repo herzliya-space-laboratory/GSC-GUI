@@ -2,7 +2,7 @@ function downloadCSV(csv, filename) {
     let csvFile;
     let downloadLink;
 
-    csvFile = new Blob([csv], {type: "text/csv"});
+    csvFile = new Blob([csv], { type: "text/csv" });
 
     downloadLink = document.createElement("a");
 
@@ -20,19 +20,30 @@ function downloadCSV(csv, filename) {
 function exportTableToCSV(filename) {
     let csv = [];
     let rows = document.querySelectorAll("table tr");
-    
+
     for (let i = 0; i < rows.length; i++) {
         let row = [], cols = rows[i].querySelectorAll("td, th");
-        
-        for (let j = 0; j < cols.length; j++) 
+
+        for (let j = 0; j < cols.length; j++)
             row.push(cols[j].innerText);
-        
-        csv.push(row.join(","));        
+
+        csv.push(row.join(","));
     }
     downloadCSV(csv.join("\n"), filename);
 }
 
-function getCurrentDate(){
+function exportDictToCSV(name, telem) {
+    let csv = `${name}\nParameter Name,Value\n`;
+    for (const param in telem) {
+        if (telem.hasOwnProperty(param)) {
+            const value = telem[param];
+            csv += `${param},${value}\n`
+        }
+    }
+    downloadCSV(csv, name + ".csv");
+}
+
+function getCurrentDate() {
     let currentDate = new Date();
     let year = currentDate.getFullYear().toString()
     let month = (currentDate.getMonth() + 1).toString()
