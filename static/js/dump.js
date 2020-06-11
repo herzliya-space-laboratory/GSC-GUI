@@ -31,7 +31,8 @@ function createCharts() {
     }, 1000);
 
     $("#exportCsv").click(function () {
-        exportDictToCSV(telemName, data);
+        const num = document.getElementById("numCsv").value;
+        getLatestPackets(num, telemType, telemName);
     })
 }
 
@@ -86,6 +87,16 @@ function updateCharts(charts, options, units, telemType) {
         data: {}
     }).done(function (params) {
         drawCharts(charts, options, params, units);
+    });
+}
+
+function getLatestPackets(num, telemType, telemName) {
+    $.ajax({
+        type: "POST",
+        url: "/getLatestPackets?st=" + telemType["st"] + "&sst=" + telemType["sst"] + "&num=" + num,
+        data: {}
+    }).done(function (params) {
+        exportObjArrToCSV(telemName, params.data);
     });
 }
 

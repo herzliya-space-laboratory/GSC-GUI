@@ -15,6 +15,7 @@ import re
 from datetime import datetime
 import threading
 from os.path import isfile, join
+import heapq
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -311,6 +312,13 @@ def getNewestFileInDir(directory):
     return None
 
 
+def getNewestFilesInDir(directory, num):
+    if len(os.listdir(directory)) > 0:
+        list_of_files = glob.glob(directory + "/*")
+        return heapq.nlargest(num, list_of_files, os.path.getctime)
+    return None
+
+
 def findTelemetryInMIB(serviceType, serviceSubType):
     f = open(config["mibPath"], "r")
 
@@ -504,6 +512,20 @@ def dump():
     units["ground_time"] = "date"
 
     return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType={"st": st, "sst": sst})
+
+
+@app.route('/getLatestPackets', methods=['GET', 'POST'])
+def getLatestParams():
+    num = int(request.args.get('num'))
+    st = request.args.get('st')
+    sst = request.args.get('sst')
+    key = str(st) + "-" + str(sst)
+    fs = getNewestFilesInDir(dumpDirNames[key]["path"], num)
+    params = getParamsFromCSV(fs[0])
+    packets = []
+    for f in fs:
+        packets.insert(0, parseCSVfile(f, params))
+    return {"data": packets}
 
 
 @app.route('/paramGraph')

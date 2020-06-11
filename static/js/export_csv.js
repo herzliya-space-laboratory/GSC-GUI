@@ -42,7 +42,26 @@ function exportDictToCSV(name, telem) {
     }
     downloadCSV(csv, name + ".csv");
 }
+function exportObjArrToCSV(name, arr) {
+    let csv = `${name}\n`;
+    for (const param in arr[0]) {
+        csv += `${param},`
+    }
+    csv = csv.slice(0, -1);
+    csv += "\n";
+    for (const packet of arr) {
+        for (const param in packet) {
+            if (packet.hasOwnProperty(param)) {
+                const value = packet[param];
+                csv += `${value},`
+            }
+        }
+        csv = csv.slice(0, -1);
+        csv += "\n";
+    }
 
+    downloadCSV(csv, name + ".csv");
+}
 function getCurrentDate() {
     let currentDate = new Date();
     let year = currentDate.getFullYear().toString()
