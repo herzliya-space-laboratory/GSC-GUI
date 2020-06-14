@@ -1,8 +1,0 @@
-Packet ID,421
-Packet Ground Date Time,29/10/2019 17:43:38
-Packet Sat Date Time,29/10/2019 18:34:35
-Packet Total Raw Data,D5-0B-00-00-04-00-00-00
-
-Parameter Name,Raw Data,Value,Unit
-log num,D5-0B-00-00,3029,x
-info,04-00-00-00,4,x

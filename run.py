@@ -451,9 +451,10 @@ def commands():
 @app.route('/logs', methods=['GET', 'POST'])
 def logs():
     logCount = request.args.get('sliceNum')
-
+    eventKey = str("13") + "-" + str("49")
+    errKey = str("13") + "-" + str("50")
     logsDict = sortByTime(createLogsDict(
-        config["eventLogsFolderPath"], config["errorLogsFolderPath"]), "Sat Time", False)
+        dumpDirNames[eventKey]["path"], dumpDirNames[errKey]["path"]), "Sat Time", False)
 
     if request.method == "POST":
         if logCount == "" or logCount == None:
@@ -470,7 +471,8 @@ def logs():
 @app.route('/')
 @app.route('/beacon', methods=['GET', 'POST'])
 def beacon():
-    latestFile = getNewestFileInDir(config["beaconFolderPath"])
+    key = str("3") + "-" + str("25")
+    latestFile = getNewestFileInDir(dumpDirNames[key]["path"])
     params = getParamsFromCSV(latestFile)
     data = parseCSVfile(latestFile, params)
     if request.method == "POST":
