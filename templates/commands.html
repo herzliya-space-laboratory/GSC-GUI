@@ -134,7 +134,7 @@
             <div class="card indigo darken-1">
                 <div class="card-content white-text">
                     <span class="card-title">Control Panel</span>
-                    <button class="btn" id="dummyFunc" onclick="">Send dummy funcs</button>
+                    <button class="btn" id="dummyFunc" onclick="sendDummyFuncs()">Send dummy funcs</button>
                     <p>How many Dummy Funcs?</p>
                     <input type="number" id="dummyFuncNum" min="1" max="255" value="1" class="white-text">
                     <p>Select EndNode</p>
@@ -504,7 +504,7 @@
         }
     });
 
-    function sendDummyFuncs(st, sst) {
+    function sendDummyFuncs() {
         const howMany = document.getElementById("dummyFuncNum").value;
 
         for (let i = 0; i < howMany; i++) {
