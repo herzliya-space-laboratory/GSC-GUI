@@ -1,0 +1,4 @@
+ST-13 SST-49 general - log events
+ST-13 SST-50 general - log errors
+ST-13 SST-90 general - ack
+ST-3 SST-25 global param - beacon
