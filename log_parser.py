@@ -10,6 +10,8 @@ config = json.loads(config)
 # Recieves log number, and check the relevant subsystem by a defined offset
 # The delta remained is the log by the sybsystem
 # =============================================================================
+
+
 def EventLogParser(input_number):
     log_eps = [
         'EPS_ENTER_FULL_MODE',
@@ -479,7 +481,7 @@ def ParseLogFile(path, logFileParsingFunction):
         output = logFileParsingFunction(log_type)
         output.append(log_data)
     except:
-         pass #print("-E-\t Error ("") at file: "+path)
+        pass  # print("-E-\t Error ("") at file: "+path)
     else:
         if None in output:
             output = None
@@ -513,7 +515,7 @@ def GetGroundTime(file_name):
 
 
 def getColor(directory):
-    if directory == config["eventLogsFolderPath"]:
+    if directory == config["telemetryFolderPath"] + "ST-13 SST-49 general - log events":
         return "blue white-text"
     return "red white-text"
 
