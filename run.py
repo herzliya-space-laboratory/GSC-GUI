@@ -424,6 +424,7 @@ def sendPacket(params):
         time.sleep(0.1)
 
 
+@app.route('/')
 @app.route('/commands', methods=['GET', 'POST'])
 def commands():
     global s
@@ -468,7 +469,6 @@ def logs():
     return render_template(logsWeb, logParams=logsDict[len(logsDict) - 1:])
 
 
-@app.route('/')
 @app.route('/beacon', methods=['GET', 'POST'])
 def beacon():
     key = str("3") + "-" + str("25")
