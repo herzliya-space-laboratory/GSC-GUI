@@ -11,25 +11,24 @@ import time
 import glob
 import log_parser
 import re
-
-# import webbrowser
+#import webbrowser
 from datetime import datetime
 import threading
 from os.path import isfile, join
 import heapq
 
-"""
+'''
 Error 10: Unable to parse integer fro telemetry
-"""
+'''
 
 import socket
 import logging
 
-log = logging.getLogger("werkzeug")
+log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
-with open("config.json", "r") as file:
-    config = file.read().replace("\n", "")
+with open('config.json', 'r') as file:
+    config = file.read().replace('\n', '')
 config = json.loads(config)
 
 TCP_IP = config["baseIP"]
@@ -89,7 +88,8 @@ for serType in commands.find_all("servicetype"):
         paramTypes.append(types)
         paramUnits.append(units)
         commandNames.append(subtypeName)
-        commandNumbers.append(repr((int(typeVal), subtypeValue)).replace(" ", ""))
+        commandNumbers.append(
+            repr((int(typeVal), subtypeValue)).replace(" ", ""))
 
 f.close()
 
@@ -110,7 +110,7 @@ loginWeb = "login.html"
 
 def IPAddrValidate():
     ip = request.remote_addr
-    if ip[0:3] == "172" or ip == "127.0.0.1":
+    if(ip[0:3] == "172" or ip == "127.0.0.1"):
         print(ip + " is Allowed to connect")
         return True
     print(ip + " is not allowed to connect")
@@ -118,7 +118,7 @@ def IPAddrValidate():
 
 
 def is_number(s):
-    """Finds out if string is a number"""
+    '''Finds out if string is a number'''
     try:
         float(s)
         return True
@@ -146,7 +146,7 @@ def findAll(itemList, item):
 
 
 def getParam(line):
-    """Take last number from line"""
+    '''Take last number from line'''
     line = line.replace("\n", "")
     line = line.split(",")
     param = line[2]
@@ -167,18 +167,16 @@ def getUnit(line):
 def sortByTime(data, paramName, isReverse):
     sortedArray = sorted(
         data,
-        key=lambda x: datetime.strptime(x[paramName], "%d/%m/%Y %H:%M:%S"),
-        reverse=isReverse,
-    )
+        key=lambda x: datetime.strptime(x[paramName], '%d/%m/%Y %H:%M:%S'), reverse=isReverse)
 
     return sortedArray
 
 
 def praseCSV(directory, paramNames, params={}):
-    """For each file, find param name and append it to param dictionary."""
+    '''For each file, find param name and append it to param dictionary.'''
     names = os.listdir(directory)
     for name in names:
-        f = open(directory + "/" + name, "r")
+        f = open(directory + "/"+name, "r")
         for line in f:
             for i in range(len(paramNames)):
                 if line.startswith(paramNames[i]):
@@ -195,7 +193,7 @@ def praseCSV(directory, paramNames, params={}):
 def parseCSVfile(fileName, paramNames):
     if fileName == None:
         return {}
-    if not fileName.endswith(".csv"):
+    if not fileName.endswith('.csv'):
         print("There is a non-CSV file in the telemetry directory, please delete it!!")
         print("Path:" + fileName)
 
@@ -218,18 +216,16 @@ def parseCSVfile(fileName, paramNames):
 
 def createLogsDict(eventLogDirectory, erroLogDirectory):
     logsDict = log_parser.ParseAllLogFilesInDirectory(
-        eventLogDirectory, log_parser.EventLogParser
-    )
+        eventLogDirectory, log_parser.EventLogParser)
     errorlogsDict = log_parser.ParseAllLogFilesInDirectory(
-        erroLogDirectory, log_parser.ErrorLogParser
-    )
+        erroLogDirectory, log_parser.ErrorLogParser)
     return logsDict + errorlogsDict
 
 
 def getParamsFromCSV(fileName):
     if fileName == None:
         return []
-    if not fileName.endswith(".csv"):
+    if not fileName.endswith('.csv'):
         print("There is a non-CSV file in the telemetry directory, please delete it!!")
         print("Path:" + fileName)
 
@@ -241,13 +237,7 @@ def getParamsFromCSV(fileName):
         if match != None:
             param = match.group(1)
 
-        if (
-            param != "Packet ID"
-            and param != "Packet Ground Date Time"
-            and param != "Packet Sat Date Time"
-            and param != "Packet Total Raw Data"
-            and param != "Parameter Name"
-        ):
+        if param != 'Packet ID' and param != 'Packet Ground Date Time' and param != 'Packet Sat Date Time' and param != 'Packet Total Raw Data' and param != 'Parameter Name':
             params.append(param)
 
     return params
@@ -257,7 +247,7 @@ def parseCSVfileForGraph(fileName, parameterName):
     if fileName == None:
         return None
 
-    if not fileName.endswith(".csv"):
+    if not fileName.endswith('.csv'):
         print("There is a non-CSV file in the telemetry directory, please delete it!!")
         print("Path:" + fileName)
 
@@ -277,7 +267,7 @@ def parseCSVfileForGraph(fileName, parameterName):
 
 
 def getParamForGraph(line):
-    """Take last number from line"""
+    '''Take last number from line'''
     line = line.replace("\n", "")
     line = line.split(",")
     param = line[2]
@@ -292,7 +282,8 @@ def getParameterFromDirectory(directoryName, parameterName):
     for name in names:
         fileName = directoryName + "/" + name
         satTime = parseCSVfileForGraph(fileName, "Packet Sat Date Time")
-        paramFromDirectory[satTime] = parseCSVfileForGraph(fileName, parameterName)
+        paramFromDirectory[satTime] = parseCSVfileForGraph(
+            fileName, parameterName)
 
     return paramFromDirectory
 
@@ -300,7 +291,7 @@ def getParameterFromDirectory(directoryName, parameterName):
 def getUnitsFromCSV(fileName, paramNames):
     if fileName == None:
         return {}
-    if not fileName.endswith(".csv"):
+    if not fileName.endswith('.csv'):
         print("There is a non-CSV file in the telemetry directory, please delete it!!")
         print("Path:" + fileName)
 
@@ -333,12 +324,13 @@ def findTelemetryInMIB(serviceType, serviceSubType):
 
     soup = BeautifulSoup(f.read().lower(), "html.parser")
 
-    sts = soup.find("gscmib").find("telemetry").find_all("servicetype")
+    sts = soup.find("gscmib").find("telemetry").find_all(
+        "servicetype")
 
     for st in sts:
-        if st["value"] == serviceType:
+        if st['value'] == serviceType:
             for sst in st.find_all("servicesubtype"):
-                if sst["value"] == serviceSubType:
+                if sst['value'] == serviceSubType:
                     return sst
 
     return None
@@ -386,7 +378,7 @@ def getTelemetryOptions(serviceType, serviceSubType):
                 # "min": minAndMax["min"],
                 # "max": minAndMax["max"],
                 "rangeStart": int(param["rangestart"]),
-                "rangeEnd": int(param["rangeend"]),
+                "rangeEnd": int(param["rangeend"])
             }
         except:
             options[param["name"].lower()] = ""
@@ -410,7 +402,10 @@ def parseDumpDirNames(dirs, path):
             sst = parsedName[2]
             name = parsedName[3]
 
-            dumpNames[st + "-" + sst] = {"name": name, "path": path + d}
+            dumpNames[st + "-" + sst] = {
+                "name": name,
+                "path": path + d
+            }
         except:
             pass
 
@@ -429,8 +424,8 @@ def sendPacket(params):
         time.sleep(0.1)
 
 
-@app.route("/")
-@app.route("/commands", methods=["GET", "POST"])
+@app.route('/')
+@app.route('/commands', methods=['GET', 'POST'])
 def commands():
     global s
 
@@ -451,40 +446,30 @@ def commands():
         else:
             return "{}", 401
 
-    return render_template(
-        commandsWeb,
-        commandNames=commandNames,
-        commandNumbers=commandNumbers,
-        paramNames=paramNames,
-        paramTypes=paramTypes,
-        paramUnits=paramUnits,
-    )
+    return render_template(commandsWeb, commandNames=commandNames, commandNumbers=commandNumbers, paramNames=paramNames, paramTypes=paramTypes, paramUnits=paramUnits)
 
 
-@app.route("/logs", methods=["GET", "POST"])
+@app.route('/logs', methods=['GET', 'POST'])
 def logs():
-    logCount = request.args.get("sliceNum")
+    logCount = request.args.get('sliceNum')
     eventKey = str("13") + "-" + str("49")
     errKey = str("13") + "-" + str("50")
-    logsDict = sortByTime(
-        createLogsDict(dumpDirNames[eventKey]["path"], dumpDirNames[errKey]["path"]),
-        "Sat Time",
-        False,
-    )
+    logsDict = sortByTime(createLogsDict(
+        dumpDirNames[eventKey]["path"], dumpDirNames[errKey]["path"]), "Sat Time", False)
 
     if request.method == "POST":
         if logCount == "" or logCount == None:
-            logCount = "1"
+            logCount = '1'
 
         elif int(logCount) > len(logsDict):
             logCount = len(logsDict)
 
-        return json.dumps(logsDict[len(logsDict) - int(logCount) :])
+        return json.dumps(logsDict[len(logsDict) - int(logCount):])
 
-    return render_template(logsWeb, logParams=logsDict[len(logsDict) - 1 :])
+    return render_template(logsWeb, logParams=logsDict[len(logsDict) - 1:])
 
 
-@app.route("/beacon", methods=["GET", "POST"])
+@app.route('/beacon', methods=['GET', 'POST'])
 def beacon():
     key = str("3") + "-" + str("25")
     latestFile = getNewestFileInDir(dumpDirNames[key]["path"])
@@ -493,34 +478,27 @@ def beacon():
     if request.method == "POST":
         return data
 
-    paramOptions = getTelemetryOptions("3", "25")
-    dispOrder = getParameterSubSystems("3", "25")
-    readableNames = getParameterReadableNames("3", "25")
+    paramOptions = getTelemetryOptions('3', '25')
+    dispOrder = getParameterSubSystems('3', '25')
+    readableNames = getParameterReadableNames('3', '25')
     readableNames["sat_time"] = "Satellite Time"
     readableNames["ground_time"] = "Ground Time"
     beaconUnits = getUnitsFromCSV(latestFile, params)
     beaconUnits["sat_time"] = "date"
     beaconUnits["ground_time"] = "date"
 
-    return render_template(
-        beaconWeb,
-        beacon=data,
-        units=beaconUnits,
-        options=paramOptions,
-        dispOrder=dispOrder,
-        readableNames=readableNames,
-    )
+    return render_template(beaconWeb, beacon=data, units=beaconUnits, options=paramOptions, dispOrder=dispOrder, readableNames=readableNames)
 
 
-@app.route("/play")
+@app.route('/play')
 def palyground():
     return render_template(playground)
 
 
-@app.route("/dump", methods=["GET", "POST"])
+@app.route('/dump', methods=['GET', 'POST'])
 def dump():
-    st = request.args.get("st")
-    sst = request.args.get("sst")
+    st = request.args.get('st')
+    sst = request.args.get('sst')
 
     key = str(st) + "-" + str(sst)
     f = getNewestFileInDir(dumpDirNames[key]["path"])
@@ -535,21 +513,14 @@ def dump():
     units["sat_time"] = "date"
     units["ground_time"] = "date"
 
-    return render_template(
-        dumpWeb,
-        data=data,
-        units=units,
-        options=options,
-        telemName=dumpDirNames[key]["name"],
-        telemType={"st": st, "sst": sst},
-    )
+    return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType={"st": st, "sst": sst})
 
 
-@app.route("/getLatestPackets", methods=["GET", "POST"])
+@app.route('/getLatestPackets', methods=['GET', 'POST'])
 def getLatestParams():
-    num = int(request.args.get("num"))
-    st = request.args.get("st")
-    sst = request.args.get("sst")
+    num = int(request.args.get('num'))
+    st = request.args.get('st')
+    sst = request.args.get('sst')
     key = str(st) + "-" + str(sst)
     fs = getNewestFilesInDir(dumpDirNames[key]["path"], num)
     params = getParamsFromCSV(fs[0])
@@ -559,46 +530,44 @@ def getLatestParams():
     return {"data": packets}
 
 
-@app.route("/paramGraph")
+@app.route('/paramGraph')
 def parameterGraph():
     dumpNames = getDumpNames()
     params = json.loads(request.args.get("params"))
     isLineGraph = request.args.get("isLineGraph")
 
     try:
-        options = getTelemetryOptions(str(params[0]["st"]), str(params[0]["sst"]))[
-            params[0]["paramName"]
-        ]
+        options = getTelemetryOptions(
+            str(params[0]["st"]), str(params[0]["sst"]))[params[0]["paramName"]]
 
     except:
         options = {"rangeStart": "", "rangeEnd": ""}
 
     paramValues = []
     for param in params:
-        key = str(param["st"]) + "-" + str(param["sst"])
-        paramValues.append(
-            getParameterFromDirectory(dumpDirNames[key]["path"], param["paramName"])
-        )
+        key = str(param['st']) + "-" + str(param["sst"])
+        paramValues.append(getParameterFromDirectory(
+            dumpDirNames[key]["path"], param["paramName"]))
 
     startDate = request.args.get("startDate")
     endDate = request.args.get("endDate")
-    startDate = datetime.strptime(startDate, "%d/%m/%Y %H:%M")
+    startDate = datetime.strptime(startDate, '%d/%m/%Y %H:%M')
 
     try:
-        endDate = datetime.strptime(endDate, "%d/%m/%Y %H:%M")
+        endDate = datetime.strptime(endDate, '%d/%m/%Y %H:%M')
     except:
         endDate = datetime.today()
 
     for param in paramValues:
         forDeletion = []
         for keyDate in param:
-            date = datetime.strptime(keyDate, "%d/%m/%Y %H:%M:%S")
-            if not (startDate <= date <= endDate):
+            date = datetime.strptime(keyDate, '%d/%m/%Y %H:%M:%S')
+            if not(startDate <= date <= endDate):
                 forDeletion.append(keyDate)
         for keyDate in forDeletion:
             del param[keyDate]
 
-    key = str(params[0]["st"]) + "-" + str(params[0]["sst"])
+    key = str(params[0]['st']) + "-" + str(params[0]["sst"])
     f = getNewestFileInDir(dumpDirNames[key]["path"])
     paramscsv = getParamsFromCSV(f)
     units = getUnitsFromCSV(f, paramscsv)
@@ -608,37 +577,33 @@ def parameterGraph():
     for param in params:
         paramNames.append(param["paramName"])
 
-    return render_template(
-        graphPage,
-        paramData=paramValues,
-        paramOptions=options,
-        paramName=paramNames,
-        paramUnit=unit,
-        isLineGraph=isLineGraph,
-    )
+    return render_template(graphPage, paramData=paramValues, paramOptions=options, paramName=paramNames, paramUnit=unit, isLineGraph=isLineGraph)
 
 
-@app.route("/getDumpNames")
+@app.route('/getDumpNames')
 def getDumpNames():
     dumpTypes = {}
     for key in dumpDirNames:
         if len(os.listdir(dumpDirNames[key]["path"])) != 0:
             split = key.split("-")
-            dumpTypes[dumpDirNames[key]["name"]] = {"st": split[0], "sst": split[1]}
+            dumpTypes[dumpDirNames[key]["name"]] = {
+                "st": split[0],
+                "sst": split[1]
+            }
     return dumpTypes
 
 
-@app.route("/login")
+@app.route('/login')
 def loginPage():
     return render_template(loginWeb)
 
 
-@app.route("/graphForm")
+@app.route('/graphForm')
 def graph():
     return render_template(graphForm)
 
 
-@app.route("/getTelemParams")
+@app.route('/getTelemParams')
 def getTelemParams():
     st = request.args.get("st")
     sst = request.args.get("sst")
@@ -649,7 +614,7 @@ def getTelemParams():
     return {"params": params}
 
 
-@app.route("/getAcks")
+@app.route('/getAcks')
 def getAcks():
     global numOfAcks
     newNumOfAcks = len(os.listdir(dumpDirNames["13-90"]["path"]))
@@ -674,7 +639,7 @@ def getEndNode():
     # return {"endNodes": [{"Name": "blabla", "Id": "3"}, {"Name": "System.Object", "Id": "2"}, {"Name": "Sscdc", "Id": "4"}]}
 
 
-@app.route("/acks", methods=["GET", "POST"])
+@app.route('/acks', methods=['GET', 'POST'])
 def commandAcks():
     global commandIds
     ackDirPath = dumpDirNames["13-90"]["path"]
@@ -713,9 +678,8 @@ def commandAcks():
     return render_template(commandAcksWeb, acksList={"Content": acks})
 
 
-dumpDirNames = parseDumpDirNames(
-    getSubDirs(config["telemetryFolderPath"]), config["telemetryFolderPath"]
-)
+dumpDirNames = parseDumpDirNames(getSubDirs(
+    config["telemetryFolderPath"]), config["telemetryFolderPath"])
 numOfAcks = len(os.listdir(dumpDirNames["13-90"]["path"]))
 
 
@@ -759,12 +723,10 @@ def dealWithGSCres(res):
         print("Got from GSC: " + str(packet))
         if packet["Type"] == "SystemAck":
             print("Got ack")
-            commandIds.append(
-                {
-                    "Id": packet["Content"],
-                    "TimeSent": datetime.today().strftime("%d/%m/%Y %H:%M:%S"),
-                }
-            )
+            commandIds.append({
+                "Id": packet["Content"],
+                "TimeSent": datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+            })
         elif packet["Type"] == "EndNodes":
             print("Endnode change")
             endNodes = packet["Content"]
@@ -798,7 +760,7 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-app.run(debug=config["debugMode"], host="0.0.0.0")
+app.run(debug=config["debugMode"], host='0.0.0.0')
 
 # I'm Alon Grossman and I have scribbled on the GSC-GUI code
 
