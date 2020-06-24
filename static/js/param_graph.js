@@ -115,7 +115,7 @@ function dateParser(date_str) {
 	date = date_str[0].split("/");
 	base_str_date = date[2] + "-" + date[1] + "-" + date[0];
 	timestr = date_str[1].split(":");
-	timestr[0].padStart(2, "0");
+	timestr[0] = timestr[0].padStart(2, "0");
 	base_hour_str = "T" + timestr.join(":");
 	return new Date(base_str_date + base_hour_str);
 }
