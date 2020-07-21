@@ -70,9 +70,9 @@ paramNames = []
 paramTypes = []
 paramUnits = []
 
-commands = soup.find("gscmib").find("telecommands")
+xmlcommands = soup.find("gscmib").find("telecommands")
 
-for serType in commands.find_all("servicetype"):
+for serType in xmlcommands.find_all("servicetype"):
     typeVal = serType.get("value")
     for subtype in serType.find_all("servicesubtype"):
         subtypeName = subtype.get("name")
@@ -201,9 +201,9 @@ def parseCSVfile(fileName, paramNames):
     f = open(fileName, "r")
     for line in f:
         if line.startswith("Packet Ground Date Time"):
-            params["ground_time"] = line.split(",")[-1].replace("\n", "")
+            groundTime = line.split(",")[-1].replace("\n", "")
         elif line.startswith("Packet Sat Date Time"):
-            params["sat_time"] = line.split(",")[-1].replace("\n", "")
+            satTime = line.split(",")[-1].replace("\n", "")
 
         for i in range(len(paramNames)):
             if line.startswith(paramNames[i]):
@@ -211,6 +211,9 @@ def parseCSVfile(fileName, paramNames):
                 if is_number(paramVal):
                     paramVal = float(paramVal)
                 params[paramNames[i]] = paramVal
+    params["ground_time"] = groundTime
+    params["sat_time"] = satTime
+
     return params
 
 
@@ -504,7 +507,7 @@ def dump():
     f = getNewestFileInDir(dumpDirNames[key]["path"])
     params = getParamsFromCSV(f)
     data = parseCSVfile(f, params)
-
+    
     if request.method == "POST":
         return data
 
@@ -512,7 +515,7 @@ def dump():
     units = getUnitsFromCSV(f, params)
     units["sat_time"] = "date"
     units["ground_time"] = "date"
-
+    
     return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType={"st": st, "sst": sst})
 
 
@@ -527,7 +530,8 @@ def getLatestParams():
     packets = []
     for f in fs:
         packets.insert(0, parseCSVfile(f, params))
-    return {"data": packets}
+    
+    return json.dumps(packets)
 
 
 @app.route('/paramGraph')
