@@ -1,79 +1,118 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<link
+			rel="icon"
+			type="image"
+			href="{{ url_for('static',filename='icon.png') }}"
+		/>
+		<script
+			type="text/javascript"
+			src="/static/js/jquery-3.4.1.min.js"
+		></script>
+		<link
+			type="text/css"
+			rel="stylesheet"
+			href="/static/css/materialize.min.css"
+			media="screen,projection"
+		/>
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
+		<meta name="jinData" content="{{ data }}" />
+		<meta name="jinUnits" content="{{ units }}" />
+		<meta name="jinOptions" content="{{ options }}" />
+		<meta name="jinTelemType" content="{{ telemType }}" />
+		<meta name="jinTelemName" content="{{ telemName }}" />
+		<style>
+			header,
+			main,
+			footer {
+				padding-left: 315px;
+			}
 
-<head>
-    <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
-    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css" media="screen,projection" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <meta name="jinData" content="{{ data }}" />
-    <meta name="jinUnits" content="{{ units }}" />
-    <meta name="jinOptions" content="{{ options }}" />
-    <meta name="jinTelemType" content="{{ telemType }}" />
-    <meta name="jinTelemName" content="{{ telemName }}" />
-    <style>
-        header,
-        main,
-        footer {
-            padding-left: 315px;
-        }
+			@media only screen and (max-width: 992px) {
+				header,
+				main,
+				footer {
+					padding-left: 0;
+				}
+			}
 
-        @media only screen and (max-width : 992px) {
+			::placeholder {
+				color: #fff;
+			}
+		</style>
+		<script src="/static/js/side_bar.js"></script>
+	</head>
 
-            header,
-            main,
-            footer {
-                padding-left: 0;
-            }
-        }
+	<body class="indigo darken-1">
+		<ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
+			<li class="logo center-align">
+				<img
+					src="/static/logo/logo.png"
+					class="brand-logo"
+					height="200"
+					width="200"
+				/>
+			</li>
+			<li><h6 id="satName" class="center"></h6></li>
+			<li>
+				<div
+					style="margin-left: 30px; margin-right: 30px;"
+					class="input-field"
+				>
+					<input
+						id="dump-seacrh"
+						placeholder="Telemetry Name"
+						class="autocomplete"
+					/>
+					<label for="dump-seacrh" class="active">Dump</label>
+					<a
+						class="waves-effect waves-light btn-small"
+						onclick="searchDump('dump-seacrh')"
+						><i class="material-icons left">search</i> Search
+						Dump</a
+					>
+				</div>
+			</li>
+			<li onclick="navChange(this)"><a href="/commands">Commands</a></li>
+			<li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
+			<li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+			<li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
+			<li onclick="navChange(this)"><a href="/acks">Acks</a></li>
+		</ul>
+		<a
+			href="#"
+			data-target="slide-out"
+			class="sidenav-trigger btn-floating btn-large"
+			><i class="material-icons">menu</i></a
+		>
 
-        ::placeholder {
-            color: #fff;
-        }
-    </style>
-    <script src="/static/js/side_bar.js"></script>
-</head>
+		<h2 id="title" class="center-align white-text"></h2>
+		<main id="main">
+			<p>How many to download?</p>
+			<input type="number" id="numCsv" value="1" class="white-text" />
+			<button
+				id="exportCsv"
+				class="btn pink accent-3 white-text waves-effect"
+			>
+				Export to csv file
+			</button>
+		</main>
 
-<body class="indigo darken-1">
+		<script
+			type="text/javascript"
+			src="/static/js/materialize.min.js"
+		></script>
 
-    <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
-        <li class="logo center-align">
-            <img src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
-        </li>
-        <li>
-            <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
-                <input id="dump-seacrh" placeholder="Telemetry Name" class="autocomplete">
-                <label for="dump-seacrh" class="active">Dump</label>
-                <a class="waves-effect waves-light btn-small" onclick="searchDump('dump-seacrh')"><i
-                        class="material-icons left">search</i> Search Dump</a>
-            </div>
-        </li>
-        <li onclick="navChange(this)"><a href="/commands">Commands</a></li>
-        <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
-        <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
-        <li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
-        <li onclick="navChange(this)"><a href="/acks">Acks</a></li>
-    </ul>
-    <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
-            class="material-icons">menu</i></a>
-
-    <h2 id="title" class="center-align white-text"></h2>
-    <main id="main">
-        <p>How many to download?</p>
-        <input type="number" id="numCsv" value="1" class="white-text">
-        <button id="exportCsv" class="btn pink accent-3 white-text waves-effect">Export to csv file</button>
-    </main>
-
-    <script type="text/javascript" src="/static/js/materialize.min.js"></script>
-
-    <script src="/static/js/export_csv.js"></script>
-    <script src="/static/js/dump.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.sidenav').sidenav();
-        });
-    </script>
-
-</body>
-
+		<script src="/static/js/export_csv.js"></script>
+		<script src="/static/js/dump.js"></script>
+		<script>
+			$(document).ready(function () {
+				$(".sidenav").sidenav();
+			});
+		</script>
+	</body>
 </html>

@@ -681,6 +681,10 @@ def commandAcks():
         return {"Content": acks}
     return render_template(commandAcksWeb, acksList={"Content": acks})
 
+@app.route("/satName", methods=["GET", "POST"])
+def getSatName():
+    return config["satName"]
+
 
 dumpDirNames = parseDumpDirNames(getSubDirs(
     config["telemetryFolderPath"]), config["telemetryFolderPath"])
