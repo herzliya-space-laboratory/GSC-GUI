@@ -1,6 +1,10 @@
 {
 	"telemetryFolderPath": "D:\\GSC-Base-AlternativeStorage\\Telemetry\\",
 	"mibPath": "D:\\GSC-Base\\HSL.GSC.Base\\bin\\Debug\\MissionInformation\\MIB.xml",
+	"beaconId": {
+		"st": "3",
+		"sst": "25"
+	},
 	"satName": "sat",
 	"baseIP": "127.0.0.1",
 	"basePort": 61015,

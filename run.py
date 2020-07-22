@@ -474,16 +474,18 @@ def logs():
 
 @app.route('/beacon', methods=['GET', 'POST'])
 def beacon():
-    key = str("3") + "-" + str("25")
+    st = config["beaconId"]["st"]
+    sst = config["beaconId"]["sst"]
+    key = st + "-" + sst
     latestFile = getNewestFileInDir(dumpDirNames[key]["path"])
     params = getParamsFromCSV(latestFile)
     data = parseCSVfile(latestFile, params)
     if request.method == "POST":
         return data
 
-    paramOptions = getTelemetryOptions('3', '25')
-    dispOrder = getParameterSubSystems('3', '25')
-    readableNames = getParameterReadableNames('3', '25')
+    paramOptions = getTelemetryOptions(st, sst)
+    dispOrder = getParameterSubSystems(st, sst)
+    readableNames = getParameterReadableNames(st, sst)
     readableNames["sat_time"] = "Satellite Time"
     readableNames["ground_time"] = "Ground Time"
     beaconUnits = getUnitsFromCSV(latestFile, params)
