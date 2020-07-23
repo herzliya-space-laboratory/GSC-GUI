@@ -492,7 +492,7 @@ def beacon():
     beaconUnits["sat_time"] = "date"
     beaconUnits["ground_time"] = "date"
 
-    return render_template(beaconWeb, beacon=data, units=beaconUnits, options=paramOptions, dispOrder=dispOrder, readableNames=readableNames)
+    return render_template(beaconWeb, beacon=json.dumps(data), units=json.dumps(beaconUnits), options=json.dumps(paramOptions), dispOrder=json.dumps(dispOrder), readableNames=json.dumps(readableNames))
 
 
 @app.route('/play')
@@ -518,7 +518,7 @@ def dump():
     units["sat_time"] = "date"
     units["ground_time"] = "date"
     
-    return render_template(dumpWeb, data=data, units=units, options=options, telemName=dumpDirNames[key]["name"], telemType={"st": st, "sst": sst})
+    return render_template(dumpWeb, data=json.dumps(data), units=json.dumps(units), options=json.dumps(options), telemName=json.dumps(dumpDirNames[key]["name"]), telemType=json.dumps({"st": st, "sst": sst}))
 
 
 @app.route('/getLatestPackets', methods=['GET', 'POST'])

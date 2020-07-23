@@ -14,10 +14,10 @@ function createCharts() {
 	document.head.appendChild(title);
 	document.getElementById("title").innerHTML = telemName;
 
-	data = JSON.parse(data.replace(/'/g, '"'));
-	units = JSON.parse(units.replace(/'/g, '"'));
-	options = JSON.parse(options.replace(/'/g, '"'));
-	telemType = JSON.parse(telemType.replace(/'/g, '"'));
+	data = JSON.parse(data);
+	units = JSON.parse(units);
+	options = JSON.parse(options);
+	telemType = JSON.parse(telemType);
 
 	let charts = initCardElements(card, data);
 	document
