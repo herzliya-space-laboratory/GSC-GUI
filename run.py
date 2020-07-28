@@ -38,7 +38,7 @@ enteries = soup.find("configuration").find("appsettings").find_all("add")
 gscConf = { e.get("key"): e.get("value") for e in enteries}
 
 config["mibPath"] = str(Path(config["gscConf"]).parent / gscConf["MissionInformationLocation"])
-config["satName"] = gscConf["SatId"]
+config["satName"] = gscConf["SatName"]
 config["basePort"] = int(gscConf["ServerPort"])
 # telemPath = Path(config["gscConf"]).parent / gscConf["StorageLocation"] / "Telemetry"
 
