@@ -37,7 +37,7 @@ soup = BeautifulSoup(gscConfFile.read(), "html.parser")
 enteries = soup.find("configuration").find("appsettings").find_all("add")
 gscConf = { e.get("key"): e.get("value") for e in enteries}
 
-mibPath = Path(config["gscConf"]).parent / gscConf["MissionInformationLocation"]
+config["mibPath"] = str(Path(config["gscConf"]).parent / gscConf["MissionInformationLocation"])
 config["satName"] = gscConf["SatId"]
 config["basePort"] = int(gscConf["ServerPort"])
 # telemPath = Path(config["gscConf"]).parent / gscConf["StorageLocation"] / "Telemetry"
