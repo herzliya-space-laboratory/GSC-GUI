@@ -6,7 +6,6 @@
 		"st": "3",
 		"sst": "25"
 	},
-	"satName": "sat",
 	"baseIP": "127.0.0.1",
 	"basePort": 61015,
 	"bufferSize": 1024,
