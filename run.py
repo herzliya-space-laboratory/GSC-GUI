@@ -37,10 +37,12 @@ soup = BeautifulSoup(gscConfFile.read(), "html.parser")
 enteries = soup.find("configuration").find("appsettings").find_all("add")
 gscConf = { e.get("key"): e.get("value") for e in enteries}
 
-config["mibPath"] = str(Path(config["gscConf"]).parent / gscConf["MissionInformationLocation"])
+gscPath = Path(config["gscConf"]).parent
+
+config["mibPath"] = str(gscPath / gscConf["MissionInformationLocation"])
 config["satName"] = gscConf["SatName"]
 config["basePort"] = int(gscConf["ServerPort"])
-# telemPath = Path(config["gscConf"]).parent / gscConf["StorageLocation"] / "Telemetry"
+config["telemetryFolderPath"] = os.path.join(gscPath , gscConf["StorageLocation"] ,"Telemetry", "")
 
 TCP_IP = config["baseIP"]
 TCP_PORT = config["basePort"]

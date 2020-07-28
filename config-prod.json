@@ -1,6 +1,4 @@
 {
-	"telemetryFolderPath": "D:\\GSC-Base-AlternativeStorage\\Telemetry\\",
-	"mibPath": "D:\\GSC-Base\\HSL.GSC.Base\\bin\\Debug\\MissionInformation\\MIB.xml",
 	"gscConf": "D:\\GSC-Base\\HSL.GSC.Base\\bin\\Debug\\HSL.GSC.Base.exe.Config",
 	"beaconId": {
 		"st": "3",
