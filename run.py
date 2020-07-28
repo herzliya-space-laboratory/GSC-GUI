@@ -16,6 +16,7 @@ from datetime import datetime
 import threading
 from os.path import isfile, join
 import heapq
+from pathlib import Path
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -30,6 +31,15 @@ log.setLevel(logging.ERROR)
 with open('config.json', 'r') as file:
     config = file.read().replace('\n', '')
 config = json.loads(config)
+
+gscConfFile = open(config["gscConf"], "r")
+soup = BeautifulSoup(gscConfFile.read(), "html.parser")
+enteries = soup.find("configuration").find("appsettings").find_all("add")
+gscConf = { e.get("key"): e.get("value") for e in enteries}
+
+mibPath = Path(config["gscConf"]).parent / gscConf["MissionInformationLocation"]
+config["satName"] = gscConf["SatId"]
+# telemPath = Path(config["gscConf"]).parent / gscConf["StorageLocation"] / "Telemetry"
 
 TCP_IP = config["baseIP"]
 TCP_PORT = config["basePort"]
