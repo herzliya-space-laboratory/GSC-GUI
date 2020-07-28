@@ -39,7 +39,7 @@ gscConf = { e.get("key"): e.get("value") for e in enteries}
 
 mibPath = Path(config["gscConf"]).parent / gscConf["MissionInformationLocation"]
 config["satName"] = gscConf["SatId"]
-config["basePort"] = gscConf["ServerPort"]
+config["basePort"] = int(gscConf["ServerPort"])
 # telemPath = Path(config["gscConf"]).parent / gscConf["StorageLocation"] / "Telemetry"
 
 TCP_IP = config["baseIP"]
