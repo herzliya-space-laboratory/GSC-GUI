@@ -150,7 +150,7 @@ def is_date(string, fuzzy=False):
         parse(string, fuzzy=fuzzy)
         return True
 
-    except ValueError:
+    except:
         return False
 
 

@@ -376,50 +376,50 @@
         }
     }
     function validate(evt, type) {
-        var theEvent = evt || window.event;
-        switch (type) {
-            case ("uint"):
-            case ("int"):
-            case ("float"):
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9\.]/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault) theEvent.preventDefault();
-                }
+        // var theEvent = evt || window.event;
+        // switch (type) {
+        //     case ("uint"):
+        //     case ("int"):
+        //     case ("float"):
+        //         // Handle paste
+        //         if (theEvent.type === 'paste') {
+        //             key = event.clipboardData.getData('text/plain');
+        //         } else {
+        //             // Handle key press
+        //             var key = theEvent.keyCode || theEvent.which;
+        //             key = String.fromCharCode(key);
+        //         }
+        //         var regex = /[0-9\.]/;
+        //         if (!regex.test(key)) {
+        //             theEvent.returnValue = false;
+        //             if (theEvent.preventDefault) theEvent.preventDefault();
+        //         }
 
-                if (parseFloat(theEvent.target.value) >= Number.MAX_SAFE_INTEGER) {
-                    theEvent.returnValue = false;
-                    theEvent.preventDefault();
-                }
-                break;
-            case ("char"):
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9]/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault) theEvent.preventDefault();
-                }
-                if (parseInt(theEvent.target.value + theEvent.key) > 255) {
-                    theEvent.returnValue = false;
-                    theEvent.preventDefault();
-                }
-                break;
-        }
+        //         if (parseFloat(theEvent.target.value) >= Number.MAX_SAFE_INTEGER) {
+        //             theEvent.returnValue = false;
+        //             theEvent.preventDefault();
+        //         }
+        //         break;
+        //     case ("char"):
+        //         // Handle paste
+        //         if (theEvent.type === 'paste') {
+        //             key = event.clipboardData.getData('text/plain');
+        //         } else {
+        //             // Handle key press
+        //             var key = theEvent.keyCode || theEvent.which;
+        //             key = String.fromCharCode(key);
+        //         }
+        //         var regex = /[0-9]/;
+        //         if (!regex.test(key)) {
+        //             theEvent.returnValue = false;
+        //             if (theEvent.preventDefault) theEvent.preventDefault();
+        //         }
+        //         if (parseInt(theEvent.target.value + theEvent.key) > 255) {
+        //             theEvent.returnValue = false;
+        //             theEvent.preventDefault();
+        //         }
+        //         break;
+        // }
     }
     function init() {
         searchNames();
