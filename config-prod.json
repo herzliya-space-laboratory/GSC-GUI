@@ -6,5 +6,6 @@
 	},
 	"baseIP": "127.0.0.1",
 	"bufferSize": 1024,
-	"debugMode": false
+	"debugMode": false,
+	"port": 5000
 }

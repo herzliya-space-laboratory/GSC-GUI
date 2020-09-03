@@ -783,7 +783,7 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-app.run(debug=config["debugMode"], host='0.0.0.0')
+app.run(debug=config["debugMode"], host='0.0.0.0', port=config["port"])
 
 # I'm Alon Grossman and I have scribbled on the GSC-GUI code
 
