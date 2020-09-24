@@ -16,6 +16,7 @@ from datetime import datetime
 import threading
 from os.path import isfile, join
 import heapq
+from pathlib import Path
 
 '''
 Error 10: Unable to parse integer fro telemetry
@@ -30,6 +31,18 @@ log.setLevel(logging.ERROR)
 with open('config.json', 'r') as file:
     config = file.read().replace('\n', '')
 config = json.loads(config)
+
+gscConfFile = open(config["gscConf"], "r")
+soup = BeautifulSoup(gscConfFile.read(), "html.parser")
+enteries = soup.find("configuration").find("appsettings").find_all("add")
+gscConf = { e.get("key"): e.get("value") for e in enteries}
+
+gscPath = Path(config["gscConf"]).parent
+
+config["mibPath"] = str(gscPath / gscConf["MissionInformationLocation"])
+config["satName"] = gscConf["SatName"]
+config["basePort"] = int(gscConf["ServerPort"])
+config["telemetryFolderPath"] = os.path.join(gscPath , gscConf["StorageLocation"] ,"Telemetry", "")
 
 TCP_IP = config["baseIP"]
 TCP_PORT = config["basePort"]
@@ -137,7 +150,7 @@ def is_date(string, fuzzy=False):
         parse(string, fuzzy=fuzzy)
         return True
 
-    except ValueError:
+    except:
         return False
 
 
@@ -499,6 +512,10 @@ def beacon():
 def palyground():
     return render_template(playground)
 
+@app.route('/autoPlaylist')
+def autoPlaylist():
+    return render_template("autoPlaylist.html")
+
 
 @app.route('/dump', methods=['GET', 'POST'])
 def dump():
@@ -770,7 +787,7 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-app.run(debug=config["debugMode"], host='0.0.0.0')
+app.run(debug=config["debugMode"], host='0.0.0.0', port=config["port"])
 
 # I'm Alon Grossman and I have scribbled on the GSC-GUI code
 

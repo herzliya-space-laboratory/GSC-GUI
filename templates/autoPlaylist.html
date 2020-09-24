@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="icon" type="image" href="{{ url_for('static',filename='icon.png') }}">
+    <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css" media="screen,projection" />
+    <script src="/static/js/side_bar.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+    
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js"></script>
+    
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-database.js"></script>
+    <style>
+        header,
+        main,
+        footer {
+            padding-left: 300px;
+        }
+
+        @media only screen and (max-width : 992px) {
+
+            header,
+            main,
+            footer {
+                padding-left: 0;
+            }
+        }
+
+
+        ::placeholder {
+            color: #fff;
+        }
+    </style>
+    <title>Auto Playlist</title>
+</head>
+
+<body class="indigo darken-1">
+    <ul id="slide-out" class="sidenav sidenav-fixed light-blue lighten-3">
+        <li style="margin-top: 20px;" class="logo center-align">
+            <img id="logoImage" src="/static/logo/logo.png" class="brand-logo" height="200" width="200">
+        </li>
+		<h5 id="satName" class="center"></h5>
+        <li>
+            <div style="margin-left: 30px; margin-right: 30px;" class="input-field">
+                <input id="dump-seacrh" name="dump-search" placeholder="Telemetry Name" class="autocomplete">
+                <label for="dump-seacrh" class="active">Dump</label>
+                <a class="waves-effect waves-light btn-small" onclick="searchDump('dump-seacrh')"><i
+                        class="material-icons left">search</i> Search Dump</a>
+            </div>
+        </li>
+        <li onclick="navChange(this)"><a href="/commands">Commands</a></li>
+        <li onclick="navChange(this)"><a href="/beacon">Beacons</a></li>
+        <li onclick="navChange(this)"><a href="/logs">Logs</a></li>
+        <li onclick="navChange(this)"><a href="/graphForm">Graphs</a></li>
+        <li onclick="navChange(this)"><a href="/acks">Acks</a></li>
+        <li onclick="navChange(this)" class="active"><a href="/autoPlaylist">Auto Playlist</a></li>
+		<li onclick="navChange(this)"><a href="/login">Login<span class="new badge right yellow darken-3"></span></a></li>
+        <li><i><a id="userStatus">You are not logged in. </a><i></li>
+    </ul>
+    <a href="#" data-target="slide-out" class="sidenav-trigger btn-floating btn-large"><i
+            class="material-icons">menu</i></a>
+
+
+<div id="sendStepsModal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4 id="modalCommName"></h4>
+        <p id="modalPacket"></p>
+    </div>
+    <div class="modal-footer">
+        <button class="modal-close waves-effect waves-red btn-flat">Exit</button>
+    </div>
+</div>
+
+</div>
+
+    <main>
+        <h1 class="white-text center-align">Auto Playlist</h1>
+        <div class="row">
+            <div class="col s6">
+                <div class="card">
+                    <div class="card-content black-text">
+                        <p>Select EndNode</p>
+                        <select id="endnode" class="browser-default" onchange="chnageEndnode()"></select>
+
+                        <p>Select playlist</p>
+                        <select style="margin-bottom: 16px;" class="browser-default" id="playlistNameOptions" onchange="getPlaylist()">
+                        </select>
+
+                        <p>When to send?</p>
+                        <input type="datetime-local" id="sendTime">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+          document.addEventListener('DOMContentLoaded', function () {
+                var elems = document.querySelectorAll('.modal');
+                var instances = M.Modal.init(elems, options);
+            });
+        const options = document.getElementById("playlistNameOptions");
+        const config = {
+                apiKey: "AIzaSyDQWbidUuP-2zwyCsV9w3ylRnBRi2et_Zk",
+                authDomain: "gsc-gui.firebaseapp.com",
+                databaseURL: "https://gsc-gui.firebaseio.com",
+                storageBucket: "bucket.appspot.com"
+            };
+            firebase.initializeApp(config);
+
+            const database = firebase.database();
+        let playlist;
+
+        function checkForAck() {
+                $.ajax({
+                    type: "GET",
+                    url: "/getAcks",
+                    data: {}
+                }).done(function (params) {
+                    const ack = JSON.parse(params);
+                    if (ack != null) {
+                        console.log("got ack");
+                        nextSendStep();
+                        M.toast({
+                            html: `Ack received!
+                    Command ID: ${ack["commandid"]}
+                    Error Type: ${ack["errortype"]}`
+                        });
+                    }
+                });
+            }
+            let endNodes = [];
+            let selectedEndnode;
+            function getEndNodes() {
+                $.ajax({
+                    type: "GET",
+                    url: `/getEndNodes`,
+                    data: {},
+                }).done((params) => {
+                    addEndNodes(params.endNodes);
+                });
+            }
+
+    function chnageEndnode() {
+        const select = document.getElementById("endnode");
+        selectedEndnode = select.value;
+    }
+            function addEndNodes(endnodesArr) {
+                endnodesArr = clearEndNodesDuplicates(endnodesArr);
+                if (!objectArraysEqual(endnodesArr, endNodes)) {
+                    const endnodeSelect = document.getElementById("endnode");
+                    endnodeSelect.innerHTML = "";
+                    let isCurrEndnodeFound = false;
+                    for (let i = 0; i < endnodesArr.length; i++) {
+                        const e = endnodesArr[i];
+                        const option = document.createElement("option");
+                        option.innerHTML = e.Name;
+                        option.value = e.Id;
+                        endnodeSelect.appendChild(option);
+                        if (e.Id == selectedEndnode) {
+                            endnodeSelect.value = e.Id;
+                            isCurrEndnodeFound = true;
+                        }
+                    }
+                    if (!isCurrEndnodeFound) {
+                        selectedEndnode = endnodeSelect.value;
+                    }
+                    endNodes = endnodesArr;
+                }
+
+            }
+
+            function clearEndNodesDuplicates(endnodes) {
+                for (let i = endnodes.length - 1; i > 0; --i) {
+                    const en = endnodes[i];
+                    for (let j = i - 1; j >= 0; --j) {
+                        const element = endnodes[j];
+                        if (element.Name === en.Name) {
+                            endnodes.splice(j, 1);
+                            --i;
+                        }
+                    }
+                }
+
+                return endnodes;
+            }
+
+            function objectArraysEqual(a, b) {
+                if (a === b) return true;
+                if (a == null || b == null) return false;
+                if (a.length != b.length) return false;
+
+                for (let i = 0; i < a.length; ++i) {
+                    if (!isEquivalentObject(a[i], b[i])) return false;
+                }
+                return true;
+            }
+
+            function isEquivalentObject(a, b) {
+                // Create arrays of property names
+                var aProps = Object.getOwnPropertyNames(a);
+                var bProps = Object.getOwnPropertyNames(b);
+
+                // If number of properties is different,
+                // objects are not equivalent
+                if (aProps.length != bProps.length) {
+                    return false;
+                }
+
+                for (var i = 0; i < aProps.length; i++) {
+                    var propName = aProps[i];
+
+                    // If values of same property are not equal,
+                    // objects are not equivalent
+                    if (a[propName] !== b[propName]) {
+                        return false;
+                    }
+                }
+
+                // If we made it this far, objects
+                // are considered equivalent
+                return true;
+            }
+
+            const sendTimeInput = document.getElementById("sendTime") ;
+            const coeff = 1000 * 60;
+
+            setInterval(() => {
+                checkForAck();
+                getEndNodes();
+                // Round date to the minute
+                if(Math.round(Date.now() / coeff) * coeff === new Date(sendTimeInput.value).getTime())
+                    sendPlaylistSteps()
+            }, 1000);
+
+            function parseTimestampPacket(packet) {
+                    //Timestamp format: TShh:mm:ss
+                    packet = JSON.parse(packet);
+                    packet.Content.EndNode = document.getElementById("endnode").value;
+                    const execTime = packet.Content["ExecutionTime"];
+                    if (execTime.startsWith("TS")) {
+                        const timestamp = execTime.slice(2).split(":");
+                        const hours = parseInt(timestamp[0]);
+                        const mins = parseInt(timestamp[1]);
+                        const secs = parseInt(timestamp[2]);
+                        if (hours == 0 && mins == 0 && secs == 0)
+                            packet.Content["ExecutionTime"] = '01/01/1970 00:00:00';
+                        else {
+                            let date = new Date();
+                            date.addHours(hours);
+                            date.addMinutes(mins);
+                            date.addSeceonds(secs);
+                            packet.Content["ExecutionTime"] = dateToString(date);
+                        }
+                    }
+                    for (const key in packet.Content["Params"]) {
+                        const val = packet.Content["Params"][key];
+                        if (val.search(/TS\d+:\d+:\d+/) !== -1) {
+                            const timestamp = val.slice(2).split(":");
+                            const hours = parseInt(timestamp[0]);
+                            const mins = parseInt(timestamp[1]);
+                            const secs = parseInt(timestamp[2]);
+                            if (hours == 0 && mins == 0 && secs == 0)
+                                packet.Content["Params"][key] = '01/01/1970 00:00:00';
+                            else {
+                                let date = new Date();
+                                date.addHours(hours);
+                                date.addMinutes(mins);
+                                date.addSeceonds(secs);
+                                packet.Content["Params"][key] = dateToString(date);
+                            }
+                        }
+                    }
+                    return JSON.stringify(packet);
+            }
+               function ajaxSendPacket(url) {
+                    $.ajax({
+                        type: "POST",
+                        url: `/commands${url}`,
+                        data: {},
+                        error: (xhr, ajaxOptions, thrownError) => {
+                            M.toast({ html: 'Couldn\'t send packet', classes: 'red' });
+                        }
+                    });
+                }
+
+            function getPlaylist() {
+                const index = options.selectedIndex + 1;
+                const optionItem = options.childNodes[index];
+                const playlistPath = database.ref(optionItem.getAttribute('path'));
+                playlist = [];
+
+                playlistPath.once("value", function (snapshot) {
+                    snapshot.forEach(function (child) {
+                        child = child.val();
+                        // newCommand.setAttribute("id", child["id"]);
+                        playlist.push(child["value"]);
+                    });
+                });
+            }
+
+            let playlistIndex;
+            let isSending = false;
+
+             function sendPlaylistSteps() {
+                    if(isSending)
+                        return;
+                    isSending = true;
+                    let isAnEmptyComm = false;
+                    let emptyCommName;
+                    playlistIndex = 0;
+
+                    for (const cmd of playlist) {
+                        if (cmd == null) {
+                            isAnEmptyComm = true;
+                            emptyCommName = elem.firstElementChild.innerText;
+                        }
+                    }
+
+                    if (isAnEmptyComm) {
+                        alert(`Command: ${emptyCommName} is null`);
+                        return;
+                    }
+
+                    if (playlist.length !== 0) {
+                        const head = document.getElementById("modalCommName");
+                        const info = document.getElementById("modalPacket");
+
+                        info.innerHTML = `Packet:\n${playlist[0]}`;
+
+                        const modal = document.getElementById("sendStepsModal");
+                        M.Modal.getInstance(modal).open();
+
+                        ajaxSendPacket("?packet=[" + parseTimestampPacket(playlist[0]) + "]");
+                    }
+
+                    playlistIndex++;
+
+                }
+
+                function nextSendStep() {
+                    if(!playlistIndex)
+                        return
+                    
+                    const head = document.getElementById("modalCommName");
+                    const info = document.getElementById("modalPacket");
+
+                    info.innerHTML = `Packet:\n${playlist[playlistIndex]}`;
+
+                    ajaxSendPacket("?packet=[" + parseTimestampPacket(playlist[playlistIndex]) + "]");
+
+                    if (playlistIndex === playlist.length - 1) {
+                        /////////////////////////////// Close Modal
+                        const modal = document.getElementById("sendStepsModal");
+                        M.Modal.getInstance(modal).close();
+                        isSending = false;
+                    }
+                    playlistIndex++;
+                }
+
+            function loadPlaylists(databaseRef, additionalText = "")
+            // Database: firebase.database().ref()
+            {
+                // Get a reference to the database service
+                
+                databaseRef.once("value", function (snapshot) {
+                    snapshot.forEach(function (child) {
+                        const option = document.createElement("option");
+                        option.innerHTML = child.key + additionalText;
+                        option.setAttribute("name", child.key);
+                        option.setAttribute("path", child.getRef().path.toString());
+                        options.appendChild(option);
+                    })
+                    options.selectedIndex =0;
+                    getPlaylist()
+                });
+
+            }
+            loadPlaylists(firebase.database().ref('public'));
+            
+    </script>
+
+    <script type="text/javascript" src="/static/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+            //$('select').formSelect();
+        });
+		function initUser() {
+			NOT_LOGGED = "You are not loggin in. Please <u><a href=\"/login\">login</a></u>";
+			LOGGED = "Logged as ";
+			LOGOUT = " <u><a onclick=\"logout()\" href=\"/login\">Logout</a><u>";
+
+			userStatus = document.getElementById("userStatus");
+			firebase.auth().onAuthStateChanged((user) => {
+				if (user != null) {
+					uid = user.uid;
+					if (user.displayName == null) {
+						userStatus.innerHTML = LOGGED + "Anonymous.";
+					}
+					else {
+						userStatus.innerHTML = LOGGED + user.displayName;
+						if(user.photoURL != null){
+							logoImage = document.getElementById("logoImage");
+							logoImage.setAttribute('src', user.photoURL);
+						}
+					}
+					userStatus.innerHTML += LOGOUT;
+				}
+				else {
+					userStatus.innerHTML = NOT_LOGGED;
+				}
+				console.log(user);
+			});
+		}
+		initUser();
+		function logout()
+		{
+			firebase.auth().signOut();
+		}
+    </script>
+
+
+</body>
+
+</html>
