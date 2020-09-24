@@ -45,34 +45,19 @@ def EventLogParser(input_number):
         'SYSTEM_ANTS',
         'SYSTEM_CUF']
     log_adcs = [
-        'LOG_ADCS_SUCCESS',
-        'LOG_ADCS_FAIL',
-        'LOG_ADCS_ADCS_INIT_ERR',
-        'LOG_ADCS_QUEUE_CREATE_ERR',
-        'LOG_ADCS_SEMAPHORE_CREATE_ERR',
-        'LOG_ADCS_BOOT_ERROR',
-        'LOG_ADCS_CHANNEL_OFF',
-        'LOG_ADCS_CMD_ERR',
-        'LOG_ADCS_CMD_RECEIVED',
-        'LOG_ADCS_UPDATED_VECTOR',
-        'LOG_ADCS_WRONG_SUB_TYPE',
-        'LOG_ADCS_WRONG_TYPE',
-        'LOG_ADCS_FS_INIT_ERR',
-        'LOG_ADCS_FS_WRITE_ERR',
-        'LOG_ADCS_FS_READ_ERR',
-        'LOG_ADCS_FRAM_WRITE_ERR',
-        'LOG_ADCS_FRAM_READ_ERR',
-        'LOG_ADCS_INPUT_PARAM_ERR',
-        'LOG_ADCS_NULL_DATA',
-        'LOG_ADCS_TLM_SAVE_ERR',
-        'LOG_ADCS_TLM_ERR',
-        'LOG_ADCS_QUEUE_ERR',
-        'LOG_ADCS_MALLOC_ERR',
-        'LOG_ADCS_I2C_READ_ERR',
-        'LOG_ADCS_I2C_WRITE_ERR',
-        'LOG_ADCS_GENERIC_I2C_ACK',
+        'LOG_ADCS_INIT',
+        'LOG_ADCS_ERROR',
+        'LOG_ADCS_SOLUTION',
+        'LOG_ADCS_STATE_CHECK',
+        'LOG_ADCS_CMD_EXEC',
+        'LOG_ADCS_MACRO_CMD_EXEC',
+        'LOG_ADCS_I2C_ERROR',
         'LOG_ADCS_HARD_RESET',
-        'LOG_ADCS_SOFT_RESET']
+        'LOG_ADCS_SOFT_RESET',
+        'LOG_ADCS_GENERIC_I2C_ACK', 
+        'LOG_ADCS_I2C_ERR',
+        'LOG_ADCS_ERROR_COUNTER'
+    ]
     log_cuf = [
         'CUF_EXECUTE_unauthenticated',
         'CUF_INTEGRATED_unauthenticated',
@@ -300,6 +285,42 @@ def ErrorLogParser(input_number):
         'JpegCompression_Failure',
         'JpegCompression_qualityFactor_outOfRange',
     ]
+    log_errors_ADCS = [
+        'ADCS_ERROR_SUCCESS',
+        'ADCS_ERROR_FAIL',
+        'ADCS_ERROR_ADCS_INIT_ERR',
+        'ADCS_ERROR_BOOT_ERROR',
+        'ADCS_ERROR_CHANNEL_OFF',
+        'ADCS_ERROR_BAD_STATE',
+        'ADCS_ERROR_CMD_ERR',
+        'ADCS_ERROR_WRONG_SUB_TYPE',
+        'ADCS_ERROR_WRONG_TYPE',
+        'ADCS_ERROR_NULL_DATA',
+        'ADCS_ERROR_FRAM_RESET_ERR',
+        'ADCS_ERROR_FRAM_WRITE_ERR',
+        'ADCS_ERROR_FRAM_READ_ERR',
+        'ADCS_ERROR_INPUT_PARAM_ERR',
+        'ADCS_ERROR_QUEUE_CREATE_ERR',
+        'ADCS_ERROR_QUEUE_EMPTY',
+        'ADCS_ERROR_STACK_CREATE_ERR',
+        'ADCS_ERROR_STACK_EMPTY',
+        'ADCS_ERROR_SEMAPHORE_CREATE_ERR',
+        'ADCS_ERROR_TLM_ERR',
+        'ADCS_ERROR_MALLOC_ERR',
+        'ADCS_ERROR_VERIFY_FAIL',
+        'ADCS_ERROR_COUNTER_MAXED',
+        'ADCS_DRIVER_ERROR_NONE',
+        'ADCS_DRIVER_ERROR_I2C',
+        'ADCS_DRIVER_ERROR_PARAM',
+        'ADCS_DRIVER_ERROR_MALLOC',
+        'ADCS_DRIVER_ERROR_REINIT',
+        'ADCS_DRIVER_ERROR_PARAM_LENGTH',
+        'ADCS_ERROR_TC_NO_ERR',
+        'ADCS_ERROR_TC_INVALID_TC1',
+        'ADCS_ERROR_TC_INCORRECT_LENGTH',
+        'ADCS_ERROR_TC_INCORRECT_PARAM',
+        'ADCS_ERROR_TC_CRC_ERROR'
+    ]
 
     log_errors_CUF_num = [
         165,
@@ -426,12 +447,9 @@ def ErrorLogParser(input_number):
         log = log_errors_OBC[log_errors_OBC_num.index(system_log)]
 
     elif (offset_number*5 <= input_number < offset_number*6):
-        # Well  you see ADCS decided to use the event log as their error log...
-        #system_name = 'ADCS'
-        #system_log = input_number - offset_number*6
-        #log = log_errors_ADCS[log_errors_ADCS_num.index(system_log)]
-        system_name = None
-        log = None
+        system_name = 'ADCS'
+        system_log = input_number - offset_number*6
+        log = log_errors_ADCS[log_errors_ADCS_num.index(system_log)]
 
     elif (offset_number*6 <= input_number < offset_number*7):
         system_name = 'ANTS'
