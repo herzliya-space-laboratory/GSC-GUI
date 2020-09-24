@@ -379,83 +379,12 @@
         var theEvent = evt || window.event;
         switch (type) {
             case ("uint"):
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9]/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault) theEvent.preventDefault();
-                }
-
-                if (parseInt(theEvent.target.value) >= Number.MAX_SAFE_INTEGER) {
-                    theEvent.returnValue = false;
-                    theEvent.preventDefault();
-                }
                 break;
             case ("int"):
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9\-]/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault) theEvent.preventDefault();
-                }
-
-                if (parseInt(theEvent.target.value) >= Number.MAX_SAFE_INTEGER) {
-                    theEvent.returnValue = false;
-                    theEvent.preventDefault();
-                }
                 break;
             case ("float"):
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9\.]/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault) theEvent.preventDefault();
-                }
-
-                if (parseFloat(theEvent.target.value) >= Number.MAX_SAFE_INTEGER) {
-                    theEvent.returnValue = false;
-                    theEvent.preventDefault();
-                }
                 break;
             case ("char"):
-                // Handle paste
-                if (theEvent.type === 'paste') {
-                    key = event.clipboardData.getData('text/plain');
-                } else {
-                    // Handle key press
-                    var key = theEvent.keyCode || theEvent.which;
-                    key = String.fromCharCode(key);
-                }
-                var regex = /[0-9]/;
-                if (!regex.test(key)) {
-                    theEvent.returnValue = false;
-                    if (theEvent.preventDefault) theEvent.preventDefault();
-                }
-                if (parseInt(theEvent.target.value + theEvent.key) > 255) {
-                    theEvent.returnValue = false;
-                    theEvent.preventDefault();
-                }
                 break;
         }
     }
@@ -604,24 +533,61 @@
             <option value=74>74 file system B</option>
 			<option value=75>75 radfet</option>
 			<option value=76>76 ormad</option>
+			<option value=77>77 pic32</option>
+			<option value=78>78 payload struct</option>
+			<option value=79>79 SMPA</option>
+			<option value=80>80 current</option>
+			<option value=81>81 ormad pic spartan</option>
+			<option value=82>82 Current Unix Time</option>
+			<option value=83>83 Current State</option>
+			<option value=84>84 Current State 2</option>
+			<option value=85>85 Estimated Attitude Angles</option>
+			<option value=86>86 Estimated Angular Rates</option>
+			<option value=87>87 Fine Estimated Angular Rates</option>
+			<option value=88>88 Satellite Position (ECI)</option>
+			<option value=89>89 Satellite Velocity (ECI)</option>
+			<option value=90>90 Satellite Position (LLH)</option>
+			<option value=91>91 Magnetic Field Vector</option>
+			<option value=92>92 Rate Sensor Rates</option>
+			<option value=93>93 Wheel Speed</option>
+			<option value=94>94 Magnetorquer Command</option>
+			<option value=95>95 Wheel Speed Command</option>
+			<option value=96>96 IGRF modelled magnetic field vector</option>
+			<option value=97>97 Modelled sun vector</option>
+			<option value=98>98 Raw CSS 1 to 6 Measurements</option>
+			<option value=99>99 Raw Magnetometer Measurements</option>
+			<option value=100>100 CubeControl Current Measurements</option>
+			<option value=101>101 Wheel Currents</option>
+			<option value=102>102 TM_spartan</option>
+			<option value=103>103 TM_PIC_spartan</option>
+			<option value=104>104 ADCS Mamag Data</option>
+			<option value=132>132 Current State</option>
             <option value=140>140 Current Unix Time</option>
-            <option value=146>146 Estimated Angles</option>
+            <option value=146>146 Estimated Attitude Angles</option>
             <option value=147>147 Estimated Angular Rates</option>
-            <option value=150>150 Satellite position</option>
-            <option value=151>151 Magnetic Field From Magnetometer</option>
-            <option value=152>152 Coarse Sun Sensor Vector</option>
-            <option value=153>153 Fine Sun Sensor Vector</option>
-            <option value=155>155 Rate Sensor Measurements</option>
-            <option value=156>156 Y-Wheel Speed</option>
-            <option value=157>157 Magnetotorquer Commands</option>
-            <option value=168>168 Raw CSS Vector 1-6</option>
-            <option value=169>169 Raw CSS Vector 7-10</option>
+			<option value=148>148 Satellite Position (ECI)</option>
+			<option value=149>149 Satellite Velocity (ECI)</option>
+            <option value=150>150 Satellite Position (LLH)</option>
+            <option value=151>151 Magnetic Field Vector</option>
+            <option value=152>152 Coarse Sun Sensor Vector--</option>
+            <option value=153>153 Fine Sun Sensor Vector--</option>
+            <option value=155>155 Rate Sensor Rates</option>
+            <option value=156>156 Wheel Speed</option>
+            <option value=157>157 Magnetorquer Command</option>
+			<option value=158>158 Wheel Speed Command</option>
+			<option value=159>159 IGRF modelled magnetic field vector</option>
+			<option value=160>160 Modelled sun vector</option>
+            <option value=168>168 Raw CSS 1 to 6 Measurements</option>
             <option value=170>170 Raw Magnetometer Measurements</option>
-            <option value=172>172 CubeControl Currents</option>
+            <option value=172>172 CubeControl Current Measurements</option>
+			<option value=173>173 Wheel Currents</option>
             <option value=190>190 ADCS State Vector And Errors</option>
             <option value=193>193 Estimated MeteData</option>
             <option value=195>195 ADCS Power Temperatures</option>
             <option value=198>198 ADCS Miscellaneous Currents</option>
+			<option value=201>201 Fine Estimated Angular Rates</option>
+			<option value=224>224 Current State 2</option>
+			<option value=251>251 ADCS Mamag Data</option>
         `
         if (paramName.search("file type") === 0) {
             let found = false;
