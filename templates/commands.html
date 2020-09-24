@@ -273,7 +273,6 @@
     }
 
     function constructPacket() {
-        alert("Send command");
         var inputParams = document.getElementsByClassName("paramsInput");
         var params = [];
         for (var i = 0; i < inputParams.length; i++) {
@@ -300,8 +299,12 @@
     }
 
     function sendCommand() {
-        const packet = constructPacket();
+         const isSending = confirm("Send command");
+        if(isSending) {
+            const packet = constructPacket();
         sendPacket(packet, true, null);
+        }
+        
     }
 
     function addToPlaylist() {
