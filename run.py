@@ -512,6 +512,10 @@ def beacon():
 def palyground():
     return render_template(playground)
 
+@app.route('/autoPlaylist')
+def autoPlaylist():
+    return render_template("autoPlaylist.html")
+
 
 @app.route('/dump', methods=['GET', 'POST'])
 def dump():
