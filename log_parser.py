@@ -1,9 +1,20 @@
 import os
 import json
+from bs4 import BeautifulSoup
+from pathlib import Path
 
 with open('config.json', 'r') as file:
     config = file.read().replace('\n', '')
 config = json.loads(config)
+
+gscConfFile = open(config["gscConf"], "r")
+soup = BeautifulSoup(gscConfFile.read(), "html.parser")
+enteries = soup.find("configuration").find("appsettings").find_all("add")
+gscConf = { e.get("key"): e.get("value") for e in enteries}
+gscConfFile.close()
+
+gscPath = Path(config["gscConf"]).parent
+config["telemetryFolderPath"] = os.path.join(gscPath , gscConf["StorageLocation"] ,"Telemetry", "")
 
 # =============================================================================
 # First Part: Normal log parser

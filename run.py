@@ -40,7 +40,7 @@ gscConfFile.close()
 
 gscPath = Path(config["gscConf"]).parent
 
-config["mibPath"] = str(gscPath / gscConf["MissionInformationLocation"])
+config["mibPath"] = str(gscPath / gscConf["MibLocation"])
 config["satName"] = gscConf["SatName"]
 config["basePort"] = int(gscConf["ServerPort"])
 config["telemetryFolderPath"] = os.path.join(gscPath , gscConf["StorageLocation"] ,"Telemetry", "")
